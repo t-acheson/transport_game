@@ -4,7 +4,9 @@ package com.hotmomcircle.transport_game.entity;
 
 
 public class Entity {
-	private int x;
-	private int y;
+	protected int x;
+	protected int y;
+	
+	
 	
 }
