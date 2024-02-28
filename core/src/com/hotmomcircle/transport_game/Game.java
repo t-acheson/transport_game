@@ -17,7 +17,7 @@ public class Game extends ApplicationAdapter {
 	
 	SpriteBatch batch;
 	Texture img;
-	private Player player;
+	public Player player;
 	   
    private OrthographicCamera camera;
 
@@ -57,7 +57,12 @@ public class Game extends ApplicationAdapter {
 		ScreenUtils.clear(1, 0, 0, 1);
 		batch.begin();
 //		batch.draw(img, 0, 0);
-		player.render(batch);
+		try {
+			player.render(batch);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		batch.end();
 	}
 	
@@ -67,11 +72,4 @@ public class Game extends ApplicationAdapter {
 		img.dispose();
 	}
 	
-	public int getPlayerX() {
-		return player.getX();
-	}
-	
-	public int getPlayerY() {
-		return player.getY();
-	}
 }
