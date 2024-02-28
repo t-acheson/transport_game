@@ -63,8 +63,8 @@ public class TransportGame extends ApplicationAdapter {
 		batch.begin();
 //		batch.draw(img, 0, 0);
 		try {
-			player.render(batch);
 			gem.render(batch);
+			player.render(batch);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
