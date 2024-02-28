@@ -3,6 +3,7 @@ package com.hotmomcircle.transport_game.transport;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.hotmomcircle.transport_game.GameScreen;
 import com.hotmomcircle.transport_game.TransportGame;
 
 // Transport superclass.
@@ -11,7 +12,7 @@ import com.hotmomcircle.transport_game.TransportGame;
 //It will also own speed, but not position as this will be handled by the player class
 
 public class Transport {
-	private TransportGame game;
+	private GameScreen game;
 	public String name;
 	public int speed;
 	private int footprint;
@@ -28,7 +29,7 @@ public class Transport {
 	public Texture[] right;
 	
 
-	public Transport(TransportGame game, String name, int speed, Texture[] images) {
+	public Transport(GameScreen game, String name, int speed, Texture[] images) {
 		this.game = game;
 		this.name = name;
 		this.speed = speed;
