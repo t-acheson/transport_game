@@ -66,4 +66,12 @@ public class Game extends ApplicationAdapter {
 		batch.dispose();
 		img.dispose();
 	}
+	
+	public int getPlayerX() {
+		return player.getX();
+	}
+	
+	public int getPlayerY() {
+		return player.getY();
+	}
 }
