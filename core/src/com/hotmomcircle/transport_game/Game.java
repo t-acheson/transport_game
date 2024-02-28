@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.hotmomcircle.transport_game.entity.Gem;
 import com.hotmomcircle.transport_game.entity.Player;
 
 public class Game extends ApplicationAdapter {
@@ -18,6 +19,8 @@ public class Game extends ApplicationAdapter {
 	SpriteBatch batch;
 	Texture img;
 	public Player player;
+
+	public Gem gem;
 	   
    private OrthographicCamera camera;
 
@@ -29,7 +32,9 @@ public class Game extends ApplicationAdapter {
 		img = new Texture("badlogic.jpg");
 		
 		player = new Player(this);
-		
+
+		// currently the gem is hardcoded to be at 200, 200 for testing
+		gem = new Gem(200, 200);
 		
 		// create the camera and the SpriteBatch
 		camera = new OrthographicCamera();
@@ -59,6 +64,7 @@ public class Game extends ApplicationAdapter {
 //		batch.draw(img, 0, 0);
 		try {
 			player.render(batch);
+			gem.render(batch);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

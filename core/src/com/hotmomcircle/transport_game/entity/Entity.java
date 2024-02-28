@@ -14,5 +14,15 @@ public class Entity {
 	public int getY() {
 		return y;
 	}
+
+	Entity(int locX, int locY){
+		this.x = locX;
+		this.y = locY;
+	}
+
+	Entity(){
+		this.x = 0;
+		this.y = 0;
+	}	
 	
 }
