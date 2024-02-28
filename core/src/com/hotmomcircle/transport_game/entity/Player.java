@@ -20,6 +20,8 @@ public class Player extends Entity {
 	private int transIdx = 0; //Index corresponding to which transport the player is currently on
 	private int stamina;
 	
+	private String direction = "down";
+	
 	
 	public Player(Game game) {
 		this.game = game;
@@ -43,15 +45,28 @@ public class Player extends Entity {
 	}
 	
 	
-	public void render(SpriteBatch batch) {
+	public void render(SpriteBatch batch) throws Exception {
 		
 //		Move the player 
-		if(Gdx.input.isKeyPressed(Input.Keys.W)) y += getSpeed() * Gdx.graphics.getDeltaTime();
-		if(Gdx.input.isKeyPressed(Input.Keys.S)) y -= getSpeed() * Gdx.graphics.getDeltaTime();
-		if(Gdx.input.isKeyPressed(Input.Keys.D)) x += getSpeed() * Gdx.graphics.getDeltaTime();
-		if(Gdx.input.isKeyPressed(Input.Keys.A)) x -= getSpeed() * Gdx.graphics.getDeltaTime();
+		if(Gdx.input.isKeyPressed(Input.Keys.W)) { 
+			direction = "up";
+			y += getSpeed() * Gdx.graphics.getDeltaTime();
+			}
+		if(Gdx.input.isKeyPressed(Input.Keys.S)) { 
+			direction = "down";
+			y -= getSpeed() * Gdx.graphics.getDeltaTime();
+			}
+		if(Gdx.input.isKeyPressed(Input.Keys.A)) { 
+			direction = "left";
+			x -= getSpeed() * Gdx.graphics.getDeltaTime();
+			}
+		if(Gdx.input.isKeyPressed(Input.Keys.D)) { 
+			direction = "right";
+			x += getSpeed() * Gdx.graphics.getDeltaTime();
+			}
 		
-//		Handle
+		
+//		Handle 
 		
 		
 		
@@ -62,6 +77,10 @@ public class Player extends Entity {
 	
 	public int getSpeed() {
 		return transport[transIdx].speed;
+	}
+	
+	public String getDirection() {
+		return direction;
 	}
 	
 	

@@ -2,6 +2,7 @@ package com.hotmomcircle.transport_game.transport;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.hotmomcircle.transport_game.Game;
 
 // Transport superclass.
@@ -11,44 +12,68 @@ import com.hotmomcircle.transport_game.Game;
 
 public class Transport {
 	private Game game;
+	public String name;
+	public int speed;
 	private int footprint;
 	private int staminaCost;
 	
-	public String name;
-	public int speed;
+	private long imgDuration = 500000000; //How long each image should be displayed
+	private long imgChangeTime = 0; //Time since the image was last changed
+	private int imgIdx = 0;
+	
 	public Texture image;
-	public Texture up1;
-	public Texture up2;
-	public Texture down1;
-	public Texture down2;
-	public Texture left1;
-	public Texture left2;
-	public Texture right1;
-	public Texture right2;
+	public Texture[] up;
+	public Texture[] down;
+	public Texture[] left;
+	public Texture[] right;
+	
 
 	public Transport(Game game, String name, int speed, Texture[] images) {
 		this.game = game;
 		this.name = name;
 		this.speed = speed;
 		
-		this.up1 = images[0];
-		this.up2 = images[1];
-		this.down1 = images[2];
-		this.down2 = images[3];
-		this.left1 = images[4];
-		this.left2 = images[5];
-		this.right1 = images[6];
-		this.right2 = images[7];
+		up = new Texture[2];
+		down = new Texture[2];
+		left = new Texture[2];
+		right = new Texture[2];
+		
+		this.up[0] = images[0];
+		this.up[1] = images[1];
+		this.down[0] = images[2];
+		this.down[1] = images[3];
+		this.left[0] = images[4];
+		this.left[1] = images[5];
+		this.right[0] = images[6];
+		this.right[1] = images[7];
 		
 		
 	}
 	
-	public void render(SpriteBatch batch) {
+	public void render(SpriteBatch batch) throws Exception{
 		Texture currImg = getCurrentImage();
-		batch.draw(currImg, game.getPlayerX(), game.getPlayerY(), 0, 0, currImg.getWidth(), currImg.getHeight(), game.scale, game.scale, 0, 0, 0, currImg.getWidth(), currImg.getHeight(), false, false);
+		batch.draw(currImg, game.player.getX(), game.player.getY(), 0, 0, currImg.getWidth(), currImg.getHeight(), game.scale, game.scale, 0, 0, 0, currImg.getWidth(), currImg.getHeight(), false, false);
 	}
 	
-	public Texture getCurrentImage() {
-		return down1;
+	public Texture getCurrentImage() throws Exception {
+		
+		if(TimeUtils.nanoTime() - imgChangeTime > imgDuration) {
+			imgChangeTime = TimeUtils.nanoTime();
+			imgIdx = (imgIdx + 1) % 2;
+		}
+		
+		switch(game.player.getDirection()) {
+		case "up":
+			return up[imgIdx];
+		case "down":
+			return down[imgIdx];
+		case "left":
+			return left[imgIdx];
+		case "right":
+			return right[imgIdx];
+		default:
+			throw new Exception("Error: incorrect direction string");
+		}
 	}
+	
 }
