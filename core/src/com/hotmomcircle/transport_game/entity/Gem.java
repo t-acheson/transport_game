@@ -8,8 +8,8 @@ import com.badlogic.gdx.math.Rectangle;
 public class Gem extends Entity {
     private Texture gemImage;
 
-    public Gem(int x, int y) {
-        super(x, y);
+    public Gem(int locX, int locY) {
+        super(locX, locY);
         Rectangle gem = new Rectangle();
         gem.x = this.getX();
         gem.y = this.getY();
@@ -21,11 +21,5 @@ public class Gem extends Entity {
 
     public void render(SpriteBatch batch) {
         batch.draw(gemImage, this.getX(), this.getY());
-    }
-
-    public static void main(String[] args) {
-        Gem gem = new Gem(150, 150);
-        System.out.println(gem.getX());
-        System.out.println(gem.getY());
     }
 }
