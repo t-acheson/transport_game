@@ -9,7 +9,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.hotmomcircle.transport_game.entity.Player;
 
-public class Game extends ApplicationAdapter {
+public class TransportGame extends ApplicationAdapter {
 	
 	private int originalTileSize = 16;
 	public int scale = 3;
