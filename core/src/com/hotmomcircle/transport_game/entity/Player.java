@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.hotmomcircle.transport_game.Game;
+import com.hotmomcircle.transport_game.TransportGame;
 import com.hotmomcircle.transport_game.transport.Transport;
 
 //This will hold the player class. 
@@ -13,7 +13,7 @@ import com.hotmomcircle.transport_game.transport.Transport;
 
 public class Player extends Entity {
 	
-	Game game;
+	TransportGame game;
 	private Texture bikeImage;
 	private Texture carImage;
 	private Transport[] transport = new Transport[3];
@@ -23,7 +23,7 @@ public class Player extends Entity {
 	private String direction = "down";
 	
 	
-	public Player(Game game) {
+	public Player(TransportGame game) {
 		this.game = game;
 //		Initialize the textures
 //		Initialize player x and y positions
