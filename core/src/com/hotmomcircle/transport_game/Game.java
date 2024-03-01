@@ -49,7 +49,8 @@ public class Game extends ApplicationAdapter {
 		// // checking if the Player hits a gem
 		for (Gem gem : gems) {
 			if (player.getPlayerRectangle().overlaps(gem.getGemRectangle())) {
-				gem.setImage("empty.png");
+				gem.dispose();
+				gems.removeValue(gem, true);
 			}
 		}
 
