@@ -7,19 +7,37 @@ import com.badlogic.gdx.math.Rectangle;
 
 public class Gem extends Entity {
     private Texture gemImage;
+    private Rectangle gem;
 
     public Gem(int locX, int locY) {
         super(locX, locY);
-        Rectangle gem = new Rectangle();
+        gem = new Rectangle();
         gem.x = this.getX();
         gem.y = this.getY();
         gem.width = 32;
         gem.height = 32;
+        this.earned = false;
         gemImage = new Texture(Gdx.files.internal("gem.png"));
+        
+    }
+
+    
+    public void setImage(String imageName) {
+        gemImage = new Texture(Gdx.files.internal(imageName));
+    } 
+
+
+    public Rectangle getGemRectangle() {
+        return gem;
     }
 
 
     public void render(SpriteBatch batch) {
         batch.draw(gemImage, this.getX(), this.getY());
+    }
+
+
+    public void dispose() {
+        gemImage.dispose();
     }
 }

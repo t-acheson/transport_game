@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.hotmomcircle.transport_game.entity.Gem;
 import com.hotmomcircle.transport_game.entity.Player;
-
+ 
 // This will be the screen 
 public class GameScreen implements Screen {
 	
@@ -56,6 +56,10 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void render(float delta) {
+		
+		if (player.getPlayerRectangle().overlaps(gem.getGemRectangle())) {
+			gem.setImage("empty.png");
+		}
 		// TODO Auto-generated method stub
       // clear the screen with a dark blue color. The
       // arguments to clear are the red, green
