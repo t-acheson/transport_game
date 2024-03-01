@@ -1,9 +1,12 @@
 package com.hotmomcircle.transport_game.entity;
 
+import org.w3c.dom.css.Rect;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 import com.hotmomcircle.transport_game.Game;
 import com.hotmomcircle.transport_game.transport.Transport;
 
@@ -19,6 +22,7 @@ public class Player extends Entity {
 	private Transport[] transport = new Transport[3];
 	private int transIdx = 0; //Index corresponding to which transport the player is currently on
 	private int stamina;
+	public Rectangle playerRectangle;
 	
 	private String direction = "down";
 	
@@ -38,10 +42,15 @@ public class Player extends Entity {
 		playerTextures[5] = new Texture(Gdx.files.internal("player_left2.png"));
 		playerTextures[6] = new Texture(Gdx.files.internal("player_right1.png"));
 		playerTextures[7] = new Texture(Gdx.files.internal("player_right2.png"));
-		
+
 		transport[0] = new Transport(game, "Foot", 200, playerTextures);
-		
-		
+
+		playerRectangle = new Rectangle();
+		playerRectangle.x = this.getX();
+		playerRectangle.y = this.getY();
+		playerRectangle.height = 32;
+		playerRectangle.width = 32;
+
 	}
 	
 	
@@ -64,6 +73,9 @@ public class Player extends Entity {
 			direction = "right";
 			x += getSpeed() * Gdx.graphics.getDeltaTime();
 			}
+
+		playerRectangle.x = this.getX();
+		playerRectangle.y = this.getY();
 		
 		
 //		Handle 
@@ -87,6 +99,10 @@ public class Player extends Entity {
 //	Returns the current transport method
 	public Transport currTransport() {
 		return transport[transIdx];
+	}
+
+	public Rectangle getPlayerRectangle() {
+		return playerRectangle;
 	}
 	
 	
