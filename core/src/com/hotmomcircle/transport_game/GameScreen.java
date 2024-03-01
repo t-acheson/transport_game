@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.hotmomcircle.transport_game.entity.Gem;
 import com.hotmomcircle.transport_game.entity.Player;
@@ -25,7 +26,7 @@ public class GameScreen implements Screen {
 	Texture img;
 	public Player player;
 
-	public Gem gem;
+	public Array<Gem> gems;
 	   
    private OrthographicCamera camera;
 
@@ -39,8 +40,10 @@ public class GameScreen implements Screen {
 		
 		player = new Player(this);
 
-		// currently the gem is hardcoded to be at 200, 200 for testing
-		gem = new Gem(200, 200);
+		gems = new Array<Gem>();
+		gems.add(new Gem(100, 100));
+		gems.add(new Gem(200, 200));
+		gems.add(new Gem(300, 300));
 		
 		// create the camera and the SpriteBatch
 		camera = new OrthographicCamera();
@@ -57,9 +60,13 @@ public class GameScreen implements Screen {
 	@Override
 	public void render(float delta) {
 		
-		if (player.getPlayerRectangle().overlaps(gem.getGemRectangle())) {
-			gem.setImage("empty.png");
+		for (Gem gem : gems) {
+			if (player.getPlayerRectangle().overlaps(gem.getGemRectangle())) {
+				gem.dispose();
+				gems.removeValue(gem, true);
+			}
 		}
+
 		// TODO Auto-generated method stub
       // clear the screen with a dark blue color. The
       // arguments to clear are the red, green
@@ -77,8 +84,10 @@ public class GameScreen implements Screen {
 		ScreenUtils.clear(1, 0, 0, 1);
 		batch.begin();
 		try {
-			gem.render(batch);
 			player.render(batch);
+			for (Gem gem : gems) {
+				gem.render(batch);
+			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
