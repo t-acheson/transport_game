@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Rectangle;
 public class Gem extends Entity {
     private Texture gemImage;
     private Rectangle gem;
+    boolean earned;
 
     public Gem(int locX, int locY) {
         super(locX, locY);

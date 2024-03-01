@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 import com.hotmomcircle.transport_game.GameScreen;
 import com.hotmomcircle.transport_game.TransportGame;
 import com.hotmomcircle.transport_game.transport.Transport;
