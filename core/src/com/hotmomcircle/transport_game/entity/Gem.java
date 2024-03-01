@@ -16,7 +16,6 @@ public class Gem extends Entity {
         gem.y = this.getY();
         gem.width = 32;
         gem.height = 32;
-        this.earned = false;
         gemImage = new Texture(Gdx.files.internal("gem.png"));
         
     }

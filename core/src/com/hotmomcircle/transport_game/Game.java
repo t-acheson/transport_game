@@ -20,7 +20,7 @@ public class Game extends ApplicationAdapter {
 	Texture img;
 	public Player player;
 
-	public Gem gem;
+	public Array<Gem> gems;
 	   
    	private OrthographicCamera camera;
 
@@ -32,8 +32,10 @@ public class Game extends ApplicationAdapter {
 		
 		player = new Player(this);
 
-		// currently the gem is hardcoded to be at 200, 200 for testing
-		gem = new Gem(200, 200);
+		gems = new Array<Gem>();
+		gems.add(new Gem(100, 100));
+		gems.add(new Gem(200, 200));
+		gems.add(new Gem(300, 300));
 		
 		// create the camera and the SpriteBatch
 		camera = new OrthographicCamera();
@@ -45,9 +47,12 @@ public class Game extends ApplicationAdapter {
 	@Override
 	public void render () {
 		// // checking if the Player hits a gem
-		if (player.getPlayerRectangle().overlaps(gem.getGemRectangle())) {
-			gem.setImage("empty.png");
+		for (Gem gem : gems) {
+			if (player.getPlayerRectangle().overlaps(gem.getGemRectangle())) {
+				gem.setImage("empty.png");
+			}
 		}
+
 		
 	      // clear the screen with a dark blue color. The
 	      // arguments to clear are the red, green
@@ -67,7 +72,9 @@ public class Game extends ApplicationAdapter {
 //		batch.draw(img, 0, 0);
 		try {
 			player.render(batch);
-			gem.render(batch);
+			for (Gem gem : gems) {
+				gem.render(batch);
+			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
