@@ -21,9 +21,9 @@ public class Game extends ApplicationAdapter {
 	public Player player;
 
 	// Gem 
-	public Gem gem = new Gem(200, 200);
+	public Gem gem;
 	   
-   private OrthographicCamera camera;
+   	private OrthographicCamera camera;
 
    
 
@@ -46,6 +46,12 @@ public class Game extends ApplicationAdapter {
 
 	@Override
 	public void render () {
+		// // checking if the Player hits a gem
+		if (player.getPlayerRectangle().overlaps(gem.getGemRectangle())) {
+			// gem.setEarned();
+			// System.out.println("Player hit the gem");
+			gem.setImage("empty.png");
+		}
 		
 	      // clear the screen with a dark blue color. The
 	      // arguments to clear are the red, green
@@ -73,11 +79,7 @@ public class Game extends ApplicationAdapter {
 		batch.end();
 
 
-		// // checking if the Player hits a gem
-		if (player.getPlayerRectangle().overlaps(gem.getGemRectangle())) {
-			gem.setEarned();
-			gem.setImage("empty.png");
-		}
+
 
 	}
 	

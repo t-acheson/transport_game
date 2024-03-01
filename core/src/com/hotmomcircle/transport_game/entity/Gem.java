@@ -18,12 +18,13 @@ public class Gem extends Entity {
         gem.width = 32;
         gem.height = 32;
         this.earned = false;
-        try {
-            gemImage = new Texture(Gdx.files.internal("gem.png"));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        // gemImage = new Texture(Gdx.files.internal("gem.png"));
+        // try {
+        //     gemImage = new Texture(Gdx.files.internal("gem.png"));
+        // } catch (Exception e) {
+        //     e.printStackTrace();
+        //     System.out.println("Error loading gem.png");
+        // }
+        gemImage = new Texture(Gdx.files.internal("gem.png"));
         
     }
 
