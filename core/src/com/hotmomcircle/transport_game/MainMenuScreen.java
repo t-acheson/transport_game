@@ -32,28 +32,40 @@ public class MainMenuScreen implements Screen {
 	public MainMenuScreen(final TransportGame game) {
 		this.game = game;
 		
+//		Game camera
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, game.SCREEN_WIDTH, game.SCREEN_HEIGHT);
 		
+//		Create a stage for our buttons. This is a better way of doing UI elements
+//		We will use SpriteBatches for the game itself
 		stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
+//      Sets the theme of our buttons, this will have to be updated when we decide on our style
 		skin = new Skin(Gdx.files.internal("uiskin.json")); // Load skin for buttons
 		
+//		We will keep the buttons in a table to make handling the layout easier
 		table = new Table();
 		table.setFillParent(true);
+		table.defaults().width(game.SCREEN_WIDTH/3).expandX().fillX();
+		table.setWidth(game.SCREEN_WIDTH/3);
+		table.setDebug(true);
 		
-		
+//		Create the buttons
 		newGame = new TextButton("New Game", skin);
 		loadGame = new TextButton("Load Game", skin);
 		settings = new TextButton("Settings", skin);
 		
+		
+//		Add buttons to the table
 		table.row();
 		table.add(newGame).fillX().uniformX();
+		table.row().pad(10, 0, 10, 0);
+		table.add(loadGame).fillX().uniformX();
+		table.row().pad(10,0,10,0);
+		table.add(settings).fillX().uniformX();
 		
-
-//        newGame.setPosition(game.SCREEN_WIDTH/2, game.SCREEN_HEIGHT/2); // Set position of the TextButton
-        
+//        Add the table to the stage
 		stage.addActor(table);
         
 		
@@ -82,7 +94,8 @@ public class MainMenuScreen implements Screen {
 
 	@Override
 	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
+		// Allows buttons to update when screen is resized.
+		stage.getViewport().update(width, height, true);
 		
 	}
 
