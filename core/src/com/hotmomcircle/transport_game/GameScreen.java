@@ -4,6 +4,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.hotmomcircle.transport_game.entity.Gem;
 import com.hotmomcircle.transport_game.entity.Player;
@@ -12,6 +13,8 @@ import com.hotmomcircle.transport_game.entity.Player;
 public class GameScreen implements Screen {
 	
 	TransportGame game;
+	
+	
 	SpriteBatch batch;
 	
 	private int originalTileSize = 16;
@@ -31,6 +34,7 @@ public class GameScreen implements Screen {
 		this.game = game;
 		
 		this.batch = game.batch;
+		
 
 		
 		player = new Player(this);
@@ -40,7 +44,7 @@ public class GameScreen implements Screen {
 		
 		// create the camera and the SpriteBatch
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false, 800, 480);
+		camera.setToOrtho(false, game.SCREEN_WIDTH, game.SCREEN_HEIGHT);
 		
 		
 	}

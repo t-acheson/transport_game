@@ -3,18 +3,39 @@ package com.hotmomcircle.transport_game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class MainMenuScreen implements Screen {
 	final TransportGame game;
 	
 	OrthographicCamera camera;
 	
+	Skin skin;
+	TextButton newGame;
+	Stage stage;
+	
+	
 	public MainMenuScreen(final TransportGame game) {
 		this.game = game;
 		
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false, 800, 480);
+		camera.setToOrtho(false, game.SCREEN_WIDTH, game.SCREEN_HEIGHT);
+
+		skin = new Skin(Gdx.files.internal("uiskin.json")); // Load skin 
+		
+		newGame = new TextButton("New Game", skin);
+		stage = new Stage(new ScreenViewport());
+        Gdx.input.setInputProcessor(stage);
+
+        newGame.setPosition(100, 100); // Set position of the TextButton
+        stage.addActor(newGame); // Add the TextButton to the stage
+        
+		
 	}
 	
 	
@@ -29,14 +50,9 @@ public class MainMenuScreen implements Screen {
 		ScreenUtils.clear(0, 0, 0.2f, 1);
 		
 		camera.update();
-		game.batch.setProjectionMatrix(camera.combined);
-		game.batch.begin();
-		game.font.draw(game.batch, "Welcome to Drop!!! ", 100, 150);
-		game.font.draw(game.batch, "Tap anywhere to begin!", 100, 100);
-		
-		
-		game.batch.end();
-		
+
+		stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+		stage.draw();
 		if(Gdx.input.isTouched()) {
 			game.setScreen(new GameScreen(game));
 			dispose();
@@ -69,7 +85,7 @@ public class MainMenuScreen implements Screen {
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
+		stage.dispose();
 		
 	}
 
