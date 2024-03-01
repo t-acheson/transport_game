@@ -3,12 +3,16 @@ package com.hotmomcircle.transport_game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+
+// Main menu screen
+// Uses gdx stage to render screen and deal with inputs
+// When game is started, it will call GameScreen, which holds the game logic.
 
 public class MainMenuScreen implements Screen {
 	final TransportGame game;
@@ -16,7 +20,12 @@ public class MainMenuScreen implements Screen {
 	OrthographicCamera camera;
 	
 	Skin skin;
+	
+	Table table;
 	TextButton newGame;
+	TextButton loadGame;
+	TextButton settings;
+	
 	Stage stage;
 	
 	
@@ -25,15 +34,27 @@ public class MainMenuScreen implements Screen {
 		
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, game.SCREEN_WIDTH, game.SCREEN_HEIGHT);
-
-		skin = new Skin(Gdx.files.internal("uiskin.json")); // Load skin 
 		
-		newGame = new TextButton("New Game", skin);
 		stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
-        newGame.setPosition(100, 100); // Set position of the TextButton
-        stage.addActor(newGame); // Add the TextButton to the stage
+		skin = new Skin(Gdx.files.internal("uiskin.json")); // Load skin for buttons
+		
+		table = new Table();
+		table.setFillParent(true);
+		
+		
+		newGame = new TextButton("New Game", skin);
+		loadGame = new TextButton("Load Game", skin);
+		settings = new TextButton("Settings", skin);
+		
+		table.row();
+		table.add(newGame).fillX().uniformX();
+		
+
+//        newGame.setPosition(game.SCREEN_WIDTH/2, game.SCREEN_HEIGHT/2); // Set position of the TextButton
+        
+		stage.addActor(table);
         
 		
 	}
