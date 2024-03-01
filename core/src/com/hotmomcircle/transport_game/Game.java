@@ -20,12 +20,10 @@ public class Game extends ApplicationAdapter {
 	Texture img;
 	public Player player;
 
-	// Gem 
 	public Gem gem;
 	   
    	private OrthographicCamera camera;
 
-   
 
 	@Override
 	public void create () {
@@ -48,8 +46,6 @@ public class Game extends ApplicationAdapter {
 	public void render () {
 		// // checking if the Player hits a gem
 		if (player.getPlayerRectangle().overlaps(gem.getGemRectangle())) {
-			// gem.setEarned();
-			// System.out.println("Player hit the gem");
 			gem.setImage("empty.png");
 		}
 		
@@ -77,9 +73,6 @@ public class Game extends ApplicationAdapter {
 			e.printStackTrace();
 		}
 		batch.end();
-
-
-
 
 	}
 	

@@ -8,7 +8,6 @@ import com.badlogic.gdx.math.Rectangle;
 public class Gem extends Entity {
     private Texture gemImage;
     private Rectangle gem;
-    private Boolean earned;
 
     public Gem(int locX, int locY) {
         super(locX, locY);
@@ -18,16 +17,11 @@ public class Gem extends Entity {
         gem.width = 32;
         gem.height = 32;
         this.earned = false;
-        // try {
-        //     gemImage = new Texture(Gdx.files.internal("gem.png"));
-        // } catch (Exception e) {
-        //     e.printStackTrace();
-        //     System.out.println("Error loading gem.png");
-        // }
         gemImage = new Texture(Gdx.files.internal("gem.png"));
         
     }
 
+    
     public void setImage(String imageName) {
         gemImage = new Texture(Gdx.files.internal(imageName));
     } 
@@ -41,12 +35,6 @@ public class Gem extends Entity {
     public void render(SpriteBatch batch) {
         batch.draw(gemImage, this.getX(), this.getY());
     }
-
-
-    public void setEarned() {
-        this.earned = true;
-    }
-
 
 
     public void dispose() {
