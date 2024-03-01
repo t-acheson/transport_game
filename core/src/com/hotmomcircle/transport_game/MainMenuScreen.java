@@ -3,10 +3,12 @@ package com.hotmomcircle.transport_game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
@@ -25,6 +27,7 @@ public class MainMenuScreen implements Screen {
 	TextButton newGame;
 	TextButton loadGame;
 	TextButton settings;
+	TextButton exitGame;
 	
 	Stage stage;
 	
@@ -55,6 +58,7 @@ public class MainMenuScreen implements Screen {
 		newGame = new TextButton("New Game", skin);
 		loadGame = new TextButton("Load Game", skin);
 		settings = new TextButton("Settings", skin);
+		exitGame = new TextButton("Exit", skin);
 		
 		
 //		Add buttons to the table
@@ -64,9 +68,54 @@ public class MainMenuScreen implements Screen {
 		table.add(loadGame).fillX().uniformX();
 		table.row().pad(10,0,10,0);
 		table.add(settings).fillX().uniformX();
+		table.row().pad(10, 0, 30, 0);
+		table.add(exitGame).fillX().uniformX();
 		
 //        Add the table to the stage
 		stage.addActor(table);
+		
+//		Create button listeners
+		
+		newGame.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				game.setScreen(new GameScreen(game));
+				dispose();
+			}
+			
+		});
+		
+		loadGame.addListener( new ChangeListener() {
+
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				// TODO Add continue game functionality
+				
+			}
+			
+		});
+		
+		settings.addListener( new ChangeListener() {
+
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				// TODO Add settings functionality
+				
+			}
+			
+		});
+		
+		exitGame.addListener( new ChangeListener() {
+
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				Gdx.app.exit();
+			}
+			
+		});
+		
+		
+
         
 		
 	}
@@ -86,10 +135,7 @@ public class MainMenuScreen implements Screen {
 
 		stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
 		stage.draw();
-		if(Gdx.input.isTouched()) {
-			game.setScreen(new GameScreen(game));
-			dispose();
-		}
+
 	}
 
 	@Override
@@ -119,6 +165,7 @@ public class MainMenuScreen implements Screen {
 
 	@Override
 	public void dispose() {
+		
 		stage.dispose();
 		
 	}
