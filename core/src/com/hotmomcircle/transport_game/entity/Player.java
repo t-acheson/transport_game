@@ -106,6 +106,14 @@ public class Player extends Entity {
 		return playerRectangle;
 	}
 	
+	public boolean isMoving() {
+		boolean up = Gdx.input.isKeyPressed(Input.Keys.W);
+		boolean down = Gdx.input.isKeyPressed(Input.Keys.S);
+		boolean left = Gdx.input.isKeyPressed(Input.Keys.A);
+		boolean right = Gdx.input.isKeyPressed(Input.Keys.D);
+		return up || down || left || right;
+	}
+	
 	
 	
 }

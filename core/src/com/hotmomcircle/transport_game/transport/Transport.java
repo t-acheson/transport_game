@@ -58,7 +58,7 @@ public class Transport {
 	
 	public Texture getCurrentImage() throws Exception {
 		
-		if(TimeUtils.nanoTime() - imgChangeTime > imgDuration) {
+		if(TimeUtils.nanoTime() - imgChangeTime > imgDuration && game.player.isMoving()) {
 			imgChangeTime = TimeUtils.nanoTime();
 			imgIdx = (imgIdx + 1) % 2;
 		}
