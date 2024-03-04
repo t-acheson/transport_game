@@ -60,6 +60,20 @@ public class Player extends Entity {
 		
 		transport[1] = new Transport(game, "Bicycle", 300, bikeTextures); 
 		
+		Texture[] carTextures = new Texture[8];
+
+		carTextures[0] = new Texture(Gdx.files.internal("./car/car_up.png"));
+		carTextures[1] = new Texture(Gdx.files.internal("./car/car_up.png"));
+		carTextures[2] = new Texture(Gdx.files.internal("./car/car_down.png"));
+		carTextures[3] = new Texture(Gdx.files.internal("./car/car_down.png"));
+		carTextures[4] = new Texture(Gdx.files.internal("./car/car_left.png"));
+		carTextures[5] = new Texture(Gdx.files.internal("./car/car_left.png"));
+		carTextures[6] = new Texture(Gdx.files.internal("./car/car_right.png"));
+		carTextures[7] = new Texture(Gdx.files.internal("./car/car_right.png"));
+		
+		transport[2] = new Transport(game, "Car", 400, carTextures); 
+		
+		
 
 		playerRectangle = new Rectangle();
 		playerRectangle.x = this.getX();
@@ -77,10 +91,11 @@ public class Player extends Entity {
 			getOnBike();
 		}
 		
-//		Can press 'f' to go on foot
-		if(Gdx.input.isKeyPressed(Input.Keys.F)) {
-			getOnFoot();
+//		Can press 'c' to go in car
+		if(Gdx.input.isKeyPressed(Input.Keys.C)) {
+			getOnCar();
 		}
+		
 		
 //		Can press 'B' to get on bike
 		if(Gdx.input.isKeyPressed(Input.Keys.B)) {
@@ -155,6 +170,14 @@ public class Player extends Entity {
 //		Can only get on bike if you are on foot
 		if(transIdx == 0) {
 			transIdx = 1;
+		}
+	}
+	
+//	 Changes player transport
+	public void getOnCar() {
+//		Can only get in car if on foot
+		if(transIdx == 0) {
+			transIdx = 2;
 		}
 	}
 	
