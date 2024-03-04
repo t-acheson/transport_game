@@ -19,7 +19,7 @@ public class GameScreen implements Screen {
 	SpriteBatch batch;
 	
 	private int originalTileSize = 16;
-	public int scale = 3;
+	public int scale = 2;
 	private int tileSize = originalTileSize * scale;
 	
 	
@@ -124,6 +124,10 @@ public class GameScreen implements Screen {
 	public void dispose() {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public int getTileSize() {
+		return tileSize;
 	}
 
 }
