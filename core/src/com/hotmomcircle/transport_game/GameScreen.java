@@ -8,11 +8,11 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.hotmomcircle.transport_game.entity.Gem;
 import com.hotmomcircle.transport_game.entity.Player;
+
 //map imports below 
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -32,7 +32,7 @@ public class GameScreen implements Screen {
 	public int scale = 2;
 	private int tileSize = originalTileSize * scale;
 	
-	//initalising map 
+	//initializing map 
 	private TiledMap map;
 	private OrthogonalTiledMapRenderer renderer;
 	
@@ -43,8 +43,8 @@ public class GameScreen implements Screen {
 	
     private OrthographicCamera camera;
 	
+	// Variables associated with the pause / game state
 	private int GAME_STATE;
-	
 	private final int GAME_RUNNING = 0;
 	private final int GAME_PAUSED = 1;
 	private BitmapFont font = new BitmapFont();
@@ -92,19 +92,20 @@ public class GameScreen implements Screen {
 	@Override
 	public void render(float delta) {
 
-
+		// pauses the game if it isnt already paused - prevents multiple inputs
 		if(Gdx.input.isKeyPressed(Input.Keys.P) && GAME_STATE != GAME_PAUSED) {
 			pause();
 		} 
+		// resumes game if it isn't already running
 		if(Gdx.input.isKeyPressed(Input.Keys.R) && GAME_STATE != GAME_RUNNING) {
 			resume();
 		} 
 		if (GAME_STATE == GAME_PAUSED){
-			// draw the pause screen
 			// Clear the screen
 			Gdx.gl.glClearColor(0, 0, 0, 1);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 			
+			// draws the text on to the screen in the centre
 			batch.begin();
 			font.draw(batch, "Game Paused", game.getSCREEN_WIDTH() / 2 - 60, game.getSCREEN_HEIGHT() / 2 + 50);
 			font.draw(batch, "Press 'R' to Resume", game.getSCREEN_WIDTH() / 2 - 90, game.getSCREEN_HEIGHT() / 2);
