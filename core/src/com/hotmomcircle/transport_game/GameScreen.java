@@ -109,16 +109,6 @@ public class GameScreen implements Screen {
 	@Override
 	public void render(float delta) {
 		ScreenUtils.clear(0, 0, 0.2f, 1);
-
-		// calculate UI values 
-		float newCarbonValue = 100;
-        carbon.setCarbon(newCarbonValue);
-
-		// UI draw 
-		// was throwing errors if done before map render
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		stage.act(delta);
-		stage.draw();
 		
 		// map render 
 		renderer.setView(camera);
@@ -131,8 +121,6 @@ public class GameScreen implements Screen {
 				gems.removeValue(gem, true);
 			}
 		}
-
-
 
 		// TODO Auto-generated method stub
       // clear the screen with a dark blue color. The
@@ -159,6 +147,14 @@ public class GameScreen implements Screen {
 			e.printStackTrace();
 		}
 		batch.end();
+
+		// calculate UI values 
+		float newCarbonValue = 500;
+		carbon.setCarbon(newCarbonValue);
+
+		// UI draw 
+		stage.act(delta);
+		stage.draw();
 		
 	}
 
