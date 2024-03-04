@@ -1,33 +1,22 @@
 package com.hotmomcircle.transport_game.ui;
 // this package will hold all of the ui elements
-// MVP: Carbon, freshness and a timer of some description
+// MVP: points, freshness and a timer of some description
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
+// Group is redundant right now buy may not be when we add more components
+// i'm thinking about a minimap etc
+// so when we extend group all the components
+// SHOULD play nicely 
+
 public class Points extends Group {
-    private ProgressBar carbon;
+    private Label points;
 
     public Points(Skin skin) {
         // Create health bar
-        carbon = new ProgressBar(0, 100, 1, false, skin);
-        carbon.setSize(200, 20);
-        carbon.setAnimateDuration(0.25f);
-        carbon.getStyle().knob.setMinHeight(carbon.getHeight());
-        carbon.getStyle().knob.setMinWidth(0);
-        // TODO figure out what this means beacuse it's throwing errors
-        // carbon.getStyle().knobBefore.setMinHeight(carbon.getHeight());
-        carbon.getStyle().background.setMinHeight(carbon.getHeight());
-        addActor(carbon);
-    }
-
-    public void setPoints(float value) {
-        carbon.setValue(value);
-    }
-
-    public float getPoints() {
-        return carbon.getValue();
+        points = new Label("100", skin);
+        addActor(points);
     }
 }

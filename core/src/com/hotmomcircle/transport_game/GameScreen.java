@@ -60,7 +60,6 @@ public class GameScreen implements Screen {
 		
 		this.batch = game.batch;
 
-		// UI component boilerplate
 		// TODO explain stages, skins, assetmanager
 		this.stage = new Stage(new ScreenViewport()); 
 		// not sure if i'm thisDOTTING correctly but she wasn't working otherwise
@@ -68,11 +67,11 @@ public class GameScreen implements Screen {
         Gdx.input.setInputProcessor(this.stage);
 		Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
 
-		// Asset manager instanitation
+		// Asset manager instansiation
 		assetManager = new AssetManager();
 		assetManager.load("uiskin.json", Skin.class);
 
-		// instantiante Carbon, set position, add to Stage
+		// instantiante points, set position, add to Stage
         points = new Points(skin);
         points.setPosition(game.SCREEN_WIDTH / 20, game.SCREEN_HEIGHT / 10 * 9);
         this.stage.addActor(points);
@@ -149,10 +148,6 @@ public class GameScreen implements Screen {
 			e.printStackTrace();
 		}
 		batch.end();
-
-		// calculate UI values 
-		float newPointsValue = 50;
-		points.setPoints(newPointsValue);
 
 		// UI draw 
 		stage.act(delta);
