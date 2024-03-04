@@ -2,14 +2,19 @@ package com.hotmomcircle.transport_game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.hotmomcircle.transport_game.entity.Gem;
 import com.hotmomcircle.transport_game.entity.Player;
+import com.hotmomcircle.transport_game.ui.Carbon;
 
 //map imports below 
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -41,7 +46,14 @@ public class GameScreen implements Screen {
 	   
    private OrthographicCamera camera;
 
-	
+   // Stage for UI components 
+   private Stage stage;
+   private Carbon carbon;
+
+   // asset manager to implement uiskin.json
+   // TODO best practise to implement all our assets this way? 
+   private AssetManager assetManager;
+
 	public GameScreen(TransportGame game) {
 		this.game = game;
 		
@@ -65,6 +77,21 @@ public class GameScreen implements Screen {
 		gems.add(new Gem(100, 100));
 		gems.add(new Gem(200, 200));
 		gems.add(new Gem(300, 300));
+
+		// Asset manager instanitation
+		assetManager = new AssetManager();
+        assetManager.load("uiskin.json", Skin.class);
+
+		// UI component boilerplate
+		// TODO explain stages and skins
+		Stage stage = new Stage(new ScreenViewport());
+        Gdx.input.setInputProcessor(stage);
+		Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+
+		// instantiante Carbon, set position, add to Stage
+        carbon = new Carbon(skin);
+        carbon.setPosition(50, 50);
+        stage.addActor(carbon);
 		
 		// create the camera and the SpriteBatch
 		camera = new OrthographicCamera();
@@ -93,6 +120,11 @@ public class GameScreen implements Screen {
 				gems.removeValue(gem, true);
 			}
 		}
+
+		// UI draw 
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        stage.act(delta);
+        stage.draw();
 
 		// TODO Auto-generated method stub
       // clear the screen with a dark blue color. The
@@ -153,6 +185,8 @@ public class GameScreen implements Screen {
 		// TODO check if right place for this disposal 
 		map.dispose();
 		renderer.dispose();
+		stage.dispose();
+		assetManager.dispose();
 		
 	}
 	
