@@ -1,5 +1,6 @@
 package com.hotmomcircle.transport_game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -49,7 +50,7 @@ public class GameScreen implements Screen {
 		//loading map 
 		TmxMapLoader loader = new TmxMapLoader();
 		try {
-			map = loader.load("C:\\Users\\taraa\\OneDrive\\Desktop\\Comp_Sci_MSc\\transport_game\\transport_game\\assets\\trialMap.tmx");
+			 map = loader.load(Gdx.files.internal("./trialMap.tmx").file().getAbsolutePath());
 			System.out.println("Map loaded successfully.");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -106,7 +107,7 @@ public class GameScreen implements Screen {
       // coordinate system specified by the camera.
       batch.setProjectionMatrix(camera.combined);
 
-		// ScreenUtils.clear(1, 0, 0, 1);
+		// ScreenUtils.clear(1, 0, 0, 1); 
 		batch.begin();
 		try {
 			player.render(batch);
