@@ -3,15 +3,16 @@ package com.hotmomcircle.transport_game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.hotmomcircle.transport_game.entity.Gem;
 import com.hotmomcircle.transport_game.entity.Player;
-import com.hotmomcircle.transport_game.screen.PauseScreen;
 //map imports below 
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -46,8 +47,7 @@ public class GameScreen implements Screen {
 	
 	private final int GAME_RUNNING = 0;
 	private final int GAME_PAUSED = 1;
-	PauseScreen pauseScreen;
-	
+	private BitmapFont font = new BitmapFont();
 	
 	
 	public GameScreen(TransportGame game) {
@@ -101,7 +101,14 @@ public class GameScreen implements Screen {
 		} 
 		if (GAME_STATE == GAME_PAUSED){
 			// draw the pause screen
+			// Clear the screen
+			Gdx.gl.glClearColor(0, 0, 0, 1);
+			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 			
+			batch.begin();
+			font.draw(batch, "Game Paused", game.getSCREEN_WIDTH() / 2 - 60, game.getSCREEN_HEIGHT() / 2 + 50);
+			font.draw(batch, "Press 'R' to Resume", game.getSCREEN_WIDTH() / 2 - 90, game.getSCREEN_HEIGHT() / 2);
+			batch.end();
 
 		} else {
 
