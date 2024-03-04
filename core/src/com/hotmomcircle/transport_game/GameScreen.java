@@ -1,5 +1,7 @@
 package com.hotmomcircle.transport_game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -47,7 +49,7 @@ public class GameScreen implements Screen {
 		gems.add(new Gem(200, 200));
 		gems.add(new Gem(300, 300));
 		
-		bike = new Bicycle_OBJ(this, 300, 100);
+		bike = new Bicycle_OBJ(this, 300, 100, true);
 		
 		// create the camera and the SpriteBatch
 		camera = new OrthographicCamera();
@@ -70,6 +72,9 @@ public class GameScreen implements Screen {
 				gems.removeValue(gem, true);
 			}
 		}
+		
+		bike.update();
+		
 		
 	
 		
