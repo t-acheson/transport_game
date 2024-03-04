@@ -98,8 +98,8 @@ public class Player extends Entity {
 		
 		
 //		Can press 'B' to get on bike
-		if(Gdx.input.isKeyPressed(Input.Keys.B)) {
-			getOnBike();
+		if(Gdx.input.isKeyPressed(Input.Keys.F)) {
+			getOnFoot();
 		}
 		
 		
