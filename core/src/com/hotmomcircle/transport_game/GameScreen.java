@@ -1,5 +1,6 @@
 package com.hotmomcircle.transport_game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -9,6 +10,13 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.hotmomcircle.transport_game.entity.Gem;
 import com.hotmomcircle.transport_game.entity.Player;
+
+//map imports below 
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+
+
  
 // This will be the screen 
 public class GameScreen implements Screen {
@@ -19,9 +27,12 @@ public class GameScreen implements Screen {
 	SpriteBatch batch;
 	
 	private int originalTileSize = 16;
-	public int scale = 3;
+	public int scale = 2;
 	private int tileSize = originalTileSize * scale;
 	
+	//initalising map 
+	private TiledMap map;
+	private OrthogonalTiledMapRenderer renderer;
 	
 	Texture img;
 	public Player player;
@@ -36,6 +47,16 @@ public class GameScreen implements Screen {
 		
 		this.batch = game.batch;
 		
+		//loading map 
+		TmxMapLoader loader = new TmxMapLoader();
+		try {
+			 map = loader.load("trialMap.tmx");
+			System.out.println("Map loaded successfully.");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		renderer = new OrthogonalTiledMapRenderer(map);	
+		//
 
 		
 		player = new Player(this);
@@ -59,7 +80,13 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void render(float delta) {
+		ScreenUtils.clear(0, 0, 0.2f, 1);
 		
+		// map render 
+		renderer.setView(camera);
+		renderer.render();
+		//
+
 		for (Gem gem : gems) {
 			if (player.getPlayerRectangle().overlaps(gem.getGemRectangle())) {
 				gem.dispose();
@@ -72,7 +99,6 @@ public class GameScreen implements Screen {
       // arguments to clear are the red, green
       // blue and alpha component in the range [0,1]
       // of the color to be used to clear the screen.
-      ScreenUtils.clear(0, 0, 0.2f, 1);
 
       // tell the camera to update its matrices.
       camera.update();
@@ -81,7 +107,7 @@ public class GameScreen implements Screen {
       // coordinate system specified by the camera.
       batch.setProjectionMatrix(camera.combined);
 
-		ScreenUtils.clear(1, 0, 0, 1);
+		// ScreenUtils.clear(1, 0, 0, 1); 
 		batch.begin();
 		try {
 			player.render(batch);
@@ -124,6 +150,14 @@ public class GameScreen implements Screen {
 	public void dispose() {
 		// TODO Auto-generated method stub
 		
+		// TODO check if right place for this disposal 
+		map.dispose();
+		renderer.dispose();
+		
+	}
+	
+	public int getTileSize() {
+		return tileSize;
 	}
 
 }

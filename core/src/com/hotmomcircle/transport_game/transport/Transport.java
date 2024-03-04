@@ -21,6 +21,7 @@ public class Transport {
 	private long imgDuration = 500000000; //How long each image should be displayed
 	private long imgChangeTime = 0; //Time since the image was last changed
 	private int imgIdx = 0;
+	private int imgScale; //Size of the image relative to the tile size, assumes all images same size
 	
 	public Texture image;
 	public Texture[] up;
@@ -53,12 +54,16 @@ public class Transport {
 	
 	public void render(SpriteBatch batch) throws Exception{
 		Texture currImg = getCurrentImage();
-		batch.draw(currImg, game.player.getX(), game.player.getY(), 0, 0, currImg.getWidth(), currImg.getHeight(), game.scale, game.scale, 0, 0, 0, currImg.getWidth(), currImg.getHeight(), false, false);
+//		System.out.println(currImg.getWidth());
+//		System.out.println(currImg.getHeight());
+//		System.out.println(game.getTileSize());
+//		batch.draw(currImg, game.player.getX(), game.player.getY(), 0, 0, currImg.getWidth(), currImg.getHeight(), game.scale, game.scale, 0, 0, 0, currImg.getWidth(), currImg.getHeight(), false, false);
+		batch.draw(currImg, game.player.getX(), game.player.getY(), 0, 0, game.getTileSize(), game.getTileSize(), game.scale, game.scale, 0, 0, 0, currImg.getWidth(), currImg.getHeight(), false, false);
 	}
 	
 	public Texture getCurrentImage() throws Exception {
 		
-		if(TimeUtils.nanoTime() - imgChangeTime > imgDuration) {
+		if(TimeUtils.nanoTime() - imgChangeTime > imgDuration && game.player.isMoving()) {
 			imgChangeTime = TimeUtils.nanoTime();
 			imgIdx = (imgIdx + 1) % 2;
 		}
