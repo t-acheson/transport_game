@@ -9,12 +9,13 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.hotmomcircle.transport_game.entity.Gem;
 import com.hotmomcircle.transport_game.entity.Player;
-import com.hotmomcircle.transport_game.ui.Carbon;
+import com.hotmomcircle.transport_game.ui.Points;
 
 //map imports below 
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -48,7 +49,7 @@ public class GameScreen implements Screen {
 
    // Stage for UI components 
    private Stage stage;
-   private Carbon carbon;
+   private Points points;
 
    // asset manager to implement uiskin.json
    // TODO best practise to implement all our assets this way? 
@@ -60,8 +61,9 @@ public class GameScreen implements Screen {
 		this.batch = game.batch;
 
 		// UI component boilerplate
-		// TODO explain stages and skins
-		this.stage = new Stage(new ScreenViewport());
+		// TODO explain stages, skins, assetmanager
+		this.stage = new Stage(new ScreenViewport()); 
+		// not sure if i'm thisDOTTING correctly but she wasn't working otherwise
 		System.out.println(this.stage);
         Gdx.input.setInputProcessor(this.stage);
 		Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
@@ -71,9 +73,9 @@ public class GameScreen implements Screen {
 		assetManager.load("uiskin.json", Skin.class);
 
 		// instantiante Carbon, set position, add to Stage
-        carbon = new Carbon(skin);
-        carbon.setPosition(50, 50);
-        this.stage.addActor(carbon);
+        points = new Points(skin);
+        points.setPosition(game.SCREEN_WIDTH / 20, game.SCREEN_HEIGHT / 10 * 9);
+        this.stage.addActor(points);
 		
 		//loading map 
 		TmxMapLoader loader = new TmxMapLoader();
@@ -149,8 +151,8 @@ public class GameScreen implements Screen {
 		batch.end();
 
 		// calculate UI values 
-		float newCarbonValue = 500;
-		carbon.setCarbon(newCarbonValue);
+		float newPointsValue = 50;
+		points.setPoints(newPointsValue);
 
 		// UI draw 
 		stage.act(delta);

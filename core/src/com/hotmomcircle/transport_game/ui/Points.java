@@ -7,10 +7,10 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
-public class Carbon extends Group {
+public class Points extends Group {
     private ProgressBar carbon;
 
-    public Carbon(Skin skin) {
+    public Points(Skin skin) {
         // Create health bar
         carbon = new ProgressBar(0, 100, 1, false, skin);
         carbon.setSize(200, 20);
@@ -23,11 +23,11 @@ public class Carbon extends Group {
         addActor(carbon);
     }
 
-    public void setCarbon(float value) {
+    public void setPoints(float value) {
         carbon.setValue(value);
     }
 
-    public float getCarbon() {
+    public float getPoints() {
         return carbon.getValue();
     }
 }
