@@ -50,7 +50,7 @@ public class GameScreen implements Screen {
 		//loading map 
 		TmxMapLoader loader = new TmxMapLoader();
 		try {
-			 map = loader.load(Gdx.files.internal("./trialMap.tmx").file().getAbsolutePath());
+			 map = loader.load("trialMap.tmx");
 			System.out.println("Map loaded successfully.");
 		} catch (Exception e) {
 			e.printStackTrace();
