@@ -49,16 +49,17 @@ public class Player extends Entity {
 		
 		Texture[] bikeTextures = new Texture[8];
 
-		playerTextures[0] = new Texture(Gdx.files.internal("./bicycle/bike_up1.png"));
-		playerTextures[1] = new Texture(Gdx.files.internal("./bicycle/bike_up2.png"));
-		playerTextures[2] = new Texture(Gdx.files.internal("./bicycle/bike_down1.png"));
-		playerTextures[3] = new Texture(Gdx.files.internal("./bicycle/bike_down2.png"));
-		playerTextures[4] = new Texture(Gdx.files.internal("./bicycle/bike_left1.png"));
-		playerTextures[5] = new Texture(Gdx.files.internal("./bicycle/bike_left2.png"));
-		playerTextures[6] = new Texture(Gdx.files.internal("./bicycle/bike_right1.png"));
-		playerTextures[7] = new Texture(Gdx.files.internal("./bicycle/bike_right2.png"));
+		bikeTextures[0] = new Texture(Gdx.files.internal("./bicycle/bike_up1.png"));
+		bikeTextures[1] = new Texture(Gdx.files.internal("./bicycle/bike_up2.png"));
+		bikeTextures[2] = new Texture(Gdx.files.internal("./bicycle/bike_down1.png"));
+		bikeTextures[3] = new Texture(Gdx.files.internal("./bicycle/bike_down2.png"));
+		bikeTextures[4] = new Texture(Gdx.files.internal("./bicycle/bike_left1.png"));
+		bikeTextures[5] = new Texture(Gdx.files.internal("./bicycle/bike_left2.png"));
+		bikeTextures[6] = new Texture(Gdx.files.internal("./bicycle/bike_right1.png"));
+		bikeTextures[7] = new Texture(Gdx.files.internal("./bicycle/bike_right2.png"));
 		
-		transport[1] = new Transport(game, "Bicycle", 300, playerTextures); 
+		transport[1] = new Transport(game, "Bicycle", 300, bikeTextures); 
+		
 
 		playerRectangle = new Rectangle();
 		playerRectangle.x = this.getX();
