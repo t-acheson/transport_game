@@ -17,7 +17,8 @@ public class Carbon extends Group {
         carbon.setAnimateDuration(0.25f);
         carbon.getStyle().knob.setMinHeight(carbon.getHeight());
         carbon.getStyle().knob.setMinWidth(0);
-        carbon.getStyle().knobBefore.setMinHeight(carbon.getHeight());
+        // TODO figure out what this means beacuse it's throwing errors
+        // carbon.getStyle().knobBefore.setMinHeight(carbon.getHeight());
         carbon.getStyle().background.setMinHeight(carbon.getHeight());
         addActor(carbon);
     }

@@ -58,6 +58,22 @@ public class GameScreen implements Screen {
 		this.game = game;
 		
 		this.batch = game.batch;
+
+		// UI component boilerplate
+		// TODO explain stages and skins
+		this.stage = new Stage(new ScreenViewport());
+		System.out.println(this.stage);
+        Gdx.input.setInputProcessor(this.stage);
+		Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
+
+		// Asset manager instanitation
+		assetManager = new AssetManager();
+		assetManager.load("uiskin.json", Skin.class);
+
+		// instantiante Carbon, set position, add to Stage
+        carbon = new Carbon(skin);
+        carbon.setPosition(50, 50);
+        this.stage.addActor(carbon);
 		
 		//loading map 
 		TmxMapLoader loader = new TmxMapLoader();
@@ -77,21 +93,6 @@ public class GameScreen implements Screen {
 		gems.add(new Gem(100, 100));
 		gems.add(new Gem(200, 200));
 		gems.add(new Gem(300, 300));
-
-		// Asset manager instanitation
-		assetManager = new AssetManager();
-        assetManager.load("uiskin.json", Skin.class);
-
-		// UI component boilerplate
-		// TODO explain stages and skins
-		Stage stage = new Stage(new ScreenViewport());
-        Gdx.input.setInputProcessor(stage);
-		Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
-
-		// instantiante Carbon, set position, add to Stage
-        carbon = new Carbon(skin);
-        carbon.setPosition(50, 50);
-        stage.addActor(carbon);
 		
 		// create the camera and the SpriteBatch
 		camera = new OrthographicCamera();
@@ -108,6 +109,16 @@ public class GameScreen implements Screen {
 	@Override
 	public void render(float delta) {
 		ScreenUtils.clear(0, 0, 0.2f, 1);
+
+		// calculate UI values 
+		float newCarbonValue = 100;
+        carbon.setCarbon(newCarbonValue);
+
+		// UI draw 
+		// was throwing errors if done before map render
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		stage.act(delta);
+		stage.draw();
 		
 		// map render 
 		renderer.setView(camera);
@@ -121,10 +132,7 @@ public class GameScreen implements Screen {
 			}
 		}
 
-		// UI draw 
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        stage.act(delta);
-        stage.draw();
+
 
 		// TODO Auto-generated method stub
       // clear the screen with a dark blue color. The
