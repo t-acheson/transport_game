@@ -1,18 +1,18 @@
 package com.hotmomcircle.transport_game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -34,17 +34,22 @@ public class GameScreen implements Screen {
 	private int originalTileSize = 16;
 	public int scale = 2;
 	private int tileSize = originalTileSize * scale;
-
-	// initalising map
+	
+	//initializing map 
 	private TiledMap map;
 	private OrthogonalTiledMapRenderer renderer;
 
 	Texture img;
 	public Player player;
-
+	
 	public Array<Gem> gems;
-
-	private OrthographicCamera camera;
+	   
+   private OrthographicCamera camera;
+   // Variables associated with the pause / game state
+	private int GAME_STATE;
+	private final int GAME_RUNNING = 0;
+	private final int GAME_PAUSED = 1;
+	private BitmapFont font = new BitmapFont();
 
 	// Stage for UI components
 	private Stage stage;
@@ -58,13 +63,16 @@ public class GameScreen implements Screen {
 	// asset manager to implement uiskin.json
 	// TODO best practise to implement all our assets this way?
 	private AssetManager assetManager;
-
+	
 	public GameScreen(TransportGame game) {
 		this.game = game;
 
 		this.batch = game.batch;
-
-		// loading map
+		
+		// for the pause / play feature
+		GAME_STATE = GAME_RUNNING;
+		
+		//loading map 
 		TmxMapLoader loader = new TmxMapLoader();
 		try {
 			map = loader.load("trialMap.tmx");
@@ -76,7 +84,7 @@ public class GameScreen implements Screen {
 		//
 
 		player = new Player(this);
-
+		
 		gems = new Array<Gem>();
 		gems.add(new Gem(400, 400));
 		gems.add(new Gem(200, 200));
@@ -130,20 +138,43 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void render(float delta) {
-		ScreenUtils.clear(0, 0, 0.2f, 1);
 
-		// map render
-		renderer.setView(camera);
-		renderer.render();
-		//
+		// pauses the game if it isnt already paused - prevents multiple inputs
+		if(Gdx.input.isKeyPressed(Input.Keys.P) && GAME_STATE != GAME_PAUSED) {
+			pause();
+		} 
+		// resumes game if it isn't already running
+		if(Gdx.input.isKeyPressed(Input.Keys.R) && GAME_STATE != GAME_RUNNING) {
+			resume();
+		} 
+		if (GAME_STATE == GAME_PAUSED){
+			// Clear the screen
+			Gdx.gl.glClearColor(0, 0, 0, 1);
+			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+			
+			// draws the text on to the screen in the centre
+			batch.begin();
+			font.draw(batch, "Game Paused", game.getSCREEN_WIDTH() / 2 - 60, game.getSCREEN_HEIGHT() / 2 + 50);
+			font.draw(batch, "Press 'R' to Resume", game.getSCREEN_WIDTH() / 2 - 90, game.getSCREEN_HEIGHT() / 2);
+			batch.end();
 
-		for (Gem gem : gems) {
-			if (player.getPlayerRectangle().overlaps(gem.getGemRectangle())) {
-				gem.dispose();
-				gems.removeValue(gem, true);
+		} else {
+
+		
+			ScreenUtils.clear(0, 0, 0.2f, 1);
+			
+			// map render 
+			renderer.setView(camera);
+			renderer.render();
+			//
+
+			for (Gem gem : gems) {
+				if (player.getPlayerRectangle().overlaps(gem.getGemRectangle())) {
+					gem.dispose();
+					gems.removeValue(gem, true);
 				points.setText("50");
+				}
 			}
-		}
 
 		// TODO Auto-generated method stub
 		// clear the screen with a dark blue color. The
@@ -175,6 +206,20 @@ public class GameScreen implements Screen {
 		}
 		batch.end();
 
+			// ScreenUtils.clear(1, 0, 0, 1); 
+			batch.begin();
+			try {
+				player.render(batch);
+				for (Gem gem : gems) {
+					gem.render(batch);
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			batch.end();
+		}
+		
 	}
 
 	@Override
@@ -186,13 +231,15 @@ public class GameScreen implements Screen {
 	@Override
 	public void pause() {
 		// TODO Auto-generated method stub
-
+		System.out.println("Game Paused");
+		GAME_STATE = GAME_PAUSED;
+		
 	}
 
 	@Override
 	public void resume() {
 		// TODO Auto-generated method stub
-
+		GAME_STATE = GAME_RUNNING;
 	}
 
 	@Override
