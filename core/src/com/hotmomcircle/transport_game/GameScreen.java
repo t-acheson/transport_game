@@ -18,7 +18,6 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.hotmomcircle.transport_game.entity.Gem;
 import com.hotmomcircle.transport_game.entity.Player;
-import com.hotmomcircle.transport_game.ui.Points;
 
 //map imports below 
 import com.badlogic.gdx.maps.tiled.TiledMap;
