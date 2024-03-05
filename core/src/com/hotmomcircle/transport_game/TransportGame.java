@@ -44,5 +44,13 @@ public class TransportGame extends Game {
 		batch.dispose();
 		font.dispose();
 	}
+
+	public int getSCREEN_WIDTH() {
+		return SCREEN_WIDTH;
+	}
+
+	public int getSCREEN_HEIGHT(){
+		return SCREEN_HEIGHT;
+	}
 	
 }

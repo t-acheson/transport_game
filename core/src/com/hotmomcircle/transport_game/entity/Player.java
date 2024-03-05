@@ -20,7 +20,7 @@ public class Player extends Entity {
 	GameScreen game;
 	private Texture bikeImage;
 	private Texture carImage;
-	private Transport[] transport = new Transport[3];
+	private Transport[] transport = new Transport[3]; // [foot, bike, car]
 	private int transIdx = 0; //Index corresponding to which transport the player is currently on
 	private int stamina;
 	public Rectangle playerRectangle;
@@ -35,16 +35,45 @@ public class Player extends Entity {
 		y = 100;
 		x = 100;
 		Texture[] playerTextures = new Texture[8];
-		playerTextures[0] = new Texture(Gdx.files.internal("player_up1.png"));
-		playerTextures[1] = new Texture(Gdx.files.internal("player_up2.png"));
-		playerTextures[2] = new Texture(Gdx.files.internal("player_down1.png"));
-		playerTextures[3] = new Texture(Gdx.files.internal("player_down2.png"));
-		playerTextures[4] = new Texture(Gdx.files.internal("player_left1.png"));
-		playerTextures[5] = new Texture(Gdx.files.internal("player_left2.png"));
-		playerTextures[6] = new Texture(Gdx.files.internal("player_right1.png"));
-		playerTextures[7] = new Texture(Gdx.files.internal("player_right2.png"));
+		playerTextures[0] = new Texture(Gdx.files.internal("./foot/player_up1.png"));
+		playerTextures[1] = new Texture(Gdx.files.internal("./foot/player_up2.png"));
+		playerTextures[2] = new Texture(Gdx.files.internal("./foot/player_down1.png"));
+		playerTextures[3] = new Texture(Gdx.files.internal("./foot/player_down2.png"));
+		playerTextures[4] = new Texture(Gdx.files.internal("./foot/player_left1.png"));
+		playerTextures[5] = new Texture(Gdx.files.internal("./foot/player_left2.png"));
+		playerTextures[6] = new Texture(Gdx.files.internal("./foot/player_right1.png"));
+		playerTextures[7] = new Texture(Gdx.files.internal("./foot/player_right2.png"));
 
 		transport[0] = new Transport(game, "Foot", 200, playerTextures);
+		
+		
+		Texture[] bikeTextures = new Texture[8];
+
+		bikeTextures[0] = new Texture(Gdx.files.internal("./bicycle/bike_up1.png"));
+		bikeTextures[1] = new Texture(Gdx.files.internal("./bicycle/bike_up2.png"));
+		bikeTextures[2] = new Texture(Gdx.files.internal("./bicycle/bike_down1.png"));
+		bikeTextures[3] = new Texture(Gdx.files.internal("./bicycle/bike_down2.png"));
+		bikeTextures[4] = new Texture(Gdx.files.internal("./bicycle/bike_left1.png"));
+		bikeTextures[5] = new Texture(Gdx.files.internal("./bicycle/bike_left2.png"));
+		bikeTextures[6] = new Texture(Gdx.files.internal("./bicycle/bike_right1.png"));
+		bikeTextures[7] = new Texture(Gdx.files.internal("./bicycle/bike_right2.png"));
+		
+		transport[1] = new Transport(game, "Bicycle", 300, bikeTextures); 
+		
+		Texture[] carTextures = new Texture[8];
+
+		carTextures[0] = new Texture(Gdx.files.internal("./car/car_up.png"));
+		carTextures[1] = new Texture(Gdx.files.internal("./car/car_up.png"));
+		carTextures[2] = new Texture(Gdx.files.internal("./car/car_down.png"));
+		carTextures[3] = new Texture(Gdx.files.internal("./car/car_down.png"));
+		carTextures[4] = new Texture(Gdx.files.internal("./car/car_left.png"));
+		carTextures[5] = new Texture(Gdx.files.internal("./car/car_left.png"));
+		carTextures[6] = new Texture(Gdx.files.internal("./car/car_right.png"));
+		carTextures[7] = new Texture(Gdx.files.internal("./car/car_right.png"));
+		
+		transport[2] = new Transport(game, "Car", 400, carTextures); 
+		
+		
 
 		playerRectangle = new Rectangle();
 		playerRectangle.x = this.getX();
@@ -56,6 +85,23 @@ public class Player extends Entity {
 	
 	
 	public void render(SpriteBatch batch) throws Exception {
+		
+//		Can press 'f' to go on foot
+		if(Gdx.input.isKeyPressed(Input.Keys.B)) {
+			getOnBike();
+		}
+		
+//		Can press 'c' to go in car
+		if(Gdx.input.isKeyPressed(Input.Keys.C)) {
+			getOnCar();
+		}
+		
+		
+//		Can press 'B' to get on bike
+		if(Gdx.input.isKeyPressed(Input.Keys.F)) {
+			getOnFoot();
+		}
+		
 		
 //		Move the player 
 		if(Gdx.input.isKeyPressed(Input.Keys.W)) { 
@@ -104,6 +150,40 @@ public class Player extends Entity {
 
 	public Rectangle getPlayerRectangle() {
 		return playerRectangle;
+	}
+	
+	public boolean isMoving() {
+		boolean up = Gdx.input.isKeyPressed(Input.Keys.W);
+		boolean down = Gdx.input.isKeyPressed(Input.Keys.S);
+		boolean left = Gdx.input.isKeyPressed(Input.Keys.A);
+		boolean right = Gdx.input.isKeyPressed(Input.Keys.D);
+
+		if (up || down || left || right) {
+			this.game.carbon.setText("1");
+			this.game.freshness.setText("-1");
+		}
+		return up || down || left || right;
+	}
+	
+//  Go on foot
+	public void getOnFoot() {
+		transIdx = 0;
+	}
+	
+//	Changes player transport
+	public void getOnBike() {
+//		Can only get on bike if you are on foot
+		if(transIdx == 0) {
+			transIdx = 1;
+		}
+	}
+	
+//	 Changes player transport
+	public void getOnCar() {
+//		Can only get in car if on foot
+		if(transIdx == 0) {
+			transIdx = 2;
+		}
 	}
 	
 	
