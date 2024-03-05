@@ -18,7 +18,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.hotmomcircle.transport_game.entity.Gem;
 import com.hotmomcircle.transport_game.entity.Player;
-
+import com.hotmomcircle.transport_game.ui.Points;
 //map imports below 
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -52,9 +52,9 @@ public class GameScreen implements Screen {
    // Stage for UI components 
    private Stage stage;
    private Table table;
-   private Label points;
-   private Label carbon;
-   private Label freshness;
+   private Points points;
+   private Points carbon;
+   private Points freshness;
 
    // asset manager to implement uiskin.json
    // TODO best practise to implement all our assets this way? 
@@ -105,9 +105,9 @@ public class GameScreen implements Screen {
 		table.left().top();
 
 		// UI scores
-		points = new Label("0", skin);
-		carbon = new Label("0", skin);
-		freshness = new Label("100", skin);
+		points = new Points("0", skin);
+		carbon = new Points("0", skin);
+		freshness = new Points("100", skin);
 
 		// fill table with UI scores
 		table.add(new TextField("Points: ", skin));
@@ -140,6 +140,7 @@ public class GameScreen implements Screen {
 			if (player.getPlayerRectangle().overlaps(gem.getGemRectangle())) {
 				gem.dispose();
 				gems.removeValue(gem, true);
+				points.setText("50");
 			}
 		}
 
