@@ -157,6 +157,11 @@ public class Player extends Entity {
 		boolean down = Gdx.input.isKeyPressed(Input.Keys.S);
 		boolean left = Gdx.input.isKeyPressed(Input.Keys.A);
 		boolean right = Gdx.input.isKeyPressed(Input.Keys.D);
+
+		if (up || down || left || right) {
+			this.game.carbon.setText("1");
+			this.game.freshness.setText("-1");
+		}
 		return up || down || left || right;
 	}
 	
