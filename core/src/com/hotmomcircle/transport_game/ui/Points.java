@@ -11,12 +11,6 @@ public class Points extends Label {
     }
 
     @Override
-    public StringBuilder getText() {
-        // TODO Auto-generated method stub
-        return super.getText();
-    }
-
-    @Override
     public void setText(CharSequence deltaValue) {
         // pass value to change value by (positive or negative)
 

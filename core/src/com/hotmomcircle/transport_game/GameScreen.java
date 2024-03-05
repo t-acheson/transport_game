@@ -80,7 +80,7 @@ public class GameScreen implements Screen {
 		player = new Player(this);
 
 		gems = new Array<Gem>();
-		gems.add(new Gem(100, 100));
+		gems.add(new Gem(400, 400));
 		gems.add(new Gem(200, 200));
 		gems.add(new Gem(300, 300));
 		
