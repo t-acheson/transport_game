@@ -9,7 +9,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -49,7 +52,10 @@ public class GameScreen implements Screen {
 
    // Stage for UI components 
    private Stage stage;
-   private Points points;
+   private Table table;
+   private Label points;
+   private Label carbon;
+   private Label freshness;
 
    // asset manager to implement uiskin.json
    // TODO best practise to implement all our assets this way? 
@@ -59,22 +65,6 @@ public class GameScreen implements Screen {
 		this.game = game;
 		
 		this.batch = game.batch;
-
-		// TODO explain stages, skins, assetmanager
-		this.stage = new Stage(new ScreenViewport()); 
-		// not sure if i'm thisDOTTING correctly but she wasn't working otherwise
-		System.out.println(this.stage);
-        Gdx.input.setInputProcessor(this.stage);
-		Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
-
-		// Asset manager instansiation
-		assetManager = new AssetManager();
-		assetManager.load("uiskin.json", Skin.class);
-
-		// instantiante points, set position, add to Stage
-        points = new Points(skin);
-        points.setPosition(game.SCREEN_WIDTH / 20, game.SCREEN_HEIGHT / 10 * 9);
-        this.stage.addActor(points);
 		
 		//loading map 
 		TmxMapLoader loader = new TmxMapLoader();
@@ -99,6 +89,37 @@ public class GameScreen implements Screen {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, game.SCREEN_WIDTH, game.SCREEN_HEIGHT);
 		
+		// TODO explain stages, skins, assetmanager
+		stage = new Stage(new ScreenViewport()); 
+        Gdx.input.setInputProcessor(stage);
+		Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
+
+		// Asset manager instansiation
+		assetManager = new AssetManager();
+		assetManager.load("uiskin.json", Skin.class);
+
+		// table to hold UI elements
+		table = new Table();
+		table.setFillParent(true);
+		table.defaults().width(game.SCREEN_WIDTH/6).expandX().fillX();
+		table.setWidth(game.SCREEN_WIDTH/6);
+		table.left().top();
+
+		// UI scores
+		points = new Label("0", skin);
+		carbon = new Label("0", skin);
+		freshness = new Label("100", skin);
+
+		// fill table with UI scores
+		table.add(new TextField("Points: ", skin));
+		table.add(points).fillX().uniformX();
+		table.add(new TextField("Carbon: ", skin));
+		table.add(carbon).fillX().uniformX();
+		table.add(new TextField("Freshness: ", skin));
+		table.add(freshness).fillX().uniformX();
+
+		// add table to stage
+        stage.addActor(table);
 		
 	}
 	@Override
@@ -132,6 +153,10 @@ public class GameScreen implements Screen {
       // tell the camera to update its matrices.
       camera.update();
 
+		// UI draw 
+		stage.act(delta);
+		stage.draw();
+
       // tell the SpriteBatch to render in the
       // coordinate system specified by the camera.
       batch.setProjectionMatrix(camera.combined);
@@ -148,10 +173,6 @@ public class GameScreen implements Screen {
 			e.printStackTrace();
 		}
 		batch.end();
-
-		// UI draw 
-		stage.act(delta);
-		stage.draw();
 		
 	}
 
