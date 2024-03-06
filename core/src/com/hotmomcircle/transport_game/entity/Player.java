@@ -22,6 +22,9 @@ public class Player extends Entity {
 	private Texture carImage;
 	private Transport[] transport = new Transport[3]; // [foot, bike, car]
 	private int transIdx = 0; //Index corresponding to which transport the player is currently on
+	private int FOOT = 0;
+	private int BIKE = 1;
+	private int CAR = 2;
 	private int stamina;
 	public Rectangle playerRectangle;
 	
@@ -87,8 +90,8 @@ public class Player extends Entity {
 	public void render(SpriteBatch batch) throws Exception {
 		
 //		Can press 'f' to go on foot
-		if(Gdx.input.isKeyPressed(Input.Keys.B)) {
-			getOnBike();
+		if(Gdx.input.isKeyPressed(Input.Keys.F)) {
+			getOnFoot();
 		}
 		
 //		Can press 'c' to go in car
@@ -159,6 +162,8 @@ public class Player extends Entity {
 		boolean right = Gdx.input.isKeyPressed(Input.Keys.D);
 		return up || down || left || right;
 	}
+	
+	
 	
 //  Go on foot
 	public void getOnFoot() {
