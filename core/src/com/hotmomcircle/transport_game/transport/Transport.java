@@ -15,8 +15,10 @@ public class Transport {
 	private GameScreen game;
 	public String name;
 	public int speed;
-	private int footprint;
-	private int staminaCost;
+	// passing these as strings because that's the argument
+	// Points.setText method takes (because extends Label)
+	private String footprint;
+	private String staminaCost;
 	
 	private long imgDuration = 500000000; //How long each image should be displayed
 	private long imgChangeTime = 0; //Time since the image was last changed
@@ -30,10 +32,12 @@ public class Transport {
 	public Texture[] right;
 	
 
-	public Transport(GameScreen game, String name, int speed, Texture[] images) {
+	public Transport(GameScreen game, String name, int speed, Texture[] images, String footprint, String staminaCost) {
 		this.game = game;
 		this.name = name;
 		this.speed = speed;
+		this.footprint = footprint;
+		this.staminaCost = staminaCost;
 		
 		up = new Texture[2];
 		down = new Texture[2];
@@ -82,11 +86,11 @@ public class Transport {
 		}
 	}
 
-	public int getFootprint() {
+	public String getFootprint() {
 		return footprint;
 	}
 
-	public int getStaminaCost() {
+	public String getStaminaCost() {
 		return staminaCost;
 	}
 	
