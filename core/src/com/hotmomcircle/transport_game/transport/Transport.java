@@ -81,5 +81,13 @@ public class Transport {
 			throw new Exception("Error: incorrect direction string");
 		}
 	}
+
+	public int getFootprint() {
+		return footprint;
+	}
+
+	public int getStaminaCost() {
+		return staminaCost;
+	}
 	
 }
