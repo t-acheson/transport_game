@@ -12,5 +12,9 @@ public class Node extends Entity{
         super(locX, locY, width, height);
         this.routes = routes;
     }
+
+    public Route[] getRoutes() {
+        return routes;
+    }
     
 }
