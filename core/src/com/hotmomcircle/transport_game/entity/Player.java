@@ -22,9 +22,9 @@ public class Player extends Entity {
 	private Texture carImage;
 	private Transport[] transport = new Transport[3]; // [foot, bike, car]
 	private int transIdx = 0; //Index corresponding to which transport the player is currently on
-	private int FOOT = 0;
-	private int BIKE = 1;
-	private int CAR = 2;
+	public int FOOT = 0;
+	public int BIKE = 1;
+	public int CAR = 2;
 	private int stamina;
 	public Rectangle playerRectangle;
 	

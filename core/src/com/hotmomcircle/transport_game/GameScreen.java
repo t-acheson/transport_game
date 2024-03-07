@@ -30,7 +30,7 @@ public class GameScreen implements Screen {
 	public Player player;
 
 	public Array<Gem> gems;
-	public Bicycle_OBJ bike;
+	public Bicycle_OBJ[] bikes;
 	   
    private OrthographicCamera camera;
 
@@ -49,7 +49,11 @@ public class GameScreen implements Screen {
 		gems.add(new Gem(200, 200));
 		gems.add(new Gem(300, 300));
 		
-		bike = new Bicycle_OBJ(this, 300, 100, true);
+		bikes = new Bicycle_OBJ[3];
+		
+		bikes[0] = new Bicycle_OBJ(this, 300, 100, true);
+		bikes[1] = new Bicycle_OBJ(this, 400, 100, true);
+		bikes[2] = new Bicycle_OBJ(this, 500, 100, true);
 		
 		// create the camera and the SpriteBatch
 		camera = new OrthographicCamera();
@@ -73,7 +77,13 @@ public class GameScreen implements Screen {
 			}
 		}
 		
-		bike.update();
+		for(int i = 0; i < bikes.length; i++) {
+			if (bikes[i] != null) {
+				bikes[i].update(i);
+				
+			}
+			
+		}
 		
 		
 	
@@ -95,7 +105,11 @@ public class GameScreen implements Screen {
 		ScreenUtils.clear(1, 0, 0, 1);
 		batch.begin();
 		try {
-			bike.render(batch);
+			for (Bicycle_OBJ bike: bikes) {
+				if (bike != null) {					
+					bike.render(batch);
+				}
+			}
 			
 			for (Gem gem : gems) {
 				gem.render(batch);

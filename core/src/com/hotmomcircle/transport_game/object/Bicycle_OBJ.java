@@ -28,16 +28,16 @@ public class Bicycle_OBJ extends Object {
 		batch.draw(objImg, x, y, 0, 0, game.getTileSize(), game.getTileSize(), game.scale, game.scale, 0, 0, 0, objImg.getWidth(), objImg.getHeight(), false, false);
 	}
 	
-	public void update() {
-		if(game.player.getPlayerRectangle().overlaps(getObjectRectangle()) && Gdx.input.isKeyPressed(Keys.SPACE)) {
-			System.out.println("yo");
+	public void update(int i) {
+		if(game.player.getPlayerRectangle().overlaps(getObjectRectangle()) && Gdx.input.isKeyPressed(Keys.SPACE) && game.player.currTransport() == game.player.FOOT) {
 			interact();
+			this.dispose();
+			game.bikes[i] = null;
 		}
 	}
 	
 	public void interact() {
 		game.player.getOnBike();
-		this.dispose();
 	}
 	
 	public void dispose() {
