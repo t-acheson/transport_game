@@ -8,8 +8,8 @@ public class Node extends Entity{
 
     private Route[] routes;
 
-    Node(int x, int y, Route[] routes) {
-        super(x ,y);
+    Node(int locX, int locY, int width, int height, Route[] routes) {
+        super(locX, locY, width, height);
         this.routes = routes;
     }
     
