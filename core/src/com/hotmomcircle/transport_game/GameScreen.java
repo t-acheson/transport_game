@@ -83,12 +83,12 @@ public class GameScreen implements Screen {
 		renderer = new OrthogonalTiledMapRenderer(map);
 		//
 
-		player = new Player(this);
+		player = new Player(this, 100, 100, 32, 32);
 		
 		gems = new Array<Gem>();
-		gems.add(new Gem(400, 400));
-		gems.add(new Gem(200, 200));
-		gems.add(new Gem(300, 300));
+		gems.add(new Gem(400, 400, 16, 16));
+		gems.add(new Gem(200, 200, 16, 16));
+		gems.add(new Gem(300, 300, 16, 16));
 
 		// create the camera and the SpriteBatch
 		camera = new OrthographicCamera();
@@ -169,7 +169,7 @@ public class GameScreen implements Screen {
 			//
 
 			for (Gem gem : gems) {
-				if (player.getPlayerRectangle().overlaps(gem.getGemRectangle())) {
+				if (player.getRectangle().overlaps(gem.getRectangle())) {
 					gem.dispose();
 					gems.removeValue(gem, true);
 				points.setText("50");

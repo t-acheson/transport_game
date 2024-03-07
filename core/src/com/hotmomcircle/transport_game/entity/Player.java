@@ -28,12 +28,12 @@ public class Player extends Entity {
 	private String direction = "down";
 	
 	
-	public Player(GameScreen game) {
+	public Player(GameScreen game, int locX, int locY, int width, int height) {
+		super(locX, locY, width, height);
 		this.game = game;
 //		Initialize the textures
 //		Initialize player x and y positions
-		y = 100;
-		x = 100;
+
 		Texture[] playerTextures = new Texture[8];
 		playerTextures[0] = new Texture(Gdx.files.internal("./foot/player_up1.png"));
 		playerTextures[1] = new Texture(Gdx.files.internal("./foot/player_up2.png"));
@@ -72,14 +72,6 @@ public class Player extends Entity {
 		carTextures[7] = new Texture(Gdx.files.internal("./car/car_right.png"));
 		
 		transport[2] = new Transport(game, "Car", 400, carTextures); 
-		
-		
-
-		playerRectangle = new Rectangle();
-		playerRectangle.x = this.getX();
-		playerRectangle.y = this.getY();
-		playerRectangle.height = 32;
-		playerRectangle.width = 32;
 
 	}
 	
@@ -121,8 +113,8 @@ public class Player extends Entity {
 			x += getSpeed() * Gdx.graphics.getDeltaTime();
 			}
 
-		playerRectangle.x = this.getX();
-		playerRectangle.y = this.getY();
+		this.rectangle.x = this.getX();
+		this.rectangle.y = this.getY();
 		
 		
 //		Handle 

@@ -10,27 +10,15 @@ public class Gem extends Entity {
     private Rectangle gem;
     boolean earned;
 
-    public Gem(int locX, int locY) {
-        super(locX, locY);
-        gem = new Rectangle();
-        gem.x = this.getX();
-        gem.y = this.getY();
-        gem.width = 32;
-        gem.height = 32;
+    public Gem(int locX, int locY, int width, int height) {
+        super(locX, locY, width, height);
         gemImage = new Texture(Gdx.files.internal("gem.png"));
         
     }
 
-    
     public void setImage(String imageName) {
         gemImage = new Texture(Gdx.files.internal(imageName));
     } 
-
-
-    public Rectangle getGemRectangle() {
-        return gem;
-    }
-
 
     public void render(SpriteBatch batch) {
         batch.draw(gemImage, this.getX(), this.getY());
