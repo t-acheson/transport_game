@@ -165,6 +165,8 @@ public class GameScreen implements Screen {
 			
 			// map render 
 			renderer.setView(camera);
+			camera.position.set(player.getX(),player.getY(),0);
+
 			renderer.render();
 			//
 
