@@ -18,11 +18,14 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.hotmomcircle.transport_game.entity.Gem;
 import com.hotmomcircle.transport_game.entity.Player;
+import com.hotmomcircle.transport_game.entity.Node;
 import com.hotmomcircle.transport_game.ui.Points;
 //map imports below 
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+//
+
 
 // This will be the screen 
 public class GameScreen implements Screen {
@@ -43,6 +46,9 @@ public class GameScreen implements Screen {
 	public Player player;
 	
 	public Array<Gem> gems;
+
+	// list of Nodes for interaction
+	public Array<Node> nodes;
 	   
    private OrthographicCamera camera;
    // Variables associated with the pause / game state
@@ -80,6 +86,14 @@ public class GameScreen implements Screen {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
+		// create Nodes from map objects (probably)
+		// but will just make a few now for testing
+		nodes = new Array<Node>();
+		for (int i = 1; i < 4; i++) {
+			nodes.add(new Node(i * 100 + 200, 100, 16, 16));
+		}
+
 		renderer = new OrthogonalTiledMapRenderer(map);
 		//
 
@@ -199,6 +213,9 @@ public class GameScreen implements Screen {
 			player.render(batch);
 			for (Gem gem : gems) {
 				gem.render(batch);
+			}
+			for (Node node: nodes) {
+				node.render(batch);
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

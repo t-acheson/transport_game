@@ -127,7 +127,9 @@ public class Player extends Entity {
 		
 		
 //		Handle 
-		
+		if(Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+			this.interact();
+		}
 		
 		
 		
@@ -189,6 +191,12 @@ public class Player extends Entity {
 		}
 	}
 	
-	
-	
+	public void interact() {
+		for (Node node: this.game.nodes) {
+			if (this.rectangle.overlaps(node.rectangle)) {
+				System.out.println("Interact!");
+				break;
+			}
+		}
+	}
 }
