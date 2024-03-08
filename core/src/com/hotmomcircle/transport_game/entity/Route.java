@@ -6,8 +6,8 @@ public class Route extends Entity {
     // could argue destX and destY are
     // redundant because steps should translate
     // x, y to destX, destY
-    Route(int locX, int locY, int width, int height, int destX, int destY, int steps[]) {
-        super(locX, locY, width, height);
+    Route(int locX, int locY, int width, int height, String imagePath, int destX, int destY, int steps[]) {
+        super(locX, locY, width, height, imagePath);
         this.steps = steps;
     }
 
