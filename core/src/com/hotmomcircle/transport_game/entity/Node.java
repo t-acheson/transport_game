@@ -13,7 +13,7 @@ public class Node extends Entity{
 
     private Route[] routes;
 
-    public Node(int locX, int locY, int width, int height, String imagePath) { // Route[] routes
+    public Node(float locX, float locY, int width, int height, String imagePath) { // Route[] routes
         super(locX, locY, width, height, imagePath);
         // this.routes = routes;
         image = new Texture(Gdx.files.internal("gem.png"));

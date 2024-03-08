@@ -90,37 +90,29 @@ public class GameScreen implements Screen {
 			e.printStackTrace();
 		}
 
+		// initialise Node array
+		nodes = new Array<Node>();
+
 		for (MapLayer layer : map.getLayers()) {
             // Check if the layer contains objects
-			System.out.println(layer.getName());
-            if (layer.getObjects() != null) {
-				System.out.println("Has objects");
+			// AND create Node(s) for the object layer
+            if (layer.getObjects() != null && layer.getName().equals("rec_layer")) {
                 // Retrieve objects from the layer
                 for (MapObject object : layer.getObjects()) {
-                    // Process each object as needed
-                    // You can access properties of each object using object.getProperties()
-                    // For example, to get the name of the object:
-                    String name = object.getName();
-                    // Or to get the position of the object:
-                    float x = object.getProperties().get("x", Float.class);
-                    float y = object.getProperties().get("y", Float.class);
-                    // You can similarly get other properties such as width, height, etc.
-					System.out.println(name + " X: " + x  + " Y: " + y);
+					// get X and Y for each object
+                    float locX = object.getProperties().get("x", Float.class);
+                    float locY = object.getProperties().get("y", Float.class);
+					// pass to Node constructor
+					nodes.add(new Node(locX, locY, 16, 16, "gem.png"));
                 }
             }
 		}
 
-		// create Nodes from map objects (probably)
-		// but will just make a few now for testing
-		nodes = new Array<Node>();
-		for (int i = 1; i < 4; i++) {
-			nodes.add(new Node(i * 100 + 200, 100, 16, 16, "gem.png"));
-		}
 
 		renderer = new OrthogonalTiledMapRenderer(map);
 		//
 
-		player = new Player(this, 100, 100, 32, 32, "foot/player_down1.png");
+		player = new Player(this, 700, 300, 32, 32, "foot/player_down1.png");
 		
 		gems = new Array<Gem>();
 		gems.add(new Gem(400, 400, 16, 16, "gem.png"));
