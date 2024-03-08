@@ -22,8 +22,8 @@ public class Entity {
 		this.y = locY;
 
 		this.rectangle = new Rectangle();
-		this.rectangle.x = this.getX();
-		this.rectangle.y = this.getY();
+		this.rectangle.x = locX;
+		this.rectangle.y = locY;
 		// can somebody explain to me if i need to be thisDOTTING these
 		rectangle.width = width;
 		rectangle.height = height; 
