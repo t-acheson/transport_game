@@ -28,8 +28,8 @@ public class Player extends Entity {
 	private String direction = "down";
 	
 	
-	public Player(GameScreen game, int locX, int locY, int width, int height) {
-		super(locX, locY, width, height);
+	public Player(GameScreen game, int locX, int locY, int width, int height, String imagePath) {
+		super(locX, locY, width, height, imagePath);
 		this.game = game;
 //		Initialize the textures
 //		Initialize player x and y positions
@@ -84,7 +84,7 @@ public class Player extends Entity {
 
 	}
 	
-	
+	@Override
 	public void render(SpriteBatch batch) throws Exception {
 		
 //		Can press 'f' to go on foot
