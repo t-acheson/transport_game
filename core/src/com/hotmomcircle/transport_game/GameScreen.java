@@ -81,7 +81,7 @@ public class GameScreen implements Screen {
 		//loading map 
 		TmxMapLoader loader = new TmxMapLoader();
 		try {
-			map = loader.load("trialMap.tmx");
+			map = loader.load("trialMapwithObjects.tmx");
 			System.out.println("Map loaded successfully.");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -179,6 +179,8 @@ public class GameScreen implements Screen {
 			
 			// map render 
 			renderer.setView(camera);
+			camera.position.set(player.getX(),player.getY(),0);
+
 			renderer.render();
 			//
 
@@ -223,18 +225,6 @@ public class GameScreen implements Screen {
 		}
 		batch.end();
 
-			// ScreenUtils.clear(1, 0, 0, 1); 
-			batch.begin();
-			try {
-				player.render(batch);
-				for (Gem gem : gems) {
-					gem.render(batch);
-				}
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			batch.end();
 		}
 		
 	}
