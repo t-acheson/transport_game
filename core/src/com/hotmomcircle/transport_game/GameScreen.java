@@ -83,12 +83,12 @@ public class GameScreen implements Screen {
 		renderer = new OrthogonalTiledMapRenderer(map);
 		//
 
-		player = new Player(this, 100, 100, 32, 32);
+		player = new Player(this, 100, 100, 32, 32, "foot/player_down1.png");
 		
 		gems = new Array<Gem>();
-		gems.add(new Gem(400, 400, 16, 16));
-		gems.add(new Gem(200, 200, 16, 16));
-		gems.add(new Gem(300, 300, 16, 16));
+		gems.add(new Gem(400, 400, 16, 16, "gem.png"));
+		gems.add(new Gem(200, 200, 16, 16, "gem.png"));
+		gems.add(new Gem(300, 300, 16, 16, "gem.png"));
 
 		// create the camera and the SpriteBatch
 		camera = new OrthographicCamera();
