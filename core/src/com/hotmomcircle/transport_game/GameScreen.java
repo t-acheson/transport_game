@@ -21,6 +21,9 @@ import com.hotmomcircle.transport_game.entity.Player;
 import com.hotmomcircle.transport_game.entity.Node;
 import com.hotmomcircle.transport_game.ui.Points;
 //map imports below 
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapObjects;
+import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -87,6 +90,26 @@ public class GameScreen implements Screen {
 			e.printStackTrace();
 		}
 
+		for (MapLayer layer : map.getLayers()) {
+            // Check if the layer contains objects
+			System.out.println(layer.getName());
+            if (layer.getObjects() != null) {
+				System.out.println("Has objects");
+                // Retrieve objects from the layer
+                for (MapObject object : layer.getObjects()) {
+                    // Process each object as needed
+                    // You can access properties of each object using object.getProperties()
+                    // For example, to get the name of the object:
+                    String name = object.getName();
+                    // Or to get the position of the object:
+                    float x = object.getProperties().get("x", Float.class);
+                    float y = object.getProperties().get("y", Float.class);
+                    // You can similarly get other properties such as width, height, etc.
+					System.out.println(name + " X: " + x  + " Y: " + y);
+                }
+            }
+		}
+
 		// create Nodes from map objects (probably)
 		// but will just make a few now for testing
 		nodes = new Array<Node>();
@@ -97,7 +120,7 @@ public class GameScreen implements Screen {
 		renderer = new OrthogonalTiledMapRenderer(map);
 		//
 
-		player = new Player(this, 100, 100, 32, 32);
+		player = new Player(this, 4540, 1212, 32, 32);
 		
 		gems = new Array<Gem>();
 		gems.add(new Gem(400, 400, 16, 16));
