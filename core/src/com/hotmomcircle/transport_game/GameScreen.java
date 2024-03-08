@@ -91,7 +91,7 @@ public class GameScreen implements Screen {
 		// but will just make a few now for testing
 		nodes = new Array<Node>();
 		for (int i = 1; i < 4; i++) {
-			nodes.add(new Node(i * 100 + 200, 100, 16, 16));
+			nodes.add(new Node(i * 100 + 200, 100, 16, 16, "gem.png"));
 		}
 
 		renderer = new OrthogonalTiledMapRenderer(map);
