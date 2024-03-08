@@ -44,7 +44,7 @@ public class Player extends Entity {
 		playerTextures[6] = new Texture(Gdx.files.internal("./foot/player_right1.png"));
 		playerTextures[7] = new Texture(Gdx.files.internal("./foot/player_right2.png"));
 
-		transport[0] = new Transport(game, "Foot", 200, playerTextures);
+		transport[0] = new Transport(game, "Foot", 200, playerTextures, "0", "-5");
 		
 		
 		Texture[] bikeTextures = new Texture[8];
@@ -58,7 +58,8 @@ public class Player extends Entity {
 		bikeTextures[6] = new Texture(Gdx.files.internal("./bicycle/bike_right1.png"));
 		bikeTextures[7] = new Texture(Gdx.files.internal("./bicycle/bike_right2.png"));
 		
-		transport[1] = new Transport(game, "Bicycle", 300, bikeTextures); 
+		// footprint for the bike? we gotta nerf it somehow, could just crank up the stamina cost?
+		transport[1] = new Transport(game, "Bicycle", 300, bikeTextures, "2", "-10"); 
 		
 		Texture[] carTextures = new Texture[8];
 
@@ -71,7 +72,7 @@ public class Player extends Entity {
 		carTextures[6] = new Texture(Gdx.files.internal("./car/car_right.png"));
 		carTextures[7] = new Texture(Gdx.files.internal("./car/car_right.png"));
 		
-		transport[2] = new Transport(game, "Car", 400, carTextures); 
+		transport[2] = new Transport(game, "Car", 400, carTextures, "10", "0"); 
 		
 		
 
@@ -159,8 +160,10 @@ public class Player extends Entity {
 		boolean right = Gdx.input.isKeyPressed(Input.Keys.D);
 
 		if (up || down || left || right) {
-			this.game.carbon.setText("1");
-			this.game.freshness.setText("-1");
+			String staminaCost = transport[transIdx].getStaminaCost();
+			String footprint = transport[transIdx].getFootprint();
+			this.game.freshness.setText(staminaCost);
+			this.game.carbon.setText(footprint);
 		}
 		return up || down || left || right;
 	}
