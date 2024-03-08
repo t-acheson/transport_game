@@ -26,4 +26,9 @@ public class Node extends Entity{
     public void render(SpriteBatch batch) {
         batch.draw(image, this.getX(), this.getY());
     }
+
+    @Override
+    public String toString() {
+        return "Node at " + "X: " + this.getX() + " Y: " + this.getY();
+    }
 }

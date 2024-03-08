@@ -3,11 +3,9 @@ package com.hotmomcircle.transport_game.entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Rectangle;
 
 public class Gem extends Entity {
     private Texture gemImage;
-    private Rectangle gem;
     boolean earned;
 
     public Gem(int locX, int locY, int width, int height) {
