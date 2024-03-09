@@ -1,20 +1,27 @@
 package com.hotmomcircle.transport_game.ui;
 
-import java.util.List;
+// import java.util.List;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+// import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.hotmomcircle.transport_game.entity.Gem;
 import com.hotmomcircle.transport_game.entity.Player;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
 public class gemArrow {
     
-    private Gem findClosestGem (List<Gem> gems, Player player) {
+    private Image arrowImage;
+
+    private Gem findClosestGem (Array<Gem> gems, Player player) {
         Gem closestGem = null;
         int minDistance = Integer.MAX_VALUE;
 
         for (Gem gem : gems){
-            int distance = Math.abs(gem.x - player.x) + Math.abs(gem.y - player.y);
+            int distance = Math.abs(gem.getX() - player.getX()) + Math.abs(gem.getY() - player.getY());
             if (distance < minDistance) {
                 minDistance = distance;
                 closestGem = gem;
@@ -25,29 +32,41 @@ public class gemArrow {
     }
 
     private double gemAngle (Player player, Gem gem) {
-        double deltaX = gem.x - player.x;
-        double deltaY = gem.y - player.y;
+        double deltaX = gem.getX() - player.getX();
+        double deltaY = gem.getY() - player.getY();
         double angleInRadians = Math.atan2(deltaY, deltaX);
         double angleInDegrees = Math.toDegrees(angleInRadians);
         return angleInDegrees;
     }
 
 
-    public gemArrow(Skin skin, Player player, List<Gem> gems){
+    public gemArrow(Skin skin, Player player, Array<Gem> gems, Table table){
+        //load arrow 
+        Texture arrowTexture = skin.getRegion("arrow").getTexture();
+        TextureRegion arrowRegion = new TextureRegion(arrowTexture);
+        arrowImage = new Image(arrowRegion);
+        
         //calls findClosestGem
         //returns gem 
         Gem closestGem = findClosestGem(gems, player);
     
         //calls gemAngle
         //returns angle between player and gem 
-        double angleToGem = gemAngle(player, closestGem);
-        
-        //loads arrow image at 0 degrees
-        
+        double angleToGem = gemAngle(player, closestGem);      
 
         //rotates arrow to angle as above
+        arrowImage.setRotation((float) angleToGem);
 
-        //puts arrow on ui 
+        table.add(arrowImage).size(arrowTexture.getWidth(), arrowTexture.getHeight());
+}
+       
+    
+
+    public void update(Player player, Array<Gem> gems) {
+        // Update the gemArrow UI with the current player and gem positions
+        Gem closestGem = findClosestGem(gems, player);
+        double angleToGem = gemAngle(player, closestGem);
+        arrowImage.setRotation((float) angleToGem);
     }
 
 }

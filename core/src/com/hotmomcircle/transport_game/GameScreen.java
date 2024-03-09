@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.hotmomcircle.transport_game.entity.Gem;
 import com.hotmomcircle.transport_game.entity.Player;
 import com.hotmomcircle.transport_game.ui.Points;
+import com.hotmomcircle.transport_game.ui.gemArrow;
 //map imports below 
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -63,7 +64,11 @@ public class GameScreen implements Screen {
 	// asset manager to implement uiskin.json
 	// TODO best practise to implement all our assets this way?
 	private AssetManager assetManager;
-	
+
+	//gemArrow instance 
+	private gemArrow gemArrowUI;
+
+
 	public GameScreen(TransportGame game) {
 		this.game = game;
 
@@ -90,6 +95,8 @@ public class GameScreen implements Screen {
 		gems.add(new Gem(200, 200));
 		gems.add(new Gem(300, 300));
 
+		
+
 		// create the camera and the SpriteBatch
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, game.SCREEN_WIDTH, game.SCREEN_HEIGHT);
@@ -104,6 +111,10 @@ public class GameScreen implements Screen {
 		// Asset manager instansiation
 		assetManager = new AssetManager();
 		assetManager.load("uiskin.json", Skin.class);
+
+		//initalise gemArrow 
+		gemArrowUI = new gemArrow(skin, player, gems, table); //TODO need to resolve 
+
 
 		// table to hold UI elements
 		table = new Table();
@@ -127,6 +138,11 @@ public class GameScreen implements Screen {
 
 		// UI arrow goes here
 		// table.add(arraw) potentially 
+		 //put arrow on ui 
+		
+	
+
+		
 
 		// add table to stage
 		stage.addActor(table);
@@ -212,6 +228,8 @@ public class GameScreen implements Screen {
 		batch.end();
 
 		}
+		 // Update the gemArrow UI with the current player and gem positions
+		gemArrowUI.update(player, gems);
 		
 	}
 
