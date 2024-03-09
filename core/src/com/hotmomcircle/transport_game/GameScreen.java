@@ -125,6 +125,9 @@ public class GameScreen implements Screen {
 		table.add(new TextField("Freshness: ", skin));
 		table.add(freshness).fillX().uniformX();
 
+		// UI arrow goes here
+		// table.add(arraw) potentially 
+
 		// add table to stage
 		stage.addActor(table);
 
