@@ -33,14 +33,18 @@ public class gemArrow {
     }
 
 
-    public gemArrow(Skin skin){
+    public gemArrow(Skin skin, Player player, List<Gem> gems){
         //calls findClosestGem
         //returns gem 
-
+        Gem closestGem = findClosestGem(gems, player);
+    
         //calls gemAngle
         //returns angle between player and gem 
-
+        double angleToGem = gemAngle(player, closestGem);
+        
         //loads arrow image at 0 degrees
+        
+
         //rotates arrow to angle as above
 
         //puts arrow on ui 
