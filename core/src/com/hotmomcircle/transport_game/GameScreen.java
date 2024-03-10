@@ -9,9 +9,12 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -309,23 +312,42 @@ public class GameScreen implements Screen {
 		// takes Routes as argument from togglePlanning
 		// creates new table and populates with routes
 		planningTable = new Table();
+		planningTable.setFillParent(true);
+		planningTable.defaults().width(game.SCREEN_WIDTH / 6).expandX().fillX();
+		planningTable.setWidth(game.SCREEN_WIDTH / 6);
+
 		for (Route route: routes) {
-			planningTable.add(new TextField(route.toString(), skin));
+			planningTable.row().pad(10, 0, 10, 0);
+			TextButton routeButton = new TextButton(route.toString(), skin);
+			planningTable.add(routeButton);
+			routeButton.addListener(new InputListener() {
+
+				@Override
+				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+					// Handle the click event here
+					deactivatePlanning();
+					return true; // Returning true indicates that the event has been handled
+				}
+			});
+			
 		}
 		stage.addActor(planningTable);
 	}
 
-	public void togglePlanning(Array<Route> routes) {
+	public void activatePlanning(Array<Route> routes) {
 		// planning mode "active" or not
 		// for conditional planning UI render
 		// calls populatePlanning on False -> True toggle
 		// passing routes from Node to populate options
-		if (planning) {
-			planning = false;
-			stage.getRoot().removeActor(planningTable);
-		} else {
+		if (planning != true) {
 			planning = true;
 			populatePlanning(routes);
 		}
+	}
+
+	public void deactivatePlanning() {
+		if (planning) {
+		stage.getRoot().removeActor(planningTable);
+		} 
 	}
 }
