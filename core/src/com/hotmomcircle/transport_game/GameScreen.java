@@ -103,7 +103,7 @@ public class GameScreen implements Screen {
 		// routes for node testing
 		routes = new Array<Route>();
 		for (int i = 1; i < 4; i++) {
-			routes.add(new Route(0, 0, 32, 32, "gem.png", i * 100 + 500, i * 100 + 100));
+			routes.add(new Route(0, 0, 32, 32, "gem.png", 900, i * 100 + 100));
 		}
 
 		// initialise Node array
@@ -174,7 +174,7 @@ public class GameScreen implements Screen {
 		stage.addActor(table);
 
 		// Planning UI
-		planningUI = new Planning(game, stage, skin);
+		planningUI = new Planning(game, stage, skin, player);
 
 	}
 

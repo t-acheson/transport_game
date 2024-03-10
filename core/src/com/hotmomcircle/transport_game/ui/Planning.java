@@ -8,21 +8,24 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Array;
 import com.hotmomcircle.transport_game.TransportGame;
+import com.hotmomcircle.transport_game.entity.Player;
 import com.hotmomcircle.transport_game.entity.Route;
 
 public class Planning {
     private TransportGame game;
     private Table planningTable;
-    
+    private Player player;
+
 	public boolean active = false;
     public Skin skin;
     public Stage stage;
 
-    public Planning(TransportGame game, Stage stage, Skin skin) {
+    public Planning(TransportGame game, Stage stage, Skin skin, Player player) {
         // constructor just needs to know what it can work with
         this.game = game;
         this.stage = stage;
         this.skin = skin;
+        this.player = player;
     }
     
     public void populatePlanning (Array<Route> routes) {
@@ -41,10 +44,13 @@ public class Planning {
             // right now it just closes the Planning UI
 			routeButton.addListener(new InputListener() {
 
-				@Override
+                @Override
 				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                     // handling of the Guided Transport is actually here
 					deactivatePlanning();
+                    player.setX(route.getDestX());
+                    player.setY(route.getDestX());
+                    System.out.println(route.getDestX() + " " + route.getDestY());
 					return true;
 				}
 			});

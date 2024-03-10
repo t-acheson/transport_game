@@ -24,4 +24,12 @@ public class Route extends Entity {
     public String toString () {
         return "X: " + destX + " Y: " + destY; 
     }
+
+    public int getDestX() {
+        return destX;
+    }
+
+    public int getDestY() {
+        return destY;
+    }
 }
