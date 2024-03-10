@@ -1,5 +1,7 @@
 package com.hotmomcircle.transport_game.entity;
 
+import com.badlogic.gdx.utils.Array;
+
 import org.w3c.dom.css.Rect;
 
 import com.badlogic.gdx.Gdx;
@@ -200,9 +202,7 @@ public class Player extends Entity {
 			if (this.rectangle.overlaps(node.rectangle)) {
 				// do something
 				// next feature is open a route choice UI
-				float[] dest = node.activate();
-				this.x = dest[0];
-				this.y = dest[1];
+				this.game.togglePlanning(node.getRoutes());
 				break;
 			}
 		}

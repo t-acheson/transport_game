@@ -18,6 +18,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.hotmomcircle.transport_game.entity.Gem;
 import com.hotmomcircle.transport_game.entity.Player;
+import com.hotmomcircle.transport_game.entity.Route;
 import com.hotmomcircle.transport_game.entity.Node;
 import com.hotmomcircle.transport_game.ui.Points;
 //map imports below 
@@ -52,6 +53,9 @@ public class GameScreen implements Screen {
 
 	// list of Nodes for interaction
 	public Array<Node> nodes;
+
+	// list of Routes for planning UI
+	public Array<Route> routes;
 	   
    private OrthographicCamera camera;
    // Variables associated with the pause / game state
@@ -59,6 +63,13 @@ public class GameScreen implements Screen {
 	private final int GAME_RUNNING = 0;
 	private final int GAME_PAUSED = 1;
 	private BitmapFont font = new BitmapFont();
+
+	// Route planing UI conditional
+	private boolean planning = false;
+	private Table planningTable;
+
+	//UI Skin
+	public Skin skin;
 
 	// Stage for UI components
 	private Stage stage;
@@ -90,6 +101,12 @@ public class GameScreen implements Screen {
 			e.printStackTrace();
 		}
 
+		// routes for node testing
+		routes = new Array<Route>();
+		for (int i = 1; i < 4; i++) {
+			routes.add(new Route(0, 0, 32, 32, "gem.png", i * 100 + 500, i * 100 + 100));
+		}
+
 		// initialise Node array
 		nodes = new Array<Node>();
 
@@ -103,7 +120,7 @@ public class GameScreen implements Screen {
                     float locX = object.getProperties().get("x", Float.class);
                     float locY = object.getProperties().get("y", Float.class);
 					// pass to Node constructor
-					nodes.add(new Node(locX, locY, 16, 16, "gem.png"));
+					nodes.add(new Node(locX, locY, 16, 16, "gem.png", routes));
                 }
             }
 		}
@@ -128,7 +145,7 @@ public class GameScreen implements Screen {
 		// the map more complicated and add objects
 		stage = new Stage(new ScreenViewport());
 		Gdx.input.setInputProcessor(stage);
-		Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
+		skin = new Skin(Gdx.files.internal("uiskin.json"));
 
 		// Asset manager instansiation
 		assetManager = new AssetManager();
@@ -216,9 +233,7 @@ public class GameScreen implements Screen {
 		// tell the camera to update its matrices.
 		camera.update();
 
-		// UI draw
-		stage.act(delta);
-		stage.draw();
+
 
 		// tell the SpriteBatch to render in the
 		// coordinate system specified by the camera.
@@ -239,6 +254,15 @@ public class GameScreen implements Screen {
 			e.printStackTrace();
 		}
 		batch.end();
+
+		// conditionally draw Route planning
+		if (this.planning) {
+
+		}
+
+		// UI draw
+		stage.act(delta);
+		stage.draw();
 
 		}
 		
@@ -286,4 +310,19 @@ public class GameScreen implements Screen {
 		return tileSize;
 	}
 
+	public void populatePlanning (Array<Route> routes) {
+		planningTable = new Table();
+		for (Route route: routes) {
+			table.add(new TextField(route.getDest(), skin));
+		}
+	}
+
+	public void togglePlanning(Array<Route> routes) {
+		if (planning) {
+			planning = false;
+		} else {
+			planning = true;
+			populatePlanning(routes);
+		}
+	}
 }
