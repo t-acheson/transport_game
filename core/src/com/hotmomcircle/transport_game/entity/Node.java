@@ -31,4 +31,8 @@ public class Node extends Entity{
     public String toString() {
         return "Node at " + "X: " + this.getX() + " Y: " + this.getY();
     }
+
+    public void activate() {
+        
+    }
 }

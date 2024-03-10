@@ -127,7 +127,7 @@ public class Player extends Entity {
 		
 		
 		// Player interaction
-		if(Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+		if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
 			this.interact();
 		}
 		
