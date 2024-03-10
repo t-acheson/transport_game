@@ -9,12 +9,9 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -23,10 +20,10 @@ import com.hotmomcircle.transport_game.entity.Gem;
 import com.hotmomcircle.transport_game.entity.Player;
 import com.hotmomcircle.transport_game.entity.Route;
 import com.hotmomcircle.transport_game.entity.Node;
+import com.hotmomcircle.transport_game.ui.Planning;
 import com.hotmomcircle.transport_game.ui.Points;
 //map imports below 
 import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -67,16 +64,15 @@ public class GameScreen implements Screen {
 	private final int GAME_PAUSED = 1;
 	private BitmapFont font = new BitmapFont();
 
-	// Route planing UI conditional
-	private boolean planning = false;
-	private Table planningTable;
-
 	//UI Skin
 	public Skin skin;
 
 	// Stage for UI components
 	private Stage stage;
 	private Table table;
+
+	// Planning UI
+	public Planning planningUI;
 
 	// scores need to be public so Player can modify
 	public Points points;
@@ -176,6 +172,9 @@ public class GameScreen implements Screen {
 
 		// add table to stage
 		stage.addActor(table);
+
+		// Planning UI
+		planningUI = new Planning(game, stage, skin);
 
 	}
 
@@ -308,47 +307,5 @@ public class GameScreen implements Screen {
 		return tileSize;
 	}
 
-	public void populatePlanning (Array<Route> routes) {
-		// takes Routes as argument from togglePlanning
-		// creates new table and populates with routes
-		planningTable = new Table();
-		planningTable.setFillParent(true);
-		planningTable.defaults().width(game.SCREEN_WIDTH / 6).expandX().fillX();
-		planningTable.setWidth(game.SCREEN_WIDTH / 6);
-
-		for (Route route: routes) {
-			planningTable.row().pad(10, 0, 10, 0);
-			TextButton routeButton = new TextButton(route.toString(), skin);
-			planningTable.add(routeButton);
-			routeButton.addListener(new InputListener() {
-
-				@Override
-				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-					// Handle the click event here
-					deactivatePlanning();
-					return true; // Returning true indicates that the event has been handled
-				}
-			});
-			
-		}
-		stage.addActor(planningTable);
-	}
-
-	public void activatePlanning(Array<Route> routes) {
-		// planning mode "active" or not
-		// for conditional planning UI render
-		// calls populatePlanning on False -> True toggle
-		// passing routes from Node to populate options
-		if (planning != true) {
-			planning = true;
-			populatePlanning(routes);
-		}
-	}
-
-	public void deactivatePlanning() {
-		if (planning) {
-		stage.getRoot().removeActor(planningTable);
-		planning = false;
-		} 
-	}
+	
 }

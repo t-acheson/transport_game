@@ -203,7 +203,7 @@ public class Player extends Entity {
 				// if overlaps
 				// call togglePlanning
 				// pass Routes of overlapped Node
-				this.game.activatePlanning(node.getRoutes());
+				this.game.planningUI.activatePlanning(node.getRoutes());
 				break;
 			}
 		}
