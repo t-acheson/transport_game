@@ -348,6 +348,7 @@ public class GameScreen implements Screen {
 	public void deactivatePlanning() {
 		if (planning) {
 		stage.getRoot().removeActor(planningTable);
+		planning = false;
 		} 
 	}
 }
