@@ -244,7 +244,9 @@ public class GameScreen implements Screen {
 		// ScreenUtils.clear(1, 0, 0, 1);
 		batch.begin();
 		try {
+			if (!planningUI.active) {
 			player.render(batch);
+			}
 			for (Gem gem : gems) {
 				gem.render(batch);
 			}

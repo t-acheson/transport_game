@@ -13,8 +13,8 @@ import com.hotmomcircle.transport_game.entity.Route;
 public class Planning {
     private TransportGame game;
     private Table planningTable;
-	private boolean active = false;
-
+    
+	public boolean active = false;
     public Skin skin;
     public Stage stage;
 
