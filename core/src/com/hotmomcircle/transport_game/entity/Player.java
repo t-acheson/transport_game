@@ -200,7 +200,9 @@ public class Player extends Entity {
 			if (this.rectangle.overlaps(node.rectangle)) {
 				// do something
 				// next feature is open a route choice UI
-				System.out.println("Interacting with " + node);
+				float[] dest = node.activate();
+				this.x = dest[0];
+				this.y = dest[1];
 				break;
 			}
 		}

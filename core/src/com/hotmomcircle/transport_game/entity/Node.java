@@ -32,7 +32,9 @@ public class Node extends Entity{
         return "Node at " + "X: " + this.getX() + " Y: " + this.getY();
     }
 
-    public void activate() {
-        
+    public float[] activate() {
+        float[] dest = {1280, 320};
+
+        return dest;
     }
 }
