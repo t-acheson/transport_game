@@ -49,8 +49,7 @@ public class Planning {
                     // handling of the Guided Transport is actually here
 					deactivatePlanning();
                     player.setX(route.getDestX());
-                    player.setY(route.getDestX());
-                    System.out.println(route.getDestX() + " " + route.getDestY());
+                    player.setY(route.getDestY());
 					return true;
 				}
 			});
