@@ -200,8 +200,9 @@ public class Player extends Entity {
 		for (Node node: this.game.nodes) {
 			// if overlaps
 			if (this.rectangle.overlaps(node.rectangle)) {
-				// do something
-				// next feature is open a route choice UI
+				// if overlaps
+				// call togglePlanning
+				// pass Routes of overlapped Node
 				this.game.togglePlanning(node.getRoutes());
 				break;
 			}

@@ -20,7 +20,8 @@ public class Route extends Entity {
         return steps;
     }
 
-    public String getDest () {
+    @Override
+    public String toString () {
         return "X: " + destX + " Y: " + destY; 
     }
 }

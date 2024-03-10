@@ -255,11 +255,6 @@ public class GameScreen implements Screen {
 		}
 		batch.end();
 
-		// conditionally draw Route planning
-		if (this.planning) {
-
-		}
-
 		// UI draw
 		stage.act(delta);
 		stage.draw();
@@ -311,15 +306,23 @@ public class GameScreen implements Screen {
 	}
 
 	public void populatePlanning (Array<Route> routes) {
+		// takes Routes as argument from togglePlanning
+		// creates new table and populates with routes
 		planningTable = new Table();
 		for (Route route: routes) {
-			table.add(new TextField(route.getDest(), skin));
+			planningTable.add(new TextField(route.toString(), skin));
 		}
+		stage.addActor(planningTable);
 	}
 
 	public void togglePlanning(Array<Route> routes) {
+		// planning mode "active" or not
+		// for conditional planning UI render
+		// calls populatePlanning on False -> True toggle
+		// passing routes from Node to populate options
 		if (planning) {
 			planning = false;
+			stage.getRoot().removeActor(planningTable);
 		} else {
 			planning = true;
 			populatePlanning(routes);
