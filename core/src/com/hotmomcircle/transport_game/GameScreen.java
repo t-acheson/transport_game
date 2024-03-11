@@ -112,9 +112,6 @@ public class GameScreen implements Screen {
 		assetManager = new AssetManager();
 		assetManager.load("uiskin.json", Skin.class);
 
-		//initalise gemArrow 
-		gemArrowUI = new gemArrow(skin, player, gems, table); //TODO need to resolve 
-
 
 		// table to hold UI elements
 		table = new Table();
@@ -139,7 +136,9 @@ public class GameScreen implements Screen {
 		// UI arrow goes here
 		// table.add(arraw) potentially 
 		 //put arrow on ui 
-		
+		//initalise gemArrow 
+		gemArrowUI = new gemArrow(skin, player, gems, table); //TODO need to resolve 
+
 	
 
 		

@@ -1,5 +1,7 @@
 package com.hotmomcircle.transport_game.ui;
 
+import com.badlogic.gdx.Gdx;
+
 // import java.util.List;
 
 import com.badlogic.gdx.graphics.Texture;
@@ -41,8 +43,14 @@ public class gemArrow {
 
 
     public gemArrow(Skin skin, Player player, Array<Gem> gems, Table table){
+        
+        
         //load arrow 
-        Texture arrowTexture = skin.getRegion("arrow").getTexture();
+        // Texture arrowTexture = skin.getRegion("arrow").getTexture();
+        Texture arrowTexture = new Texture(Gdx.files.internal("arrow.png"));
+        // Skin skin2 = new Skin();
+        // skin2.add("arrow", arrowTexture);
+
         TextureRegion arrowRegion = new TextureRegion(arrowTexture);
         arrowImage = new Image(arrowRegion);
         
