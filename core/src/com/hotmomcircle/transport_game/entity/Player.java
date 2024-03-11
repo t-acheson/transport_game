@@ -118,8 +118,10 @@ public class Player extends Entity {
 		this.rectangle.y = this.getY();
 		
 		
-//		Handle 
-		
+		// Player interaction
+		if(Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+			this.interact();
+		}
 		
 		
 		
@@ -181,6 +183,22 @@ public class Player extends Entity {
 		}
 	}
 	
-	
-	
+	// naive method to handle Player interaction
+
+	public void interact() {
+		// interate through all "interactable objects"
+		for (Node node: this.game.nodes) {
+			// if overlaps
+			if (this.rectangle.overlaps(node.rectangle)) {
+				// do something
+				// next feature is open a route choice UI
+				System.out.println("Interacting with " + node);
+				break;
+			}
+		}
+		// could implement different loops for interacting
+		// with different things
+		// if we need to interact with anything more
+		// than these transport nodes 
+	}
 }
