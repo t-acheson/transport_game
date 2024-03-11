@@ -10,7 +10,10 @@ import com.hotmomcircle.transport_game.entity.Player;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
-public class gemArrow {
+import com.badlogic.gdx.scenes.scene2d.Actor;;
+
+
+public class gemArrow extends Actor {
     
     private Image arrowImage;
 
@@ -30,6 +33,13 @@ public class gemArrow {
     }
 
     private double gemAngle (Player player, Gem gem) {
+
+        if (gem == null) {
+
+        System.err.println("No gem found for player.");
+            return 0; 
+        }
+        
         double deltaX = gem.getX() - player.getX();
         double deltaY = gem.getY() - player.getY();
         double angleInRadians = Math.atan2(deltaY, deltaX);
@@ -39,27 +49,31 @@ public class gemArrow {
 
 
     public gemArrow(Skin skin, Player player, Array<Gem> gems, Table table){
+           
+        try {
+            // Load arrow
+            Texture arrowTexture = new Texture(Gdx.files.internal("arrow.png"));
+            TextureRegion arrowRegion = new TextureRegion(arrowTexture);
+            arrowImage = new Image(arrowRegion);
+            
+            // Calls findClosestGem
+            // Returns gem 
+            Gem closestGem = findClosestGem(gems, player);
         
-        //load arrow 
-        Texture arrowTexture = new Texture(Gdx.files.internal("arrow.png"));
-        TextureRegion arrowRegion = new TextureRegion(arrowTexture);
-        arrowImage = new Image(arrowRegion);
-        
-        //calls findClosestGem
-        //returns gem 
-        Gem closestGem = findClosestGem(gems, player);
+            // Calls gemAngle
+            // Returns angle between player and gem 
+            double angleToGem = gemAngle(player, closestGem);      
     
-        //calls gemAngle
-        //returns angle between player and gem 
-        double angleToGem = gemAngle(player, closestGem);      
-
-        //rotates arrow to angle as above
-        arrowImage.setRotation((float) angleToGem);
-
-        //TODO @Eoin I need your help here, padding right doesn't seem to affect position of arrow in the way I want so I can display on screen properly?
-        table.add(arrowImage).size(arrowTexture.getWidth(), arrowTexture.getHeight()).padRight(10);
-}
-       
+            // Rotates arrow to angle as above
+            arrowImage.setRotation((float) angleToGem);
+    
+            // Add arrowImage to the table
+            table.add(arrowImage).size(arrowTexture.getWidth(), arrowTexture.getHeight()).pad(20);
+        } catch (Exception e) {
+            // Handle any exceptions that might occur
+            e.printStackTrace();
+        }
+    }
     
 
     public void update(Player player, Array<Gem> gems) {

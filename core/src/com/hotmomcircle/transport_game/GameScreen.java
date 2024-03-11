@@ -124,6 +124,10 @@ public class GameScreen implements Screen {
 		points = new Points("0", skin);
 		carbon = new Points("0", skin);
 		freshness = new Points("100", skin);
+		
+		gemArrowUI = new gemArrow(skin, player, gems, table); 
+
+		table.add(gemArrowUI).top().left();
 
 		// fill table with UI scores
 		table.add(new TextField("Points: ", skin));
@@ -134,7 +138,6 @@ public class GameScreen implements Screen {
 		table.add(freshness).fillX().uniformX();
 
 		//initalise gemArrow 
-		gemArrowUI = new gemArrow(skin, player, gems, table); 
 
 		// add table to stage
 		stage.addActor(table);
