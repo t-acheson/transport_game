@@ -133,15 +133,8 @@ public class GameScreen implements Screen {
 		table.add(new TextField("Freshness: ", skin));
 		table.add(freshness).fillX().uniformX();
 
-		// UI arrow goes here
-		// table.add(arraw) potentially 
-		 //put arrow on ui 
 		//initalise gemArrow 
-		gemArrowUI = new gemArrow(skin, player, gems, table); //TODO need to resolve 
-
-	
-
-		
+		gemArrowUI = new gemArrow(skin, player, gems, table); 
 
 		// add table to stage
 		stage.addActor(table);

@@ -1,13 +1,9 @@
 package com.hotmomcircle.transport_game.ui;
 
 import com.badlogic.gdx.Gdx;
-
-// import java.util.List;
-
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-// import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.hotmomcircle.transport_game.entity.Gem;
 import com.hotmomcircle.transport_game.entity.Player;
@@ -44,13 +40,8 @@ public class gemArrow {
 
     public gemArrow(Skin skin, Player player, Array<Gem> gems, Table table){
         
-        
         //load arrow 
-        // Texture arrowTexture = skin.getRegion("arrow").getTexture();
         Texture arrowTexture = new Texture(Gdx.files.internal("arrow.png"));
-        // Skin skin2 = new Skin();
-        // skin2.add("arrow", arrowTexture);
-
         TextureRegion arrowRegion = new TextureRegion(arrowTexture);
         arrowImage = new Image(arrowRegion);
         
@@ -65,7 +56,8 @@ public class gemArrow {
         //rotates arrow to angle as above
         arrowImage.setRotation((float) angleToGem);
 
-        table.add(arrowImage).size(arrowTexture.getWidth(), arrowTexture.getHeight());
+        //TODO @Eoin I need your help here, padding right doesn't seem to affect position of arrow in the way I want so I can display on screen properly?
+        table.add(arrowImage).size(arrowTexture.getWidth(), arrowTexture.getHeight()).padRight(10);
 }
        
     
