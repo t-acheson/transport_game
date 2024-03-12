@@ -1,10 +1,7 @@
 package com.hotmomcircle.transport_game.entity;
 // This will hold the entity superclass
 //player will inherit from this
-// can we abstract the Rectangles from 
-// Player and Gem etc. to here?
-// Entity is anything a player might 
-// interact with so likely useful to standardise
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;

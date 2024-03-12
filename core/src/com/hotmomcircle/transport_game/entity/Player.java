@@ -75,14 +75,6 @@ public class Player extends Entity {
 		carTextures[7] = new Texture(Gdx.files.internal("./car/car_right.png"));
 		
 		transport[2] = new Transport(game, "Car", 400, carTextures, "10", "0"); 
-		
-		
-
-		playerRectangle = new Rectangle();
-		playerRectangle.x = this.getX();
-		playerRectangle.y = this.getY();
-		playerRectangle.height = 32;
-		playerRectangle.width = 32;
 
 	}
 	
