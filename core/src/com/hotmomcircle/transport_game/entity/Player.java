@@ -201,4 +201,12 @@ public class Player extends Entity {
 		// if we need to interact with anything more
 		// than these transport nodes 
 	}
+
+	public Transport[] getTransport() {
+		return transport;
+	}
+
+	public int getTransIdx() {
+		return transIdx;
+	}
 }

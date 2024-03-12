@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.hotmomcircle.transport_game.TransportGame;
 import com.hotmomcircle.transport_game.entity.Player;
+import com.hotmomcircle.transport_game.transport.Transport;
 
 public class Camera extends OrthographicCamera {
     private Player player;
@@ -22,8 +23,11 @@ public class Camera extends OrthographicCamera {
         float deadZoneWidth = this.viewportWidth * 0.25f; // Adjust as needed
         float deadZoneHeight = this.viewportHeight * 0.25f; // Adjust as needed
 
+        Transport[] playerTranport = this.player.getTransport();
+        int currentPlayerTransport = this.player.getTransIdx();
+
         // Define the lag factor
-        // float lagFactor = 1f; // Adjust as needed
+        float lagFactor = 1f * (playerTranport[currentPlayerTransport].speed / 200); // Adjust as needed
 
         // Update camera position
         float targetX = player.getX();
@@ -32,14 +36,14 @@ public class Camera extends OrthographicCamera {
         float dx = targetX - this.position.x;
         float dy = targetY - this.position.y;
 
-        float scaledDx = dx  * deltaTime;
-        float scaledDy = dy  * deltaTime;
+        float scaledDx = dx  * lagFactor * deltaTime;
+        float scaledDy = dy  * lagFactor * deltaTime;
 
         float minMovementThreshold = 0.2f; // Adjust as needed
         
         // Check if the player's movement exceeds the minimum threshold
-        boolean exceedsThresholdX = Math.abs(dx) > minMovementThreshold;
-        boolean exceedsThresholdY = Math.abs(dy) > minMovementThreshold;
+        boolean exceedsThresholdX = Math.abs(scaledDx) > minMovementThreshold;
+        boolean exceedsThresholdY = Math.abs(scaledDy) > minMovementThreshold;
         
         // Check if the player is outside the dead zone
         boolean outsideDeadZoneX = Math.abs(dx) > deadZoneWidth / 2;
