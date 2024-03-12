@@ -8,7 +8,8 @@ import com.hotmomcircle.transport_game.transport.Transport;
 
 public class Camera extends OrthographicCamera {
     private Player player;
-    
+
+    // easiest thing to do was extend the Camera
     public Camera(TransportGame game, Player player) {
         super();
         this.setToOrtho(false, game.SCREEN_WIDTH, game.SCREEN_HEIGHT);
@@ -16,40 +17,53 @@ public class Camera extends OrthographicCamera {
     }
 
     public void setPosition() {
-        // this.position.set(player.getX(), player.getY(), 0);
 
+        // the deltaTime is the time since the last frame
+        // was rendered: multiplying this by the lag
+        // helps keep the camera movement smooth
         float deltaTime = Gdx.graphics.getDeltaTime();
-        // Define the dead zone size
+
+        // define the region of the screen (the centre)
+        // that the camera won't move if the player moves within it
         float deadZoneWidth = this.viewportWidth * 0.15f; // Adjust as needed
         float deadZoneHeight = this.viewportHeight * 0.15f; // Adjust as needed
 
+        // we need to know what transport the player
+        // is currently using to adjust for the speed
         Transport[] playerTranport = this.player.getTransport();
         int currentPlayerTransport = this.player.getTransIdx();
 
-        // Define the lag factor
+        // define lag factor base on speed
         float lagFactor = (playerTranport[currentPlayerTransport].speed / 200); // Adjust as needed
 
-        // Update camera position
         float targetX = player.getX();
         float targetY = player.getY();
 
         float dx = targetX - this.position.x;
         float dy = targetY - this.position.y;
 
+        // scaling the dx, and dy by the lag and the delta
+        // to keep things smooth
         float scaledDx = dx  * lagFactor * deltaTime;
         float scaledDy = dy  * lagFactor * deltaTime;
 
+        // this stops the camera updating for every
+        // tiny movement outside the deadzone
+        // because it was jittering at the 
+        // extremes without it
         float minMovementThreshold = 0.1f; // Adjust as needed
         
-        // Check if the player's movement exceeds the minimum threshold
+        // check if the player's movement exceeds the minimum threshold
         boolean exceedsThresholdX = Math.abs(scaledDx) > minMovementThreshold;
         boolean exceedsThresholdY = Math.abs(scaledDy) > minMovementThreshold;
         
-        // Check if the player is outside the dead zone
+        // check if the player is outside the dead zone
         boolean outsideDeadZoneX = Math.abs(dx) > deadZoneWidth / 2;
         boolean outsideDeadZoneY = Math.abs(dy) > deadZoneHeight / 2;
         
-        // Apply lag effect only if movement exceeds the minimum threshold and the player is outside the dead zone
+        // apply the scaled position values only if they 
+        // are outside the deadZone and the
+        // threshhold is exceeded
         if ((exceedsThresholdX || exceedsThresholdY) && (outsideDeadZoneX || outsideDeadZoneY)) {
             // Apply lag effect
             this.position.x += scaledDx;
