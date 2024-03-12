@@ -97,22 +97,46 @@ public class Player extends Entity {
 		
 		
 //		Move the player 
-		if(Gdx.input.isKeyPressed(Input.Keys.W)) { 
+		// define speed at render time
+		float speed = getSpeed() * Gdx.graphics.getDeltaTime();
+
+		// determine movement direction
+		// TODO find a way to reintroduce the moonwalk bug, i mean FEATURE
+		float dx = 0;
+		float dy = 0;
+
+		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
 			direction = "up";
-			y += getSpeed() * Gdx.graphics.getDeltaTime();
-			}
-		if(Gdx.input.isKeyPressed(Input.Keys.S)) { 
+			dy += speed;
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.S)) {
 			direction = "down";
-			y -= getSpeed() * Gdx.graphics.getDeltaTime();
-			}
-		if(Gdx.input.isKeyPressed(Input.Keys.A)) { 
+			dy -= speed;
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.A)) {
 			direction = "left";
-			x -= getSpeed() * Gdx.graphics.getDeltaTime();
-			}
-		if(Gdx.input.isKeyPressed(Input.Keys.D)) { 
+			dx -= speed;
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.D)) {
 			direction = "right";
-			x += getSpeed() * Gdx.graphics.getDeltaTime();
-			}
+			dx += speed;
+		}
+
+		// the diagonal vector is the same as the 
+		// square root of the sum of the squared
+		// vertical and horizontal vectors
+
+		float movementMagnitude = (float) Math.sqrt(dx * dx + dy * dy);
+		if (movementMagnitude > speed) {
+			// if it exceeds it, we normalise the speed
+			// by the magnitude
+			dx = dx / movementMagnitude * speed;	
+			dy = dy / movementMagnitude * speed;
+		}
+
+		// finally apply the movement
+		x += dx;
+		y += dy;
 
 		this.rectangle.x = this.getX();
 		this.rectangle.y = this.getY();
