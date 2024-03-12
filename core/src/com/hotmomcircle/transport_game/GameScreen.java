@@ -106,7 +106,7 @@ public class GameScreen implements Screen {
 		gems.add(new Gem(300, 300, 16, 16, "gem.png"));
 
 		// create the camera and the SpriteBatch
-		camera = new Camera(game);
+		camera = new Camera(game, player);
 
 		// Stage is the layer on which we draw the UI
 		// Likely keeps things cleaner as we make
@@ -179,7 +179,8 @@ public class GameScreen implements Screen {
 			
 			// map render 
 			renderer.setView(camera);
-			camera.position.set(player.getX(),player.getY(),0);
+			camera.setPosition();
+			// camera.position.set(player.getX(),player.getY(), 0);
 
 			renderer.render();
 			//
