@@ -18,6 +18,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.hotmomcircle.transport_game.entity.Gem;
 import com.hotmomcircle.transport_game.entity.Player;
+import com.hotmomcircle.transport_game.tools.Camera;
 import com.hotmomcircle.transport_game.entity.Node;
 import com.hotmomcircle.transport_game.ui.Points;
 //map imports below 
@@ -50,7 +51,7 @@ public class GameScreen implements Screen {
 	// list of Nodes for interaction
 	public Array<Node> nodes;
 	   
-   private OrthographicCamera camera;
+   private Camera camera;
    // Variables associated with the pause / game state
 	private int GAME_STATE;
 	private final int GAME_RUNNING = 0;
@@ -105,8 +106,7 @@ public class GameScreen implements Screen {
 		gems.add(new Gem(300, 300, 16, 16, "gem.png"));
 
 		// create the camera and the SpriteBatch
-		camera = new OrthographicCamera();
-		camera.setToOrtho(false, game.SCREEN_WIDTH, game.SCREEN_HEIGHT);
+		camera = new Camera(game);
 
 		// Stage is the layer on which we draw the UI
 		// Likely keeps things cleaner as we make
