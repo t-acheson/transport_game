@@ -20,14 +20,14 @@ public class Camera extends OrthographicCamera {
 
         float deltaTime = Gdx.graphics.getDeltaTime();
         // Define the dead zone size
-        float deadZoneWidth = this.viewportWidth * 0.25f; // Adjust as needed
-        float deadZoneHeight = this.viewportHeight * 0.25f; // Adjust as needed
+        float deadZoneWidth = this.viewportWidth * 0.15f; // Adjust as needed
+        float deadZoneHeight = this.viewportHeight * 0.15f; // Adjust as needed
 
         Transport[] playerTranport = this.player.getTransport();
         int currentPlayerTransport = this.player.getTransIdx();
 
         // Define the lag factor
-        float lagFactor = 1f * (playerTranport[currentPlayerTransport].speed / 200); // Adjust as needed
+        float lagFactor = (playerTranport[currentPlayerTransport].speed / 200); // Adjust as needed
 
         // Update camera position
         float targetX = player.getX();
@@ -39,7 +39,7 @@ public class Camera extends OrthographicCamera {
         float scaledDx = dx  * lagFactor * deltaTime;
         float scaledDy = dy  * lagFactor * deltaTime;
 
-        float minMovementThreshold = 0.2f; // Adjust as needed
+        float minMovementThreshold = 0.1f; // Adjust as needed
         
         // Check if the player's movement exceeds the minimum threshold
         boolean exceedsThresholdX = Math.abs(scaledDx) > minMovementThreshold;
