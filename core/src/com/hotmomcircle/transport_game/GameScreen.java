@@ -57,7 +57,7 @@ public class GameScreen implements Screen {
 	// list of Routes for planning UI
 	public Array<Route> routes;
 	   
-   private Camera camera;
+   public Camera camera;
    // Variables associated with the pause / game state
 	private int GAME_STATE;
 	private final int GAME_RUNNING = 0;
@@ -173,7 +173,7 @@ public class GameScreen implements Screen {
 		stage.addActor(table);
 
 		// Planning UI
-		planningUI = new Planning(game, stage, skin, player);
+		planningUI = new Planning(game, this, stage, skin, player);
 
 	}
 
