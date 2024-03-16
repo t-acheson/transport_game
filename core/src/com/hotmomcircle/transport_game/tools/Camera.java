@@ -8,11 +8,13 @@ import com.hotmomcircle.transport_game.transport.Transport;
 
 public class Camera extends OrthographicCamera {
     private Player player;
+    private TransportGame game;
 
     // easiest thing to do was extend the Camera
     public Camera(TransportGame game, Player player) {
         super();
         this.setToOrtho(false, game.SCREEN_WIDTH, game.SCREEN_HEIGHT);
+        this.game = game;
         this.player = player;
     }
 
@@ -70,5 +72,15 @@ public class Camera extends OrthographicCamera {
             this.position.y += scaledDy;
         }
 
+    }
+
+    public void zoomOut() {
+        this.viewportHeight = this.game.getSCREEN_HEIGHT() * 2;
+        this.viewportWidth = this.game.getSCREEN_WIDTH() * 2;
+    }
+
+    public void zoomIn() {
+        this.viewportHeight = this.game.getSCREEN_HEIGHT();
+        this.viewportWidth = this.game.getSCREEN_WIDTH();
     }
 }
