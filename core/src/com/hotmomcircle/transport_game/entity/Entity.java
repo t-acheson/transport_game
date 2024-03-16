@@ -8,21 +8,21 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 
 public class Entity {
-	protected int x;
-	protected int y;
+	protected float x;
+	protected float y;
 	public Rectangle rectangle;
 	public String imagePath;
 	private Texture image;
 	
-	public int getX() {
+	public float getX() {
 		return x;
 	}
 	
-	public int getY() {
+	public float getY() {
 		return y;
 	}
 
-	Entity(int locX, int locY, int width, int height, String imagePath){
+	Entity(float locX, float locY, int width, int height, String imagePath){
 		this.x = locX;
 		this.y = locY;
 
@@ -54,5 +54,13 @@ public class Entity {
 	public void dispose() {
         image.dispose();
     }
+
+	public void setX(float x) {
+		this.x = x;
+	}
+
+	public void setY(float y) {
+		this.y = y;
+	}
 	
 }

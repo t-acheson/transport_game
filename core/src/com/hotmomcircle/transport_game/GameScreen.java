@@ -18,10 +18,14 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.hotmomcircle.transport_game.entity.Gem;
 import com.hotmomcircle.transport_game.entity.Player;
+import com.hotmomcircle.transport_game.entity.Route;
 import com.hotmomcircle.transport_game.tools.Camera;
 import com.hotmomcircle.transport_game.entity.Node;
+import com.hotmomcircle.transport_game.ui.Planning;
 import com.hotmomcircle.transport_game.ui.Points;
 //map imports below 
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -50,6 +54,8 @@ public class GameScreen implements Screen {
 
 	// list of Nodes for interaction
 	public Array<Node> nodes;
+	// list of Routes for planning UI
+	public Array<Route> routes;
 	   
    private Camera camera;
    // Variables associated with the pause / game state
@@ -58,9 +64,15 @@ public class GameScreen implements Screen {
 	private final int GAME_PAUSED = 1;
 	private BitmapFont font = new BitmapFont();
 
+	//UI Skin
+	public Skin skin;
+
 	// Stage for UI components
 	private Stage stage;
 	private Table table;
+
+	// Planning UI
+	public Planning planningUI;
 
 	// scores need to be public so Player can modify
 	public Points points;
@@ -88,17 +100,35 @@ public class GameScreen implements Screen {
 			e.printStackTrace();
 		}
 
-		// create Nodes from map objects (probably)
-		// but will just make a few now for testing
-		nodes = new Array<Node>();
+		// routes for node testing
+		routes = new Array<Route>();
 		for (int i = 1; i < 4; i++) {
-			nodes.add(new Node(i * 100 + 200, 100, 16, 16, "gem.png"));
+			routes.add(new Route(0, 0, 32, 32, "gem.png", 900, i * 100 + 100));
 		}
+
+		// initialise Node array
+		nodes = new Array<Node>();
+
+		for (MapLayer layer : map.getLayers()) {
+            // Check if the layer contains objects
+			// AND create Node(s) for the object layer
+            if (layer.getObjects() != null && layer.getName().equals("rec_layer")) {
+                // Retrieve objects from the layer
+                for (MapObject object : layer.getObjects()) {
+					// get X and Y for each object
+                    float locX = object.getProperties().get("x", Float.class);
+                    float locY = object.getProperties().get("y", Float.class);
+					// pass to Node constructor
+					nodes.add(new Node(locX, locY, 16, 16, "gem.png", routes));
+                }
+            }
+		}
+
 
 		renderer = new OrthogonalTiledMapRenderer(map);
 		//
 
-		player = new Player(this, 100, 100, 32, 32, "foot/player_down1.png");
+		player = new Player(this, 700, 300, 32, 32, "foot/player_down1.png");
 		
 		gems = new Array<Gem>();
 		gems.add(new Gem(400, 400, 16, 16, "gem.png"));
@@ -113,7 +143,7 @@ public class GameScreen implements Screen {
 		// the map more complicated and add objects
 		stage = new Stage(new ScreenViewport());
 		Gdx.input.setInputProcessor(stage);
-		Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
+		skin = new Skin(Gdx.files.internal("uiskin.json"));
 
 		// Asset manager instansiation
 		assetManager = new AssetManager();
@@ -141,6 +171,9 @@ public class GameScreen implements Screen {
 
 		// add table to stage
 		stage.addActor(table);
+
+		// Planning UI
+		planningUI = new Planning(game, stage, skin, player);
 
 	}
 
@@ -202,9 +235,7 @@ public class GameScreen implements Screen {
 		// tell the camera to update its matrices.
 		camera.update();
 
-		// UI draw
-		stage.act(delta);
-		stage.draw();
+
 
 		// tell the SpriteBatch to render in the
 		// coordinate system specified by the camera.
@@ -213,7 +244,9 @@ public class GameScreen implements Screen {
 		// ScreenUtils.clear(1, 0, 0, 1);
 		batch.begin();
 		try {
+			if (!planningUI.active) {
 			player.render(batch);
+			}
 			for (Gem gem : gems) {
 				gem.render(batch);
 			}
@@ -225,6 +258,10 @@ public class GameScreen implements Screen {
 			e.printStackTrace();
 		}
 		batch.end();
+
+		// UI draw
+		stage.act(delta);
+		stage.draw();
 
 		}
 		
@@ -272,4 +309,5 @@ public class GameScreen implements Screen {
 		return tileSize;
 	}
 
+	
 }
