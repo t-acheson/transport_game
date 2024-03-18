@@ -81,7 +81,7 @@ public class GameScreen implements Screen {
 		//loading map 
 		TmxMapLoader loader = new TmxMapLoader();
 		try {
-			map = loader.load("trialMapwithObjects.tmx");
+			map = loader.load("levels/level-1.tmx");
 			System.out.println("Map loaded successfully.");
 		} catch (Exception e) {
 			e.printStackTrace();
