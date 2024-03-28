@@ -22,7 +22,7 @@ public class gemArrow extends Actor {
         int minDistance = Integer.MAX_VALUE;
 
         for (Gem gem : gems){
-            int distance = Math.abs(gem.getX() - player.getX()) + Math.abs(gem.getY() - player.getY());
+            int distance = Math.round(Math.abs(gem.getX() - player.getX()) + Math.abs(gem.getY() - player.getY()));
             if (distance < minDistance) {
                 minDistance = distance;
                 closestGem = gem;
