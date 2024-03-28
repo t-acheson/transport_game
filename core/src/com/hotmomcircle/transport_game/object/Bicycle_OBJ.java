@@ -29,7 +29,7 @@ public class Bicycle_OBJ extends Object {
 	}
 	
 	public void update(int i) {
-		if(game.player.getPlayerRectangle().overlaps(getObjectRectangle()) && Gdx.input.isKeyPressed(Keys.SPACE) && game.player.currTransport() == game.player.FOOT) {
+		if(game.player.getPlayerRectangle().overlaps(getObjectRectangle()) && Gdx.input.isKeyPressed(Keys.SPACE) && game.player.transIdx == game.player.FOOT) {
 			interact();
 			this.dispose();
 			game.bikes[i] = null;

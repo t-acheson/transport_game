@@ -21,7 +21,7 @@ public class Player extends Entity {
 	private Texture bikeImage;
 	private Texture carImage;
 	private Transport[] transport = new Transport[3]; // [foot, bike, car]
-	private int transIdx = 0; //Index corresponding to which transport the player is currently on
+	public int transIdx = 0; //Index corresponding to which transport the player is currently on
 	public int FOOT = 0;
 	public int BIKE = 1;
 	public int CAR = 2;
