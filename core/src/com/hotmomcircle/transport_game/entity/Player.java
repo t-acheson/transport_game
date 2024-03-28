@@ -1,5 +1,7 @@
 package com.hotmomcircle.transport_game.entity;
 
+import com.badlogic.gdx.utils.Array;
+
 import org.w3c.dom.css.Rect;
 
 import com.badlogic.gdx.Gdx;
@@ -119,7 +121,7 @@ public class Player extends Entity {
 		
 		
 		// Player interaction
-		if(Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+		if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
 			this.interact();
 		}
 		
@@ -190,9 +192,11 @@ public class Player extends Entity {
 		for (Node node: this.game.nodes) {
 			// if overlaps
 			if (this.rectangle.overlaps(node.rectangle)) {
-				// do something
-				// next feature is open a route choice UI
-				System.out.println("Interacting with " + node);
+				// if overlaps
+				// call togglePlanning
+				// pass Routes of overlapped Node
+				System.out.println(node);
+				this.game.planningUI.activatePlanning(node.getRoutes());
 				break;
 			}
 		}
