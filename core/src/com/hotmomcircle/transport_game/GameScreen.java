@@ -23,6 +23,7 @@ import com.hotmomcircle.transport_game.tools.Camera;
 import com.hotmomcircle.transport_game.entity.Node;
 import com.hotmomcircle.transport_game.ui.Planning;
 import com.hotmomcircle.transport_game.ui.Points;
+import com.hotmomcircle.transport_game.ui.gemArrow;
 //map imports below 
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapLayer;
@@ -82,7 +83,11 @@ public class GameScreen implements Screen {
 	// asset manager to implement uiskin.json
 	// TODO best practise to implement all our assets this way?
 	private AssetManager assetManager;
-	
+
+	//gemArrow instance 
+	private gemArrow gemArrowUI;
+
+
 	public GameScreen(TransportGame game) {
 		this.game = game;
 
@@ -135,6 +140,8 @@ public class GameScreen implements Screen {
 		gems.add(new Gem(200, 200, 16, 16, "gem.png"));
 		gems.add(new Gem(300, 300, 16, 16, "gem.png"));
 
+		
+
 		// create the camera and the SpriteBatch
 		camera = new Camera(game, player);
 
@@ -149,6 +156,7 @@ public class GameScreen implements Screen {
 		assetManager = new AssetManager();
 		assetManager.load("uiskin.json", Skin.class);
 
+
 		// table to hold UI elements
 		table = new Table();
 		table.setFillParent(true);
@@ -160,6 +168,10 @@ public class GameScreen implements Screen {
 		points = new Points("0", skin);
 		carbon = new Points("0", skin);
 		freshness = new Points("100", skin);
+		
+		gemArrowUI = new gemArrow(skin, player, gems, table); 
+
+		table.add(gemArrowUI).top().left();
 
 		// fill table with UI scores
 		table.add(new TextField("Points: ", skin));
@@ -168,6 +180,8 @@ public class GameScreen implements Screen {
 		table.add(carbon).fillX().uniformX();
 		table.add(new TextField("Freshness: ", skin));
 		table.add(freshness).fillX().uniformX();
+
+		//initalise gemArrow 
 
 		// add table to stage
 		stage.addActor(table);
@@ -264,6 +278,8 @@ public class GameScreen implements Screen {
 		stage.draw();
 
 		}
+		 // Update the gemArrow UI with the current player and gem positions
+		gemArrowUI.update(player, gems);
 		
 	}
 
