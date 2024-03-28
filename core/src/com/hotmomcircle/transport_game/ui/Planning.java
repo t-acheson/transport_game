@@ -7,12 +7,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Array;
+import com.hotmomcircle.transport_game.GameScreen;
 import com.hotmomcircle.transport_game.TransportGame;
 import com.hotmomcircle.transport_game.entity.Player;
 import com.hotmomcircle.transport_game.entity.Route;
 
 public class Planning {
     private TransportGame game;
+	private GameScreen screen; // passing screen for camera control 
     private Table planningTable;
     private Player player;
 
@@ -20,12 +22,13 @@ public class Planning {
     public Skin skin;
     public Stage stage;
 
-    public Planning(TransportGame game, Stage stage, Skin skin, Player player) {
+    public Planning(TransportGame game, GameScreen screen, Stage stage, Skin skin, Player player) {
         // constructor just needs to know what it can work with
         this.game = game;
         this.stage = stage;
         this.skin = skin;
         this.player = player;
+		this.screen = screen;
     }
     
     public void populatePlanning (Array<Route> routes) {
@@ -50,6 +53,7 @@ public class Planning {
 					deactivatePlanning();
                     player.setX(route.getDestX());
                     player.setY(route.getDestY());
+					screen.camera.zoomIn();
 					return true;
 				}
 			});

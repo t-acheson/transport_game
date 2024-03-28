@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.hotmomcircle.transport_game.entity.Gem;
 import com.hotmomcircle.transport_game.entity.Player;
 import com.hotmomcircle.transport_game.entity.Route;
+import com.hotmomcircle.transport_game.tools.Camera;
 import com.hotmomcircle.transport_game.entity.Node;
 import com.hotmomcircle.transport_game.ui.Planning;
 import com.hotmomcircle.transport_game.ui.Points;
@@ -53,11 +54,10 @@ public class GameScreen implements Screen {
 
 	// list of Nodes for interaction
 	public Array<Node> nodes;
-
 	// list of Routes for planning UI
 	public Array<Route> routes;
 	   
-   private OrthographicCamera camera;
+   public Camera camera;
    // Variables associated with the pause / game state
 	private int GAME_STATE;
 	private final int GAME_RUNNING = 0;
@@ -136,8 +136,7 @@ public class GameScreen implements Screen {
 		gems.add(new Gem(300, 300, 16, 16, "gem.png"));
 
 		// create the camera and the SpriteBatch
-		camera = new OrthographicCamera();
-		camera.setToOrtho(false, game.SCREEN_WIDTH, game.SCREEN_HEIGHT);
+		camera = new Camera(game, player);
 
 		// Stage is the layer on which we draw the UI
 		// Likely keeps things cleaner as we make
@@ -174,7 +173,7 @@ public class GameScreen implements Screen {
 		stage.addActor(table);
 
 		// Planning UI
-		planningUI = new Planning(game, stage, skin, player);
+		planningUI = new Planning(game, this, stage, skin, player);
 
 	}
 
@@ -213,7 +212,8 @@ public class GameScreen implements Screen {
 			
 			// map render 
 			renderer.setView(camera);
-			camera.position.set(player.getX(),player.getY(),0);
+			camera.setPosition();
+			// camera.position.set(player.getX(),player.getY(), 0);
 
 			renderer.render();
 			//

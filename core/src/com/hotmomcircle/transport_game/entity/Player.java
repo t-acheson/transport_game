@@ -221,6 +221,7 @@ public class Player extends Entity {
 				// pass Routes of overlapped Node
 				System.out.println(node);
 				this.game.planningUI.activatePlanning(node.getRoutes());
+				this.game.camera.zoomOut();
 				break;
 			}
 		}
@@ -228,5 +229,13 @@ public class Player extends Entity {
 		// with different things
 		// if we need to interact with anything more
 		// than these transport nodes 
+	}
+
+	public Transport[] getTransport() {
+		return transport;
+	}
+
+	public int getTransIdx() {
+		return transIdx;
 	}
 }
