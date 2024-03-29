@@ -68,7 +68,7 @@ public class gemArrow extends Actor {
             arrowImage.setRotation((float) angleToGem);
     
             // Add arrowImage to the table
-            table.add(arrowImage).size(arrowTexture.getWidth(), arrowTexture.getHeight()).pad(20);
+            table.add(arrowImage).size(arrowTexture.getWidth(), arrowTexture.getHeight()).pad(1);
         } catch (Exception e) {
             // Handle any exceptions that might occur
             e.printStackTrace();
