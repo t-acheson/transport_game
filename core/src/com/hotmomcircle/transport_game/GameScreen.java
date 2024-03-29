@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
@@ -171,15 +172,17 @@ public class GameScreen implements Screen {
 		
 		gemArrowUI = new gemArrow(skin, player, gems, table); 
 
-		table.add(gemArrowUI).top().left();
+		
 
 		// fill table with UI scores
-		table.add(new TextField("Points: ", skin));
+		table.add(new Label("Points: ", skin));
 		table.add(points).fillX().uniformX();
-		table.add(new TextField("Carbon: ", skin));
+		table.add(new Label("Carbon: ", skin));
 		table.add(carbon).fillX().uniformX();
-		table.add(new TextField("Freshness: ", skin));
+		table.add(new Label("Freshness: ", skin));
 		table.add(freshness).fillX().uniformX();
+
+		table.add(gemArrowUI).fillX().uniformX();
 
 		//initalise gemArrow 
 
