@@ -27,7 +27,7 @@ public class Player extends Entity {
 	private boolean hasInteracted = false;
 	
 	public Player(GameScreen game, int locX, int locY, int width, int height, String imagePath) {
-		super(locX, locY, width, height, imagePath);
+		super(game, locX, locY, width, height, imagePath);
 		this.game = game;
 //		Initialize the textures	and create transport classes
 //		Game assetManager has already loaded these

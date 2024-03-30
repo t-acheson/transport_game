@@ -146,6 +146,8 @@ public class GameScreen implements Screen {
 		
 		
 		assetManager.finishLoading();
+		
+		
 		try {
 			map = assetManager.get("trialMapwithObjects.tmx", TiledMap.class);
 			System.out.println("Map loaded successfully.");
@@ -156,7 +158,7 @@ public class GameScreen implements Screen {
 		// routes for node testing
 		routes = new Array<Route>();
 		for (int i = 1; i < 4; i++) {
-			routes.add(new Route(0, 0, 32, 32, "gem.png", 900, i * 100 + 100));
+			routes.add(new Route(this, 0, 0, 32, 32, "gem.png", 900, i * 100 + 100));
 		}
 
 		// initialise Node array
@@ -172,7 +174,7 @@ public class GameScreen implements Screen {
                     float locX = object.getProperties().get("x", Float.class);
                     float locY = object.getProperties().get("y", Float.class);
 					// pass to Node constructor
-					nodes.add(new Node(locX, locY, 16, 16, "gem.png", routes));
+					nodes.add(new Node(this, locX, locY, 16, 16, "gem.png", routes));
                 }
             }
 		}
@@ -181,12 +183,12 @@ public class GameScreen implements Screen {
 		renderer = new OrthogonalTiledMapRenderer(map);
 		//
 
-		player = new Player(this, 700, 300, 32, 32, "foot/player_down1.png");
+		player = new Player(this, 700, 300, 32, 32, "./foot/player_down1.png");
 		
 		gems = new Array<Gem>();
-		gems.add(new Gem(400, 400, 16, 16, "gem.png"));
-		gems.add(new Gem(200, 200, 16, 16, "gem.png"));
-		gems.add(new Gem(300, 300, 16, 16, "gem.png"));
+		gems.add(new Gem(this, 400, 400, 16, 16, "gem.png"));
+		gems.add(new Gem(this, 200, 200, 16, 16, "gem.png"));
+		gems.add(new Gem(this, 300, 300, 16, 16, "gem.png"));
 		
 		transport_OBJs.add(new Bicycle_OBJ(this, 300, 100, true));
 		transport_OBJs.add(new Bicycle_OBJ(this, 400, 100, true));

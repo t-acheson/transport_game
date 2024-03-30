@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
+import com.hotmomcircle.transport_game.GameScreen;
 
 // Node class interactable by player
 // holds Route[] from which player interacts
@@ -13,8 +14,8 @@ public class Node extends Entity{
     private Texture image;
     private Array<Route> routes;
 
-    public Node(float locX, float locY, int width, int height, String imagePath, Array<Route> routes) { 
-        super(locX, locY, width, height, imagePath);
+    public Node(GameScreen game, float locX, float locY, int width, int height, String imagePath, Array<Route> routes) { 
+        super(game, locX, locY, width, height, imagePath);
         this.routes = routes;
         image = new Texture(Gdx.files.internal("gem.png"));
     }
