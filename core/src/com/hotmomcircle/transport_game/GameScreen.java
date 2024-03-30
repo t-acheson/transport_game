@@ -297,11 +297,6 @@ public class GameScreen implements Screen {
 		for(int i = 0; i < transport_OBJs.size(); i++) {
 				transport_OBJs.get(i).update(i);
 		}
-		
-      // clear the screen with a dark blue color. The
-      // arguments to clear are the red, green
-      // blue and alpha component in the range [0,1]
-      // of the color to be used to clear the screen.
 
 		// tell the camera to update its matrices.
 		camera.update();

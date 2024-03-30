@@ -3,12 +3,15 @@ package com.hotmomcircle.transport_game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
@@ -46,6 +49,8 @@ public class MainMenuScreen implements Screen {
 
 //      Sets the theme of our buttons, this will have to be updated when we decide on our style
 		skin = new Skin(Gdx.files.internal("uiskin.json")); // Load skin for buttons
+		BitmapFont font = new BitmapFont(Gdx.files.internal("fonts/game_font.ttf"));
+        skin.add("default-font", font);
 		
 //		We will keep the buttons in a table to make handling the layout easier
 		table = new Table();
@@ -53,6 +58,12 @@ public class MainMenuScreen implements Screen {
 		table.defaults().width(game.SCREEN_WIDTH/3).expandX().fillX();
 		table.setWidth(game.SCREEN_WIDTH/3);
 		table.setDebug(true);
+		
+		Label titleLabel = new Label("The Burning City", skin);
+		titleLabel.setAlignment(Align.center);
+        titleLabel.setFontScale(3.0f); // Increase font size
+		table.add(titleLabel).padBottom(20); // Colspan to span across all columns
+
 		
 //		Create the buttons
 		newGame = new TextButton("New Game", skin);
