@@ -2,11 +2,16 @@ package com.hotmomcircle.transport_game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -19,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.hotmomcircle.transport_game.tools.Camera;
 
 // Main menu screen
 // Uses gdx stage to render screen and deal with inputs
@@ -26,6 +32,10 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class MainMenuScreen implements Screen {
 	final TransportGame game;
+	
+	AssetManager assetManager;
+	private TiledMap map;
+	private OrthogonalTiledMapRenderer renderer;
 	
 	OrthographicCamera camera;
 	
@@ -39,6 +49,8 @@ public class MainMenuScreen implements Screen {
 	TextButton exitGame;
 	
 	Stage stage;
+	Vector3 targetPosition;
+	float panSpeed = 100; //Sets the speed at which the main menu camera pans 
 	
 	
 	public MainMenuScreen(final TransportGame game) {
@@ -47,9 +59,19 @@ public class MainMenuScreen implements Screen {
 		this.skin = game.skin;
 		this.font = game.font;
 		
+//		Load map
+		
+		assetManager = new AssetManager();
+
+		//loading map 
+		assetManager.setLoader(TiledMap.class,  new TmxMapLoader());
+		assetManager.load("maps/mainMenuMap.tmx", TiledMap.class);
+		
 //		Game camera
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, game.SCREEN_WIDTH, game.SCREEN_HEIGHT);
+		camera.position.set(game.SCREEN_WIDTH/2, 2950, 0);
+		targetPosition = new Vector3(camera.position);
 		
 //		Create a stage for our buttons. This is a better way of doing UI elements
 //		We will use SpriteBatches for the game itself
@@ -137,7 +159,15 @@ public class MainMenuScreen implements Screen {
 		
 		
 
-        
+		assetManager.finishLoading();
+		
+		try {
+			map = assetManager.get("maps/mainMenuMap.tmx", TiledMap.class);
+			System.out.println("Map loaded successfully.");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		renderer = new OrthogonalTiledMapRenderer(map);
 		
 	}
 	
@@ -152,7 +182,17 @@ public class MainMenuScreen implements Screen {
 	public void render(float delta) {
 		ScreenUtils.clear(0, 0, 0.2f, 1);
 		
+        float targetX = camera.position.x + panSpeed * Gdx.graphics.getDeltaTime(); // Adjust the value based on how far you want to slide
+        float targetY = camera.position.y; // Keep the y-coordinate the same to slide horizontally
+        targetPosition.set(targetX, targetY, 0); // Set the new target position
+		
+		camera.position.lerp(targetPosition, Gdx.graphics.getDeltaTime() * panSpeed/10);
 		camera.update();
+		// map render 
+		renderer.setView(camera);
+		// camera.position.set(player.getX(),player.getY(), 0);
+
+		renderer.render();
 
 		stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
 		stage.draw();
