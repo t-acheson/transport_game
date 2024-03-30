@@ -62,7 +62,6 @@ public class GameScreen implements Screen {
 	// list of Routes for planning UI
 	public Array<Route> routes;
 	   
-   public Camera camera;
    // Variables associated with the pause / game state
 	private int GAME_STATE;
 	private final int GAME_RUNNING = 0;
@@ -312,7 +311,6 @@ public class GameScreen implements Screen {
 		stage.act(delta);
 		stage.draw();
 
-		}
 		 // Update the gemArrow UI with the current player and gem positions
 		gemArrowUI.update(player, gems);
 		
