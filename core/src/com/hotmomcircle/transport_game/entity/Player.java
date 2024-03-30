@@ -173,7 +173,7 @@ public class Player extends Entity {
 	}
 
 	public Rectangle getPlayerRectangle() {
-		return playerRectangle;
+		return this.rectangle;
 	}
 	
 	public boolean isMoving() {

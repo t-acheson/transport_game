@@ -29,6 +29,7 @@ public class Bicycle_OBJ extends Object {
 	}
 	
 	public void update(int i) {
+		System.out.println();
 		if(game.player.getPlayerRectangle().overlaps(getObjectRectangle()) && Gdx.input.isKeyPressed(Keys.SPACE) && game.player.transIdx == game.player.FOOT) {
 			interact();
 			this.dispose();
@@ -42,6 +43,10 @@ public class Bicycle_OBJ extends Object {
 	
 	public void dispose() {
 		objImg.dispose();
+	}
+	
+	public Rectangle getObjectRectangle() {
+		return interactionRadius;
 	}
 	
 }

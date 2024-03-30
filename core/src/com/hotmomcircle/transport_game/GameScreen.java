@@ -53,7 +53,7 @@ public class GameScreen implements Screen {
 	public Player player;
 	public Bicycle_OBJ[] bikes;
 	   
-   private OrthographicCamera camera;
+	public Camera camera;
 	
 	public Array<Gem> gems;
 
@@ -247,7 +247,7 @@ public class GameScreen implements Screen {
 				}
 			}
 
-		}
+		
 		
 		for(int i = 0; i < bikes.length; i++) {
 			if (bikes[i] != null) {
@@ -311,6 +311,7 @@ public class GameScreen implements Screen {
 		stage.act(delta);
 		stage.draw();
 
+	}
 		 // Update the gemArrow UI with the current player and gem positions
 		gemArrowUI.update(player, gems);
 		
