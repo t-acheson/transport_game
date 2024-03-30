@@ -31,7 +31,7 @@ public class Player extends Entity {
 	public Rectangle playerRectangle;
 	
 	private String direction = "down";
-	
+	private boolean hasInteracted = false;
 	
 	public Player(GameScreen game, int locX, int locY, int width, int height, String imagePath) {
 		super(locX, locY, width, height, imagePath);
@@ -84,6 +84,14 @@ public class Player extends Entity {
 	@Override
 	public void render(SpriteBatch batch) throws Exception {
 		
+		if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !hasInteracted) {
+			switch(currTransport().name) {
+			case "Bicycle":
+				game.addBike(Math.round(this.x), Math.round(this.y));
+				getOnFoot();
+				break;
+			}
+		}
 //		Can press 'f' to go on foot
 		if(Gdx.input.isKeyPressed(Input.Keys.F)) {
 			getOnFoot();
@@ -148,14 +156,11 @@ public class Player extends Entity {
 		
 		
 		// Player interaction
-		if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-			this.interact();
-		}
-		
-		
 		
 		currTransport().render(batch);
 //		batch.draw(transport[transIdx].image, x, y, 0, 0, transport[transIdx].image.getWidth(), transport[transIdx].image.getHeight(), game.scale, game.scale, 0, 0, 0, transport[transIdx].image.getWidth(), transport[transIdx].image.getHeight(), false, false);
+	
+		hasInteracted = false;
 	}
 	
 	public int getSpeed() {
@@ -191,15 +196,15 @@ public class Player extends Entity {
 		return up || down || left || right;
 	}
 	
-	
-	
 //  Go on foot
 	public void getOnFoot() {
+		hasInteracted = true;
 		transIdx = 0;
 	}
 	
 //	Changes player transport
 	public void getOnBike() {
+		hasInteracted = true;
 //		Can only get on bike if you are on foot
 		if(transIdx == 0) {
 			transIdx = 1;
@@ -208,6 +213,7 @@ public class Player extends Entity {
 	
 //	 Changes player transport
 	public void getOnCar() {
+		hasInteracted = true;
 //		Can only get in car if on foot
 		if(transIdx == 0) {
 			transIdx = 2;
@@ -217,6 +223,10 @@ public class Player extends Entity {
 	// naive method to handle Player interaction
 
 	public void interact() {
+		
+		if(hasInteracted)
+			return;
+		
 		// interate through all "interactable objects"
 		for (Node node: this.game.nodes) {
 			// if overlaps
@@ -239,8 +249,14 @@ public class Player extends Entity {
 	public Transport[] getTransport() {
 		return transport;
 	}
-
+	
+	
 	public int getTransIdx() {
 		return transIdx;
+	}
+	
+//	Can the player interact with an object
+	public boolean canGetOnTransport(Rectangle rect) {
+		return !hasInteracted && getPlayerRectangle().overlaps(rect) && transIdx == FOOT;
 	}
 }

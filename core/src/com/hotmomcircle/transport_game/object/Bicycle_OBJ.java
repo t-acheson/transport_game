@@ -29,11 +29,11 @@ public class Bicycle_OBJ extends Object {
 	}
 	
 	public void update(int i) {
-		System.out.println();
-		if(game.player.getPlayerRectangle().overlaps(getObjectRectangle()) && Gdx.input.isKeyPressed(Keys.SPACE) && game.player.transIdx == game.player.FOOT) {
+		
+		if(game.player.canGetOnTransport(getObjectRectangle()) && Gdx.input.isKeyJustPressed(Keys.SPACE)) {
 			interact();
 			this.dispose();
-			game.bikes[i] = null;
+			game.bikes.remove(i);
 		}
 	}
 	
