@@ -24,6 +24,7 @@ import com.hotmomcircle.transport_game.entity.Node;
 import com.hotmomcircle.transport_game.ui.Planning;
 import com.hotmomcircle.transport_game.ui.Points;
 import com.hotmomcircle.transport_game.ui.gemArrow;
+import com.hotmomcircle.transport_game.ui.Pause;
 //map imports below 
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapLayer;
@@ -59,11 +60,14 @@ public class GameScreen implements Screen {
 	public Array<Route> routes;
 	   
    public Camera camera;
+
    // Variables associated with the pause / game state
 	private int GAME_STATE;
 	private final int GAME_RUNNING = 0;
 	private final int GAME_PAUSED = 1;
 	private BitmapFont font = new BitmapFont();
+
+	public Pause pauseUI;
 
 	//UI Skin
 	public Skin skin;
@@ -189,6 +193,8 @@ public class GameScreen implements Screen {
 		// Planning UI
 		planningUI = new Planning(game, this, stage, skin, player);
 
+		// Pause UI
+		pauseUI = new Pause(game, stage, skin);
 	}
 
 	@Override
@@ -210,13 +216,10 @@ public class GameScreen implements Screen {
 		} 
 		if (GAME_STATE == GAME_PAUSED){
 			// Clear the screen
-			Gdx.gl.glClearColor(0, 0, 0, 1);
-			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-			
-			// draws the text on to the screen in the centre
+			// Gdx.gl.glClearColor(0, 0, 0, 1);
+			// Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 			batch.begin();
-			font.draw(batch, "Game Paused", game.getSCREEN_WIDTH() / 2 - 60, game.getSCREEN_HEIGHT() / 2 + 50);
-			font.draw(batch, "Press 'R' to Resume", game.getSCREEN_WIDTH() / 2 - 90, game.getSCREEN_HEIGHT() / 2);
+			pauseUI.showPause();
 			batch.end();
 
 		} else {
@@ -291,7 +294,6 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void pause() {
-		// TODO Auto-generated method stub
 		System.out.println("Game Paused");
 		GAME_STATE = GAME_PAUSED;
 		
@@ -299,7 +301,6 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void resume() {
-		// TODO Auto-generated method stub
 		GAME_STATE = GAME_RUNNING;
 	}
 
