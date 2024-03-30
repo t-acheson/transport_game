@@ -77,13 +77,11 @@ public class Pause {
         pauseTable.add(quitButton);
 
 		stage.addActor(pauseTable);
-        System.out.println("PAUSING");
 	}
 
 
 	public void deactivatePause() {
 		stage.getRoot().removeActor(pauseTable);
-        System.out.println("should have removed it");
     }
 }
 
