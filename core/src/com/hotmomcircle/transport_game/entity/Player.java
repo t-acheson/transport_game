@@ -1,5 +1,7 @@
 package com.hotmomcircle.transport_game.entity;
 
+import com.badlogic.gdx.utils.Array;
+
 import org.w3c.dom.css.Rect;
 
 import com.badlogic.gdx.Gdx;
@@ -31,12 +33,12 @@ public class Player extends Entity {
 	private String direction = "down";
 	
 	
-	public Player(GameScreen game) {
+	public Player(GameScreen game, int locX, int locY, int width, int height, String imagePath) {
+		super(locX, locY, width, height, imagePath);
 		this.game = game;
 //		Initialize the textures
 //		Initialize player x and y positions
-		y = 100;
-		x = 100;
+
 		Texture[] playerTextures = new Texture[8];
 		playerTextures[0] = new Texture(Gdx.files.internal("./foot/player_up1.png"));
 		playerTextures[1] = new Texture(Gdx.files.internal("./foot/player_up2.png"));
@@ -47,7 +49,7 @@ public class Player extends Entity {
 		playerTextures[6] = new Texture(Gdx.files.internal("./foot/player_right1.png"));
 		playerTextures[7] = new Texture(Gdx.files.internal("./foot/player_right2.png"));
 
-		transport[0] = new Transport(game, "Foot", 200, playerTextures);
+		transport[0] = new Transport(game, "Foot", 200, playerTextures, "0", "-5");
 		
 		
 		Texture[] bikeTextures = new Texture[8];
@@ -61,7 +63,8 @@ public class Player extends Entity {
 		bikeTextures[6] = new Texture(Gdx.files.internal("./bicycle/bike_right1.png"));
 		bikeTextures[7] = new Texture(Gdx.files.internal("./bicycle/bike_right2.png"));
 		
-		transport[1] = new Transport(game, "Bicycle", 300, bikeTextures); 
+		// footprint for the bike? we gotta nerf it somehow, could just crank up the stamina cost?
+		transport[1] = new Transport(game, "Bicycle", 300, bikeTextures, "2", "-10"); 
 		
 		Texture[] carTextures = new Texture[8];
 
@@ -74,19 +77,11 @@ public class Player extends Entity {
 		carTextures[6] = new Texture(Gdx.files.internal("./car/car_right.png"));
 		carTextures[7] = new Texture(Gdx.files.internal("./car/car_right.png"));
 		
-		transport[2] = new Transport(game, "Car", 400, carTextures); 
-		
-		
-
-		playerRectangle = new Rectangle();
-		playerRectangle.x = this.getX();
-		playerRectangle.y = this.getY();
-		playerRectangle.height = 32;
-		playerRectangle.width = 32;
+		transport[2] = new Transport(game, "Car", 400, carTextures, "10", "0"); 
 
 	}
 	
-	
+	@Override
 	public void render(SpriteBatch batch) throws Exception {
 		
 //		Can press 'f' to go on foot
@@ -101,35 +96,61 @@ public class Player extends Entity {
 		
 		
 //		Can press 'B' to get on bike
-		if(Gdx.input.isKeyPressed(Input.Keys.B)) {
-			getOnBike();
+		if(Gdx.input.isKeyPressed(Input.Keys.F)) {
+			getOnFoot();
 		}
 		
 		
 //		Move the player 
-		if(Gdx.input.isKeyPressed(Input.Keys.W)) { 
-			direction = "up";
-			y += getSpeed() * Gdx.graphics.getDeltaTime();
-			}
-		if(Gdx.input.isKeyPressed(Input.Keys.S)) { 
-			direction = "down";
-			y -= getSpeed() * Gdx.graphics.getDeltaTime();
-			}
-		if(Gdx.input.isKeyPressed(Input.Keys.A)) { 
-			direction = "left";
-			x -= getSpeed() * Gdx.graphics.getDeltaTime();
-			}
-		if(Gdx.input.isKeyPressed(Input.Keys.D)) { 
-			direction = "right";
-			x += getSpeed() * Gdx.graphics.getDeltaTime();
-			}
+		// define speed at render time
+		float speed = getSpeed() * Gdx.graphics.getDeltaTime();
 
-		playerRectangle.x = this.getX();
-		playerRectangle.y = this.getY();
+		// determine movement direction
+		// TODO find a way to reintroduce the moonwalk bug, i mean FEATURE
+		float dx = 0;
+		float dy = 0;
+
+		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+			direction = "up";
+			dy += speed;
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+			direction = "down";
+			dy -= speed;
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+			direction = "left";
+			dx -= speed;
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+			direction = "right";
+			dx += speed;
+		}
+
+		// the diagonal vector is the same as the 
+		// square root of the sum of the squared
+		// vertical and horizontal vectors
+
+		float movementMagnitude = (float) Math.sqrt(dx * dx + dy * dy);
+		if (movementMagnitude > speed) {
+			// if it exceeds it, we normalise the speed
+			// by the magnitude
+			dx = dx / movementMagnitude * speed;	
+			dy = dy / movementMagnitude * speed;
+		}
+
+		// finally apply the movement
+		x += dx;
+		y += dy;
+
+		this.rectangle.x = this.getX();
+		this.rectangle.y = this.getY();
 		
 		
-//		Handle 
-		
+		// Player interaction
+		if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+			this.interact();
+		}
 		
 		
 		
@@ -160,6 +181,13 @@ public class Player extends Entity {
 		boolean down = Gdx.input.isKeyPressed(Input.Keys.S);
 		boolean left = Gdx.input.isKeyPressed(Input.Keys.A);
 		boolean right = Gdx.input.isKeyPressed(Input.Keys.D);
+
+		if (up || down || left || right) {
+			String staminaCost = transport[transIdx].getStaminaCost();
+			String footprint = transport[transIdx].getFootprint();
+			this.game.freshness.setText(staminaCost);
+			this.game.carbon.setText(footprint);
+		}
 		return up || down || left || right;
 	}
 	
@@ -186,6 +214,33 @@ public class Player extends Entity {
 		}
 	}
 	
-	
-	
+	// naive method to handle Player interaction
+
+	public void interact() {
+		// interate through all "interactable objects"
+		for (Node node: this.game.nodes) {
+			// if overlaps
+			if (this.rectangle.overlaps(node.rectangle)) {
+				// if overlaps
+				// call togglePlanning
+				// pass Routes of overlapped Node
+				System.out.println(node);
+				this.game.planningUI.activatePlanning(node.getRoutes());
+				this.game.camera.zoomOut();
+				break;
+			}
+		}
+		// could implement different loops for interacting
+		// with different things
+		// if we need to interact with anything more
+		// than these transport nodes 
+	}
+
+	public Transport[] getTransport() {
+		return transport;
+	}
+
+	public int getTransIdx() {
+		return transIdx;
+	}
 }
