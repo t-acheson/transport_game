@@ -10,7 +10,10 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
@@ -68,10 +71,10 @@ public class GameScreen implements Screen {
 	private int GAME_STATE;
 	private final int GAME_RUNNING = 0;
 	private final int GAME_PAUSED = 1;
-	private BitmapFont font = new BitmapFont();
+	public Skin skin;
+	public BitmapFont font;
 
 	//UI Skin
-	public Skin skin;
 
 	// Stage for UI components
 	private Stage stage;
@@ -95,12 +98,14 @@ public class GameScreen implements Screen {
 
 	public GameScreen(TransportGame game) {
 		this.game = game;
+		this.font = game.font;
+		this.skin = game.skin;
 
 		this.batch = game.batch;
 		
 		// for the pause / play feature
 		GAME_STATE = GAME_RUNNING;
-		
+
 		
 //		Load assets - Load all textures, maps, etc here with the assetManager before going to the game screen.
 //		In the mean time show a loading screen
@@ -204,7 +209,6 @@ public class GameScreen implements Screen {
 		// the map more complicated and add objects
 		stage = new Stage(new ScreenViewport());
 		Gdx.input.setInputProcessor(stage);
-		skin = new Skin(Gdx.files.internal("uiskin.json"));
 
 		// Asset manager instansiation
 		assetManager.load("uiskin.json", Skin.class);
@@ -227,11 +231,11 @@ public class GameScreen implements Screen {
 		table.add(gemArrowUI).top().left();
 
 		// fill table with UI scores
-		table.add(new TextField("Points: ", skin));
+		table.add(new Label("Points: ", skin));
 		table.add(points).fillX().uniformX();
-		table.add(new TextField("Carbon: ", skin));
+		table.add(new Label("Carbon: ", skin));
 		table.add(carbon).fillX().uniformX();
-		table.add(new TextField("Freshness: ", skin));
+		table.add(new Label("Freshness: ", skin));
 		table.add(freshness).fillX().uniformX();
 
 		//initalise gemArrow 

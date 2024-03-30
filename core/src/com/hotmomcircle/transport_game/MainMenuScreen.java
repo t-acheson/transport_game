@@ -4,12 +4,17 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -25,6 +30,7 @@ public class MainMenuScreen implements Screen {
 	OrthographicCamera camera;
 	
 	Skin skin;
+	BitmapFont font;
 	
 	Table table;
 	TextButton newGame;
@@ -38,6 +44,9 @@ public class MainMenuScreen implements Screen {
 	public MainMenuScreen(final TransportGame game) {
 		this.game = game;
 		
+		this.skin = game.skin;
+		this.font = game.font;
+		
 //		Game camera
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, game.SCREEN_WIDTH, game.SCREEN_HEIGHT);
@@ -47,10 +56,11 @@ public class MainMenuScreen implements Screen {
 		stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
-//      Sets the theme of our buttons, this will have to be updated when we decide on our style
-		skin = new Skin(Gdx.files.internal("uiskin.json")); // Load skin for buttons
-		BitmapFont font = new BitmapFont(Gdx.files.internal("fonts/game_font.ttf"));
-        skin.add("default-font", font);
+
+        
+        
+        
+//        skin = new Skin(Gdx.files.internal("uiskin.json")); // Load 
 		
 //		We will keep the buttons in a table to make handling the layout easier
 		table = new Table();
@@ -146,7 +156,7 @@ public class MainMenuScreen implements Screen {
 
 		stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
 		stage.draw();
-
+		
 	}
 
 	@Override
