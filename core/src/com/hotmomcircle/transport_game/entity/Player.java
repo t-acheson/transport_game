@@ -1,16 +1,11 @@
 package com.hotmomcircle.transport_game.entity;
 
-import com.badlogic.gdx.utils.Array;
-
-import org.w3c.dom.css.Rect;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.hotmomcircle.transport_game.GameScreen;
-import com.hotmomcircle.transport_game.TransportGame;
 import com.hotmomcircle.transport_game.transport.Transport;
 
 //This will hold the player class. 
@@ -20,8 +15,6 @@ import com.hotmomcircle.transport_game.transport.Transport;
 public class Player extends Entity {
 	
 	GameScreen game;
-	private Texture bikeImage;
-	private Texture carImage;
 	private Transport[] transport = new Transport[3]; // [foot, bike, car]
 	public int transIdx = 0; //Index corresponding to which transport the player is currently on
 	public int FOOT = 0;
