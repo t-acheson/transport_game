@@ -91,9 +91,9 @@ public class MainMenuScreen implements Screen {
 		table.setWidth(game.SCREEN_WIDTH/3);
 		table.setDebug(true);
 		
-		Label titleLabel = new Label("The Burning City", skin);
+		Label titleLabel = new Label("Gem Expedition", skin);
 		titleLabel.setAlignment(Align.center);
-        titleLabel.setFontScale(3.0f); // Increase font size
+        titleLabel.setFontScale(2.5f); // Increase font size
 		table.add(titleLabel).padBottom(20); // Colspan to span across all columns
 
 		
