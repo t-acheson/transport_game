@@ -87,7 +87,7 @@ public class GameScreen implements Screen {
 
 	// asset manager to implement uiskin.json
 	// TODO best practise to implement all our assets this way?
-	private AssetManager assetManager;
+	public AssetManager assetManager;
 
 	//gemArrow instance 
 	private gemArrow gemArrowUI;
@@ -101,10 +101,53 @@ public class GameScreen implements Screen {
 		// for the pause / play feature
 		GAME_STATE = GAME_RUNNING;
 		
+		
+//		Load assets - Load all textures, maps, etc here with the assetManager before going to the game screen.
+//		In the mean time show a loading screen
+		assetManager = new AssetManager();
+
 		//loading map 
-		TmxMapLoader loader = new TmxMapLoader();
+		assetManager.setLoader(TiledMap.class,  new TmxMapLoader());
+		assetManager.load("trialMapwithObjects.tmx", TiledMap.class);
+		
+//		Load in the player transport
+		String[] transportPaths = {
+			    "./foot/player_up1.png", "./foot/player_up2.png",
+			    "./foot/player_down1.png", "./foot/player_down2.png",
+			    "./foot/player_left1.png", "./foot/player_left2.png",
+			    "./foot/player_right1.png", "./foot/player_right2.png",
+			    "./bicycle/bike_up1.png", "./bicycle/bike_up2.png",
+			    "./bicycle/bike_down1.png", "./bicycle/bike_down2.png",
+			    "./bicycle/bike_left1.png", "./bicycle/bike_left2.png",
+			    "./bicycle/bike_right1.png", "./bicycle/bike_right2.png",
+			    "./car/car_up.png", "./car/car_up.png",
+			    "./car/car_down.png", "./car/car_down.png",
+			    "./car/car_left.png", "./car/car_left.png",
+			    "./car/car_right.png", "./car/car_right.png"
+			};
+		
+		for(String path: transportPaths) {
+			assetManager.load(path, Texture.class);
+			
+		}
+		
+//		Load in the objects (gem, bike_OBJ, car_OBJ
+		String[] objectPaths = {
+				"gem.png",
+				"./objects/bicycle.png",
+				"./objects/car_left.png"
+		};
+		
+		for(String path: objectPaths) {
+			assetManager.load(path, Texture.class);
+			
+		}
+		
+		
+		
+		assetManager.finishLoading();
 		try {
-			map = loader.load("trialMapwithObjects.tmx");
+			map = assetManager.get("trialMapwithObjects.tmx", TiledMap.class);
 			System.out.println("Map loaded successfully.");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -162,7 +205,6 @@ public class GameScreen implements Screen {
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
 
 		// Asset manager instansiation
-		assetManager = new AssetManager();
 		assetManager.load("uiskin.json", Skin.class);
 
 

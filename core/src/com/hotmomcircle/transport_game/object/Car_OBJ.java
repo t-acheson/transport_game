@@ -13,7 +13,7 @@ public class Car_OBJ extends Transport_OBJ {
 		this.x = x;
 		this.y = y;
 		
-		objImg = new Texture(Gdx.files.internal("./objects/car_left.png"));
+		objImg = game.assetManager.get("./objects/car_left.png", Texture.class);
 		
 //		Interaction rectangle
 		this.interactable = true;

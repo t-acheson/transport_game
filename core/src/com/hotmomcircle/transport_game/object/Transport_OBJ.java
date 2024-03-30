@@ -20,7 +20,6 @@ public abstract class Transport_OBJ extends Object {
 		
 		if(game.player.canGetOnTransport(getObjectRectangle()) && Gdx.input.isKeyJustPressed(Keys.SPACE)) {
 			interact();
-			this.dispose();
 			game.transport_OBJs.remove(i);
 		}
 	}

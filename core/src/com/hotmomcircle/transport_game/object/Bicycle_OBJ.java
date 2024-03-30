@@ -12,8 +12,8 @@ public class Bicycle_OBJ extends Transport_OBJ {
 		this.game = game;
 		this.x = x;
 		this.y = y;
-		
-		objImg = new Texture(Gdx.files.internal("./objects/bicycle.png"));
+
+		objImg = game.assetManager.get("./objects/bicycle.png", Texture.class);
 		
 //		Interaction rectangle
 		this.interactable = true;

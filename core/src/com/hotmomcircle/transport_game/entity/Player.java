@@ -29,46 +29,67 @@ public class Player extends Entity {
 	public Player(GameScreen game, int locX, int locY, int width, int height, String imagePath) {
 		super(locX, locY, width, height, imagePath);
 		this.game = game;
-//		Initialize the textures
-//		Initialize player x and y positions
-
+//		Initialize the textures	and create transport classes
+//		Game assetManager has already loaded these
+		String[] paths = {
+			    "./foot/player_up1.png",
+			    "./foot/player_up2.png",
+			    "./foot/player_down1.png",
+			    "./foot/player_down2.png",
+			    "./foot/player_left1.png",
+			    "./foot/player_left2.png",
+			    "./foot/player_right1.png",
+			    "./foot/player_right2.png"
+			};
+		
 		Texture[] playerTextures = new Texture[8];
-		playerTextures[0] = new Texture(Gdx.files.internal("./foot/player_up1.png"));
-		playerTextures[1] = new Texture(Gdx.files.internal("./foot/player_up2.png"));
-		playerTextures[2] = new Texture(Gdx.files.internal("./foot/player_down1.png"));
-		playerTextures[3] = new Texture(Gdx.files.internal("./foot/player_down2.png"));
-		playerTextures[4] = new Texture(Gdx.files.internal("./foot/player_left1.png"));
-		playerTextures[5] = new Texture(Gdx.files.internal("./foot/player_left2.png"));
-		playerTextures[6] = new Texture(Gdx.files.internal("./foot/player_right1.png"));
-		playerTextures[7] = new Texture(Gdx.files.internal("./foot/player_right2.png"));
+
+		for(int i = 0; i<paths.length; i++) {
+			playerTextures[i] = game.assetManager.get(paths[i], Texture.class);
+		}
 
 		transport[0] = new Transport(game, "Foot", 200, playerTextures, "0", "-5");
 		
 		
+		
 		Texture[] bikeTextures = new Texture[8];
+		
+		String[] bikePaths = {
+			    "./bicycle/bike_up1.png",
+			    "./bicycle/bike_up2.png",
+			    "./bicycle/bike_down1.png",
+			    "./bicycle/bike_down2.png",
+			    "./bicycle/bike_left1.png",
+			    "./bicycle/bike_left2.png",
+			    "./bicycle/bike_right1.png",
+			    "./bicycle/bike_right2.png"
+			};
 
-		bikeTextures[0] = new Texture(Gdx.files.internal("./bicycle/bike_up1.png"));
-		bikeTextures[1] = new Texture(Gdx.files.internal("./bicycle/bike_up2.png"));
-		bikeTextures[2] = new Texture(Gdx.files.internal("./bicycle/bike_down1.png"));
-		bikeTextures[3] = new Texture(Gdx.files.internal("./bicycle/bike_down2.png"));
-		bikeTextures[4] = new Texture(Gdx.files.internal("./bicycle/bike_left1.png"));
-		bikeTextures[5] = new Texture(Gdx.files.internal("./bicycle/bike_left2.png"));
-		bikeTextures[6] = new Texture(Gdx.files.internal("./bicycle/bike_right1.png"));
-		bikeTextures[7] = new Texture(Gdx.files.internal("./bicycle/bike_right2.png"));
+		
+		for(int i = 0; i<bikePaths.length; i++) {
+			bikeTextures[i] = game.assetManager.get(bikePaths[i], Texture.class);
+		}
+		
 		
 		// footprint for the bike? we gotta nerf it somehow, could just crank up the stamina cost?
 		transport[1] = new Transport(game, "Bicycle", 300, bikeTextures, "2", "-10"); 
 		
 		Texture[] carTextures = new Texture[8];
-
-		carTextures[0] = new Texture(Gdx.files.internal("./car/car_up.png"));
-		carTextures[1] = new Texture(Gdx.files.internal("./car/car_up.png"));
-		carTextures[2] = new Texture(Gdx.files.internal("./car/car_down.png"));
-		carTextures[3] = new Texture(Gdx.files.internal("./car/car_down.png"));
-		carTextures[4] = new Texture(Gdx.files.internal("./car/car_left.png"));
-		carTextures[5] = new Texture(Gdx.files.internal("./car/car_left.png"));
-		carTextures[6] = new Texture(Gdx.files.internal("./car/car_right.png"));
-		carTextures[7] = new Texture(Gdx.files.internal("./car/car_right.png"));
+		
+		String[] carPaths = {
+			    "./car/car_up.png",
+			    "./car/car_up.png",
+			    "./car/car_down.png",
+			    "./car/car_down.png",
+			    "./car/car_left.png",
+			    "./car/car_left.png",
+			    "./car/car_right.png",
+			    "./car/car_right.png"
+			};
+		
+		for(int i = 0; i<carPaths.length; i++) {
+			carTextures[i] = game.assetManager.get(carPaths[i], Texture.class);
+		}
 		
 		transport[2] = new Transport(game, "Car", 400, carTextures, "10", "0"); 
 
