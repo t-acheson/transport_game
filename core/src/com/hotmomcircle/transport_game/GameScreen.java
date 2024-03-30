@@ -287,7 +287,6 @@ public class GameScreen implements Screen {
 
 			for (Gem gem : gems) {
 				if (player.getRectangle().overlaps(gem.getRectangle())) {
-					gem.dispose();
 					gems.removeValue(gem, true);
 				points.setText("50");
 				}
