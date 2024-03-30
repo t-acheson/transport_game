@@ -20,6 +20,8 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.hotmomcircle.transport_game.entity.Gem;
 import com.hotmomcircle.transport_game.entity.Player;
 import com.hotmomcircle.transport_game.object.Bicycle_OBJ;
+import com.hotmomcircle.transport_game.object.Car_OBJ;
+import com.hotmomcircle.transport_game.object.Transport_OBJ;
 import com.hotmomcircle.transport_game.entity.Route;
 import com.hotmomcircle.transport_game.tools.Camera;
 import com.hotmomcircle.transport_game.entity.Node;
@@ -51,7 +53,7 @@ public class GameScreen implements Screen {
 
 	Texture img;
 	public Player player;
-	public ArrayList<Bicycle_OBJ> bikes = new ArrayList<Bicycle_OBJ>();
+	public ArrayList<Transport_OBJ> transport_OBJs = new ArrayList<Transport_OBJ>();
 	   
 	public Camera camera;
 	
@@ -143,9 +145,11 @@ public class GameScreen implements Screen {
 		gems.add(new Gem(200, 200, 16, 16, "gem.png"));
 		gems.add(new Gem(300, 300, 16, 16, "gem.png"));
 		
-		bikes.add(new Bicycle_OBJ(this, 300, 100, true));
-		bikes.add(new Bicycle_OBJ(this, 400, 100, true));
-		bikes.add(new Bicycle_OBJ(this, 500, 100, true));
+		transport_OBJs.add(new Bicycle_OBJ(this, 300, 100, true));
+		transport_OBJs.add(new Bicycle_OBJ(this, 400, 100, true));
+		transport_OBJs.add(new Bicycle_OBJ(this, 500, 100, true));
+		
+		transport_OBJs.add(new Car_OBJ(this, 400, 150, true));
 		
 		// create the camera and the SpriteBatch
 		camera = new Camera(game, player);
@@ -247,8 +251,8 @@ public class GameScreen implements Screen {
 
 		
 		
-		for(int i = 0; i < bikes.size(); i++) {
-				bikes.get(i).update(i);
+		for(int i = 0; i < transport_OBJs.size(); i++) {
+				transport_OBJs.get(i).update(i);
 		}
 		
       // clear the screen with a dark blue color. The
@@ -267,9 +271,9 @@ public class GameScreen implements Screen {
 
 		batch.begin();
 		try {
-			for (Bicycle_OBJ bike: bikes) {
-				if (bike != null) {					
-					bike.render(batch);
+			for (Transport_OBJ transport: transport_OBJs) {
+				if (transport != null) {					
+					transport.render(batch);
 				}
 			}
 			
@@ -348,7 +352,11 @@ public class GameScreen implements Screen {
 	}
 	
 	public void addBike(int x, int y) {
-		bikes.add(new Bicycle_OBJ(this, x, y, true));
+		transport_OBJs.add(new Bicycle_OBJ(this, x, y, true));
+	}
+	
+	public void addCar(int x, int y) {
+		transport_OBJs.add(new Car_OBJ(this, x, y, true));
 	}
 
 	

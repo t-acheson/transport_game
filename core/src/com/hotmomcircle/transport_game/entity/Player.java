@@ -90,6 +90,10 @@ public class Player extends Entity {
 				game.addBike(Math.round(this.x), Math.round(this.y));
 				getOnFoot();
 				break;
+			case "Car":
+				game.addCar(Math.round(this.x), Math.round(this.y));
+				getOnFoot();
+				break;
 			}
 		}
 //		Can press 'f' to go on foot

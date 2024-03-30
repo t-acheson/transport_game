@@ -5,15 +5,15 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.hotmomcircle.transport_game.GameScreen;
 
-public class Bicycle_OBJ extends Transport_OBJ {
+public class Car_OBJ extends Transport_OBJ {
 	
 	
-	public Bicycle_OBJ(GameScreen game, int x, int y, boolean interactable) {
+	public Car_OBJ(GameScreen game, int x, int y, boolean interactable) {
 		this.game = game;
 		this.x = x;
 		this.y = y;
 		
-		objImg = new Texture(Gdx.files.internal("./objects/bicycle.png"));
+		objImg = new Texture(Gdx.files.internal("./objects/car_left.png"));
 		
 //		Interaction rectangle
 		this.interactable = true;
@@ -22,7 +22,7 @@ public class Bicycle_OBJ extends Transport_OBJ {
 	}
 	
 	public void interact() {
-		game.player.getOnBike();
+		game.player.getOnCar();
 	}
 	
 }
