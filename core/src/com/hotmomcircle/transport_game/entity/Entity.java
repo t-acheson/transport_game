@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
+import com.hotmomcircle.transport_game.GameScreen;
 
 public class Entity {
 	protected float x;
@@ -22,11 +23,11 @@ public class Entity {
 		return y;
 	}
 
-	Entity(float locX, float locY, int width, int height, String imagePath){
+	Entity(GameScreen game, float locX, float locY, int width, int height, String imagePath){
 		this.x = locX;
 		this.y = locY;
 
-		this.image = new Texture(Gdx.files.internal(imagePath));
+		this.image = game.assetManager.get(imagePath, Texture.class);
 
 		this.rectangle = new Rectangle();
 		this.rectangle.x = locX;

@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.hotmomcircle.transport_game.GameScreen;
-import com.hotmomcircle.transport_game.TransportGame;
 
 // Transport superclass.
 // Foot, bike and car will all be instances of this class
