@@ -18,7 +18,7 @@ public class TransportGame extends Game {
 	
 	SpriteBatch batch;
 	
-	public Skin skin;
+	public Skin skin; 
 	public BitmapFont font;
 
    
@@ -39,7 +39,7 @@ public class TransportGame extends Game {
 		
 		
 //		Use default UISKIN for now
-		skin = new Skin(Gdx.files.internal("uiskin.json"));
+		skin = new Skin(Gdx.files.internal("skin/star-soldier-ui.json"));
         
 //		Change the font for buttons
         TextButtonStyle style = skin.get(TextButtonStyle.class);
