@@ -10,7 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Array;
 import com.hotmomcircle.transport_game.GameScreen;
 import com.hotmomcircle.transport_game.TransportGame;
-import com.hotmomcircle.transport_game.entity.Route;
 import com.hotmomcircle.transport_game.MainMenuScreen;
 
 public class Pause {
@@ -21,7 +20,7 @@ public class Pause {
     public Skin skin;
     public Stage stage;
 
-    public Pause(TransportGame game, Stage stage, Skin skin) {
+    public Pause(TransportGame game, GameScreen screen, Stage stage, Skin skin) {
         // constructor just needs to know what it can work with
         this.game = game;
         this.stage = stage;
@@ -43,6 +42,7 @@ public class Pause {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 deactivatePause();
+                game.resume();
                 return true;
             }
         });
@@ -77,25 +77,15 @@ public class Pause {
         pauseTable.add(quitButton);
 
 		stage.addActor(pauseTable);
+        System.out.println("PAUSING");
 	}
 
-	public void activatePlanning(Array<Route> routes) {
-		// planning mode "active" or not
-		// for conditional planning UI render
-		// calls populatePlanning on False -> True toggle
-		// passing routes from Node to populate options
-		if (active != true) {
-			active = true;
-
-        }
-	}
 
 	public void deactivatePause() {
-		if (active) {
 		stage.getRoot().removeActor(pauseTable);
-		active = false;
-		} 
-	}
+        System.out.println("should have removed it");
+    }
 }
+
 
 

@@ -68,6 +68,7 @@ public class GameScreen implements Screen {
 	private BitmapFont font = new BitmapFont();
 
 	public Pause pauseUI;
+	public Stage pauseStage;
 
 	//UI Skin
 	public Skin skin;
@@ -194,7 +195,10 @@ public class GameScreen implements Screen {
 		planningUI = new Planning(game, this, stage, skin, player);
 
 		// Pause UI
-		pauseUI = new Pause(game, stage, skin);
+		pauseStage = new Stage(new ScreenViewport());
+		Gdx.input.setInputProcessor(pauseStage);
+
+		pauseUI = new Pause(game, this, pauseStage, skin);
 	}
 
 	@Override
@@ -209,18 +213,17 @@ public class GameScreen implements Screen {
 		// pauses the game if it isnt already paused - prevents multiple inputs
 		if(Gdx.input.isKeyPressed(Input.Keys.P) && GAME_STATE != GAME_PAUSED) {
 			pause();
+			pauseUI.showPause();
 		} 
 		// resumes game if it isn't already running
 		if(Gdx.input.isKeyPressed(Input.Keys.R) && GAME_STATE != GAME_RUNNING) {
 			resume();
 		} 
 		if (GAME_STATE == GAME_PAUSED){
-			// Clear the screen
-			// Gdx.gl.glClearColor(0, 0, 0, 1);
-			// Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-			batch.begin();
-			pauseUI.showPause();
-			batch.end();
+			pauseStage.act(delta);
+			pauseStage.draw();
+
+			
 
 		} else {
 
