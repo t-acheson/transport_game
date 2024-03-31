@@ -23,12 +23,15 @@ public class Player extends Entity {
 	private Texture bikeImage;
 	private Texture carImage;
 	private Transport[] transport = new Transport[3]; // [foot, bike, car]
-	private int transIdx = 0; //Index corresponding to which transport the player is currently on
+	public int transIdx = 0; //Index corresponding to which transport the player is currently on
+	public int FOOT = 0;
+	public int BIKE = 1;
+	public int CAR = 2;
 	private int stamina;
 	public Rectangle playerRectangle;
 	
 	private String direction = "down";
-	
+	private boolean hasInteracted = false;
 	
 	public Player(GameScreen game, int locX, int locY, int width, int height, String imagePath) {
 		super(locX, locY, width, height, imagePath);
@@ -81,9 +84,20 @@ public class Player extends Entity {
 	@Override
 	public void render(SpriteBatch batch) throws Exception {
 		
+		if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !hasInteracted) {
+			switch(currTransport().name) {
+			case "Foot":
+				interact();				
+				break;
+			case "Bicycle":
+				game.addBike(Math.round(this.x), Math.round(this.y));
+				getOnFoot();
+				break;
+			}
+		}
 //		Can press 'f' to go on foot
-		if(Gdx.input.isKeyPressed(Input.Keys.B)) {
-			getOnBike();
+		if(Gdx.input.isKeyPressed(Input.Keys.F)) {
+			getOnFoot();
 		}
 		
 //		Can press 'c' to go in car
@@ -145,14 +159,11 @@ public class Player extends Entity {
 		
 		
 		// Player interaction
-		if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-			this.interact();
-		}
-		
-		
 		
 		currTransport().render(batch);
 //		batch.draw(transport[transIdx].image, x, y, 0, 0, transport[transIdx].image.getWidth(), transport[transIdx].image.getHeight(), game.scale, game.scale, 0, 0, 0, transport[transIdx].image.getWidth(), transport[transIdx].image.getHeight(), false, false);
+	
+		hasInteracted = false;
 	}
 	
 	public int getSpeed() {
@@ -170,7 +181,7 @@ public class Player extends Entity {
 	}
 
 	public Rectangle getPlayerRectangle() {
-		return playerRectangle;
+		return this.rectangle;
 	}
 	
 	public boolean isMoving() {
@@ -190,11 +201,13 @@ public class Player extends Entity {
 	
 //  Go on foot
 	public void getOnFoot() {
+		hasInteracted = true;
 		transIdx = 0;
 	}
 	
 //	Changes player transport
 	public void getOnBike() {
+		hasInteracted = true;
 //		Can only get on bike if you are on foot
 		if(transIdx == 0) {
 			transIdx = 1;
@@ -203,6 +216,7 @@ public class Player extends Entity {
 	
 //	 Changes player transport
 	public void getOnCar() {
+		hasInteracted = true;
 //		Can only get in car if on foot
 		if(transIdx == 0) {
 			transIdx = 2;
@@ -212,10 +226,14 @@ public class Player extends Entity {
 	// naive method to handle Player interaction
 
 	public void interact() {
+		
+		if(hasInteracted)
+			return;
+		
 		// interate through all "interactable objects"
 		for (Node node: this.game.nodes) {
 			// if overlaps
-			if (this.rectangle.overlaps(node.rectangle)) {
+			if (canGetOnTransport(node.rectangle)) {
 				// if overlaps
 				// call togglePlanning
 				// pass Routes of overlapped Node
@@ -234,8 +252,14 @@ public class Player extends Entity {
 	public Transport[] getTransport() {
 		return transport;
 	}
-
+	
+	
 	public int getTransIdx() {
 		return transIdx;
+	}
+	
+//	Can the player interact with an object
+	public boolean canGetOnTransport(Rectangle rect) {
+		return !hasInteracted && getPlayerRectangle().overlaps(rect) && transIdx == FOOT;
 	}
 }

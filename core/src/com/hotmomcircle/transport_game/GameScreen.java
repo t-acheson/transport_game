@@ -1,11 +1,12 @@
 package com.hotmomcircle.transport_game;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -18,6 +19,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.hotmomcircle.transport_game.entity.Gem;
 import com.hotmomcircle.transport_game.entity.Player;
+import com.hotmomcircle.transport_game.object.Bicycle_OBJ;
 import com.hotmomcircle.transport_game.entity.Route;
 import com.hotmomcircle.transport_game.tools.Camera;
 import com.hotmomcircle.transport_game.entity.Node;
@@ -31,7 +33,6 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 //
-
 
 // This will be the screen 
 public class GameScreen implements Screen {
@@ -50,6 +51,9 @@ public class GameScreen implements Screen {
 
 	Texture img;
 	public Player player;
+	public ArrayList<Bicycle_OBJ> bikes = new ArrayList<Bicycle_OBJ>();
+	   
+	public Camera camera;
 	
 	public Array<Gem> gems;
 
@@ -58,7 +62,6 @@ public class GameScreen implements Screen {
 	// list of Routes for planning UI
 	public Array<Route> routes;
 	   
-   public Camera camera;
    // Variables associated with the pause / game state
 	private int GAME_STATE;
 	private final int GAME_RUNNING = 0;
@@ -139,9 +142,11 @@ public class GameScreen implements Screen {
 		gems.add(new Gem(400, 400, 16, 16, "gem.png"));
 		gems.add(new Gem(200, 200, 16, 16, "gem.png"));
 		gems.add(new Gem(300, 300, 16, 16, "gem.png"));
-
 		
-
+		bikes.add(new Bicycle_OBJ(this, 300, 100, true));
+		bikes.add(new Bicycle_OBJ(this, 400, 100, true));
+		bikes.add(new Bicycle_OBJ(this, 500, 100, true));
+		
 		// create the camera and the SpriteBatch
 		camera = new Camera(game, player);
 
@@ -240,11 +245,16 @@ public class GameScreen implements Screen {
 				}
 			}
 
-		// TODO Auto-generated method stub
-		// clear the screen with a dark blue color. The
-		// arguments to clear are the red, green
-		// blue and alpha component in the range [0,1]
-		// of the color to be used to clear the screen.
+		
+		
+		for(int i = 0; i < bikes.size(); i++) {
+				bikes.get(i).update(i);
+		}
+		
+      // clear the screen with a dark blue color. The
+      // arguments to clear are the red, green
+      // blue and alpha component in the range [0,1]
+      // of the color to be used to clear the screen.
 
 		// tell the camera to update its matrices.
 		camera.update();
@@ -255,18 +265,30 @@ public class GameScreen implements Screen {
 		// coordinate system specified by the camera.
 		batch.setProjectionMatrix(camera.combined);
 
-		// ScreenUtils.clear(1, 0, 0, 1);
 		batch.begin();
 		try {
-			if (!planningUI.active) {
-			player.render(batch);
+			for (Bicycle_OBJ bike: bikes) {
+				if (bike != null) {					
+					bike.render(batch);
+				}
 			}
+			
 			for (Gem gem : gems) {
 				gem.render(batch);
 			}
+			
 			for (Node node: nodes) {
 				node.render(batch);
 			}
+			
+//			Render the player last so they appear on top of everything
+			
+			if (!planningUI.active) {
+				player.render(batch);
+			}
+			
+			
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -277,7 +299,7 @@ public class GameScreen implements Screen {
 		stage.act(delta);
 		stage.draw();
 
-		}
+	}
 		 // Update the gemArrow UI with the current player and gem positions
 		gemArrowUI.update(player, gems);
 		
@@ -323,6 +345,10 @@ public class GameScreen implements Screen {
 
 	public int getTileSize() {
 		return tileSize;
+	}
+	
+	public void addBike(int x, int y) {
+		bikes.add(new Bicycle_OBJ(this, x, y, true));
 	}
 
 	
