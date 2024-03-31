@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 
 // Holds an instance of the game
@@ -18,12 +19,31 @@ public class ParentGameScreen implements Json.Serializable{
 	TransportGame game;
 	AssetManager assetManager;
 	
+	GameScreen gameScreen;
+	
 	int currLevel;
 	int maxLevel;
+	
+	String name = "test";
 	
 //	Constructor for new game
 	public ParentGameScreen(TransportGame game) {
 		this.game = game;
+		init();
+		gameScreen = new GameScreen(game, this);
+		game.setScreen(gameScreen);
+		
+	}
+	
+//	Constructor for loading game
+	public ParentGameScreen(TransportGame game, JsonValue jsonData) {
+		this.game = game;
+		init();
+		gameScreen = new GameScreen(game, this, jsonData);
+		game.setScreen(gameScreen);
+	}
+	
+	public void init() {
 		this.assetManager = new AssetManager();
 		currLevel = 0;
 		maxLevel = 0;
@@ -66,28 +86,27 @@ public class ParentGameScreen implements Json.Serializable{
 			
 		}
 		
-		System.out.println("Here");
-		
-		game.setScreen(new GameScreen(game, this));
-		
 	}
 	
 	public void saveGame() {
 		
 		Json json = new Json();
-		String text = json.prettyPrint(this);
-		System.out.println(text);
+		String text = json.toJson(this);
 		
         FileHandle fileHandle = Gdx.files.local("saves/output.json"); // Adjust the file path as needed
-        fileHandle.writeString(json.prettyPrint(this), false);
+        fileHandle.writeString(json.toJson(this), false);
+        text = fileHandle.readString();
+        
+        JsonValue root = new JsonReader().parse(text);
 		
 	}
 
 	@Override
 	public void write(Json json) {
-		// TODO Auto-generated method stub
-		json.writeValue("currlevel", currLevel);
+		json.writeValue("name", name);
+		json.writeValue("currLevel", currLevel);
 		json.writeValue("maxLevel", maxLevel);
+		json.writeValue("currGame", gameScreen);
 	}
 
 	@Override

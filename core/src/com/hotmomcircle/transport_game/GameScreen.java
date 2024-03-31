@@ -19,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.hotmomcircle.transport_game.entity.Gem;
@@ -42,7 +43,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 
 // Screen of the level the player is currently playing
 // Separation of game and level to allow 
-public class GameScreen implements Screen {
+public class GameScreen implements Screen, Json.Serializable {
 
 	TransportGame game;
 	ParentGameScreen parentGame;
@@ -98,10 +99,31 @@ public class GameScreen implements Screen {
 	//gemArrow instance 
 	private gemArrow gemArrowUI;
 
-
+// New level
 	public GameScreen(TransportGame game, ParentGameScreen parentGame) {
 		this.game = game;
 		this.parentGame = parentGame;
+		initializeGame();
+		
+		player = new Player(this, 700, 300, 32, 32, "./foot/player_down1.png");
+		
+		gems = new Array<Gem>();
+		gems.add(new Gem(this, 400, 400, 16, 16));
+		gems.add(new Gem(this, 200, 200, 16, 16));
+		gems.add(new Gem(this, 300, 300, 16, 16));
+
+	}
+	
+//	Load level from json
+	public GameScreen(TransportGame game, ParentGameScreen parentGame, JsonValue jsonMap) {
+		this.game = game;
+		this.parentGame = parentGame;
+		initializeGame();
+		
+		
+	}
+	
+	public void initializeGame() {
 		this.font = game.font;
 		this.skin = game.skin;
 
@@ -152,10 +174,7 @@ public class GameScreen implements Screen {
 			
 		}
 		
-		
-		
 		assetManager.finishLoading();
-		
 		
 		try {
 			map = assetManager.get("trialMapwithObjects.tmx", TiledMap.class);
@@ -192,12 +211,7 @@ public class GameScreen implements Screen {
 		renderer = new OrthogonalTiledMapRenderer(map);
 		//
 
-		player = new Player(this, 700, 300, 32, 32, "./foot/player_down1.png");
 		
-		gems = new Array<Gem>();
-		gems.add(new Gem(this, 400, 400, 16, 16));
-		gems.add(new Gem(this, 200, 200, 16, 16));
-		gems.add(new Gem(this, 300, 300, 16, 16));
 		
 		transport_OBJs.add(new Bicycle_OBJ(this, 300, 100, true));
 		transport_OBJs.add(new Bicycle_OBJ(this, 400, 100, true));
@@ -404,6 +418,19 @@ public class GameScreen implements Screen {
 	
 	public void addCar(int x, int y) {
 		transport_OBJs.add(new Car_OBJ(this, x, y, true));
+	}
+
+	@Override
+	public void write(Json json) {
+		json.writeValue("playerX", player.getX());
+		json.writeValue("playerY", player.getY());
+		
+	}
+
+	@Override
+	public void read(Json json, JsonValue jsonData) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	
