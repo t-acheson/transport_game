@@ -12,7 +12,7 @@ check-off
   offset: 0, 0
   index: -1
 textfield
-  rotate: false
+  rotate: false 
   xy: 11, 5
   size: 14, 14
   split: 3, 3, 3, 3

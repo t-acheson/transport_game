@@ -82,7 +82,30 @@ public class MainMenuScreen implements Screen {
         
         
         
-//        skin = new Skin(Gdx.files.internal("uiskin.json")); // Load 
+//      Make the table with the buttons
+        makeMainMenuTable();
+        
+//        Add the table to the stage
+		stage.addActor(table);
+		
+
+		
+		
+
+		assetManager.finishLoading();
+		
+		try {
+			map = assetManager.get("maps/mainMenuMap.tmx", TiledMap.class);
+			System.out.println("Map loaded successfully.");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		renderer = new OrthogonalTiledMapRenderer(map);
+		
+	}
+	
+	
+	public void makeMainMenuTable() {
 		
 //		We will keep the buttons in a table to make handling the layout easier
 		table = new Table();
@@ -97,7 +120,7 @@ public class MainMenuScreen implements Screen {
 		table.add(titleLabel).padBottom(20); // Colspan to span across all columns
 
 		
-//		Create the buttons
+//		Create the buttons 
 		newGame = new TextButton("New Game", skin);
 		loadGame = new TextButton("Load Game", skin);
 		settings = new TextButton("Settings", skin);
@@ -114,8 +137,6 @@ public class MainMenuScreen implements Screen {
 		table.row().pad(10, 0, 30, 0);
 		table.add(exitGame).fillX().uniformX();
 		
-//        Add the table to the stage
-		stage.addActor(table);
 		
 //		Create button listeners
 		
@@ -156,18 +177,6 @@ public class MainMenuScreen implements Screen {
 			}
 			
 		});
-		
-		
-
-		assetManager.finishLoading();
-		
-		try {
-			map = assetManager.get("maps/mainMenuMap.tmx", TiledMap.class);
-			System.out.println("Map loaded successfully.");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		renderer = new OrthogonalTiledMapRenderer(map);
 		
 	}
 	
