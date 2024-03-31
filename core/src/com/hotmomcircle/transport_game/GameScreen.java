@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.hotmomcircle.transport_game.entity.Gem;
@@ -191,9 +192,9 @@ public class GameScreen implements Screen {
 		player = new Player(this, 700, 300, 32, 32, "./foot/player_down1.png");
 		
 		gems = new Array<Gem>();
-		gems.add(new Gem(this, 400, 400, 16, 16, "gem.png"));
-		gems.add(new Gem(this, 200, 200, 16, 16, "gem.png"));
-		gems.add(new Gem(this, 300, 300, 16, 16, "gem.png"));
+		gems.add(new Gem(this, 400, 400, 16, 16));
+		gems.add(new Gem(this, 200, 200, 16, 16));
+		gems.add(new Gem(this, 300, 300, 16, 16));
 		
 		transport_OBJs.add(new Bicycle_OBJ(this, 300, 100, true));
 		transport_OBJs.add(new Bicycle_OBJ(this, 400, 100, true));
@@ -245,6 +246,9 @@ public class GameScreen implements Screen {
 
 		// Planning UI
 		planningUI = new Planning(game, this, stage, skin, player);
+		
+		Json json = new Json();
+		String s = json.toJson(player);
 
 	}
 
