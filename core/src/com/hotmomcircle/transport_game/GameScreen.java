@@ -103,8 +103,8 @@ public class GameScreen implements Screen, Json.Serializable {
 	public GameScreen(TransportGame game, ParentGameScreen parentGame) {
 		this.game = game;
 		this.parentGame = parentGame;
-		initializeGame();
 		
+		loadAssets();
 		player = new Player(this, 700, 300, 32, 32, "./foot/player_down1.png");
 		
 		gems = new Array<Gem>();
@@ -112,27 +112,28 @@ public class GameScreen implements Screen, Json.Serializable {
 		gems.add(new Gem(this, 200, 200, 16, 16));
 		gems.add(new Gem(this, 300, 300, 16, 16));
 
+		initializeGame();
 	}
 	
 //	Load level from json
 	public GameScreen(TransportGame game, ParentGameScreen parentGame, JsonValue jsonMap) {
 		this.game = game;
 		this.parentGame = parentGame;
+		loadAssets();
+//		Read in the serializable data
+		read(null, jsonMap);
+		
+//		For now write the gems in manually, these will be serialized too
+		gems = new Array<Gem>();
+		gems.add(new Gem(this, 400, 400, 16, 16));
+		gems.add(new Gem(this, 200, 200, 16, 16));
+		gems.add(new Gem(this, 300, 300, 16, 16));
 		initializeGame();
 		
 		
 	}
 	
-	public void initializeGame() {
-		this.font = game.font;
-		this.skin = game.skin;
-
-		this.batch = game.batch;
-		
-		// for the pause / play feature
-		GAME_STATE = GAME_RUNNING;
-
-		
+	public void loadAssets() {
 //		Load assets - Load all textures, maps, etc here with the assetManager before going to the game screen.
 //		In the mean time show a loading screen
 		assetManager = parentGame.assetManager;
@@ -175,6 +176,19 @@ public class GameScreen implements Screen, Json.Serializable {
 		}
 		
 		assetManager.finishLoading();
+	}
+	
+	public void initializeGame() {
+		this.font = game.font;
+		this.skin = game.skin;
+
+		this.batch = game.batch;
+		
+		// for the pause / play feature
+		GAME_STATE = GAME_RUNNING;
+
+		
+
 		
 		try {
 			map = assetManager.get("trialMapwithObjects.tmx", TiledMap.class);
@@ -430,6 +444,9 @@ public class GameScreen implements Screen, Json.Serializable {
 	@Override
 	public void read(Json json, JsonValue jsonData) {
 		// TODO Auto-generated method stub
+		int x = jsonData.getInt("playerX");
+		int y = jsonData.getInt("playerY");
+		player = new Player(this, x, y, 32, 32, "./foot/player_down1.png");
 		
 	}
 

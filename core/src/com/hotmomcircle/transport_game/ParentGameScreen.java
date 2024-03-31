@@ -30,6 +30,9 @@ public class ParentGameScreen implements Json.Serializable{
 	public ParentGameScreen(TransportGame game) {
 		this.game = game;
 		init();
+		
+		currLevel = 0;
+		maxLevel = 0;
 		gameScreen = new GameScreen(game, this);
 		game.setScreen(gameScreen);
 		
@@ -39,15 +42,12 @@ public class ParentGameScreen implements Json.Serializable{
 	public ParentGameScreen(TransportGame game, JsonValue jsonData) {
 		this.game = game;
 		init();
-		gameScreen = new GameScreen(game, this, jsonData);
-		game.setScreen(gameScreen);
+		read(null, jsonData);
+		
 	}
 	
 	public void init() {
 		this.assetManager = new AssetManager();
-		currLevel = 0;
-		maxLevel = 0;
-		saveGame();
 		
 		//loading map 
 		assetManager.setLoader(TiledMap.class,  new TmxMapLoader());
@@ -95,9 +95,9 @@ public class ParentGameScreen implements Json.Serializable{
 		
         FileHandle fileHandle = Gdx.files.local("saves/output.json"); // Adjust the file path as needed
         fileHandle.writeString(json.toJson(this), false);
-        text = fileHandle.readString();
+//        text = fileHandle.readString();
         
-        JsonValue root = new JsonReader().parse(text);
+//        JsonValue root = new JsonReader().parse(text);
 		
 	}
 
@@ -112,7 +112,11 @@ public class ParentGameScreen implements Json.Serializable{
 	@Override
 	public void read(Json json, JsonValue jsonData) {
 		// TODO Auto-generated method stub
+		currLevel = jsonData.getInt("currLevel");
+		maxLevel = jsonData.getInt("maxLevel");
 		
+		gameScreen = new GameScreen(game, this, jsonData.get("currGame"));
+		game.setScreen(gameScreen);
 	}
 	
 	

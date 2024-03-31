@@ -2,6 +2,7 @@ package com.hotmomcircle.transport_game;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
@@ -9,6 +10,8 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFont
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.utils.JsonReader;
+import com.badlogic.gdx.utils.JsonValue;
 
 public class TransportGame extends Game {
 	
@@ -49,8 +52,13 @@ public class TransportGame extends Game {
         LabelStyle labelStyle = skin.get(LabelStyle.class);
         labelStyle.font = font;
         
+        FileHandle fileHandle = Gdx.files.local("saves/output.json"); // Adjust the file path as needed
+        String text = fileHandle.readString();
         
-        new ParentGameScreen(this);
+        JsonValue json = new JsonReader().parse(text);
+        
+        
+        new ParentGameScreen(this, json);
 //		this.setScreen(new MainMenuScreen(this)); 
 		
 	}
