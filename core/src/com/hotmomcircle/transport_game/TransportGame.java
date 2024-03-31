@@ -49,7 +49,9 @@ public class TransportGame extends Game {
         LabelStyle labelStyle = skin.get(LabelStyle.class);
         labelStyle.font = font;
         
-		this.setScreen(new MainMenuScreen(this)); // I'm not sure what the set screen function does
+        
+        new ParentGameScreen(this);
+//		this.setScreen(new MainMenuScreen(this)); 
 		
 	}
 
@@ -71,6 +73,10 @@ public class TransportGame extends Game {
 
 	public int getSCREEN_HEIGHT(){
 		return SCREEN_HEIGHT;
+	}
+	
+	public void newGame() {
+		new ParentGameScreen(this);
 	}
 	
 }

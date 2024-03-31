@@ -113,7 +113,7 @@ public class GameScreen implements Screen {
 		
 //		Load assets - Load all textures, maps, etc here with the assetManager before going to the game screen.
 //		In the mean time show a loading screen
-		assetManager = new AssetManager();
+		assetManager = parentGame.assetManager;
 
 		//loading map 
 		assetManager.setLoader(TiledMap.class,  new TmxMapLoader());
