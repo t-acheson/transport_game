@@ -185,7 +185,7 @@ public class GameScreen implements Screen {
 		}
 
 
-		renderer = new OrthogonalTiledMapRenderer(map);
+		renderer = new OrthogonalTiledMapRenderer(map,3);
 		//
 
 		player = new Player(this, 700, 300, 32, 32, "./foot/player_down1.png");
