@@ -40,10 +40,12 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 //
 
-// This will be the screen 
+// Screen of the level the player is currently playing
+// Separation of game and level to allow 
 public class GameScreen implements Screen {
 
 	TransportGame game;
+	ParentGameScreen parentGame;
 
 	SpriteBatch batch;
 
@@ -97,8 +99,9 @@ public class GameScreen implements Screen {
 	private gemArrow gemArrowUI;
 
 
-	public GameScreen(TransportGame game) {
+	public GameScreen(TransportGame game, ParentGameScreen parentGame) {
 		this.game = game;
+		this.parentGame = parentGame;
 		this.font = game.font;
 		this.skin = game.skin;
 
@@ -247,8 +250,6 @@ public class GameScreen implements Screen {
 		// Planning UI
 		planningUI = new Planning(game, this, stage, skin, player);
 		
-		Json json = new Json();
-		String s = json.toJson(player);
 
 	}
 
