@@ -85,6 +85,7 @@ public class Player extends Entity {
 	public void render(SpriteBatch batch) throws Exception {
 		
 		if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !hasInteracted) {
+			interact();
 			switch(currTransport().name) {
 			case "Bicycle":
 				game.addBike(Math.round(this.x), Math.round(this.y));
