@@ -3,6 +3,7 @@ package com.hotmomcircle.transport_game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -48,6 +49,8 @@ public class MainMenuScreen implements Screen {
 	TextButton loadGame;
 	TextButton settings;
 	TextButton exitGame;
+	
+	static String savePath = "saves/";
 	
 	Stage stage;
 	Vector3 targetPosition;
@@ -169,6 +172,7 @@ public class MainMenuScreen implements Screen {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				// TODO Add continue game functionality
+				loadGameTable();
 			}
 			
 		});
@@ -191,6 +195,63 @@ public class MainMenuScreen implements Screen {
 			}
 			
 		});
+		
+	}
+	
+	public void loadGameTable() {
+		table.remove();
+//		We will keep the buttons in a table to make handling the layout easier
+		Table loadTable = new Table();
+		loadTable.setFillParent(true);
+		loadTable.defaults().width(game.SCREEN_WIDTH/2).expandX().fillX();
+		loadTable.setWidth(game.SCREEN_WIDTH/2);
+		loadTable.setDebug(true);
+		
+		Label titleLabel = new Label("Load Game", skin);
+		titleLabel.setAlignment(Align.center);
+        titleLabel.setFontScale(2.0f); // Increase font size
+		loadTable.add(titleLabel).padBottom(10); // Colspan to span across all columns		
+		
+        FileHandle localDir = Gdx.files.local(savePath);
+
+        // List all files in the local storage directory
+        FileHandle[] files = localDir.list();
+
+        // Iterate over the array of FileHandle objects
+        for (FileHandle file : files) {
+            // Get the name of each file
+            String fileName = file.name();
+            TextButton button = new TextButton(fileName, skin);
+            
+    		button.addListener( new ChangeListener() {
+    			@Override
+    			public void changed(ChangeEvent event, Actor actor) {
+    				dispose();
+    				game.loadGame(savePath + fileName);
+    			}
+    			
+    			
+    		});
+    		
+    		loadTable.row();
+    		loadTable.add(button).fillX().uniformX();
+    		
+            
+            
+        }
+		
+		
+//		Add buttons to the loadTable
+		loadTable.row();
+		loadTable.add(resumeGame).fillX().uniformX();
+		loadTable.row().pad(5, 0, 5, 0);
+		loadTable.add(loadGame).fillX().uniformX();
+		loadTable.row().pad(5,0,5,0);
+		loadTable.add(settings).fillX().uniformX();
+		loadTable.row().pad(5, 0, 15, 0);
+		loadTable.add(exitGame).fillX().uniformX();
+		
+		stage.addActor(loadTable);
 		
 	}
 	
