@@ -3,5 +3,6 @@
         "src/main",
         "footprint/src/main/java/com/hotmomcircle"
     ],
-    "maven.view": "flat"
+    "maven.view": "flat",
+    "java.configuration.updateBuildConfiguration": "interactive"
 }
