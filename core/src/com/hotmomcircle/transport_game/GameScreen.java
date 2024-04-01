@@ -10,7 +10,10 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
@@ -20,6 +23,8 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.hotmomcircle.transport_game.entity.Gem;
 import com.hotmomcircle.transport_game.entity.Player;
 import com.hotmomcircle.transport_game.object.Bicycle_OBJ;
+import com.hotmomcircle.transport_game.object.Car_OBJ;
+import com.hotmomcircle.transport_game.object.Transport_OBJ;
 import com.hotmomcircle.transport_game.entity.Route;
 import com.hotmomcircle.transport_game.tools.Camera;
 import com.hotmomcircle.transport_game.entity.Node;
@@ -51,7 +56,7 @@ public class GameScreen implements Screen {
 
 	Texture img;
 	public Player player;
-	public ArrayList<Bicycle_OBJ> bikes = new ArrayList<Bicycle_OBJ>();
+	public ArrayList<Transport_OBJ> transport_OBJs = new ArrayList<Transport_OBJ>();
 	   
 	public Camera camera;
 	
@@ -66,10 +71,10 @@ public class GameScreen implements Screen {
 	private int GAME_STATE;
 	private final int GAME_RUNNING = 0;
 	private final int GAME_PAUSED = 1;
-	private BitmapFont font = new BitmapFont();
+	public Skin skin;
+	public BitmapFont font;
 
 	//UI Skin
-	public Skin skin;
 
 	// Stage for UI components
 	private Stage stage;
@@ -85,7 +90,7 @@ public class GameScreen implements Screen {
 
 	// asset manager to implement uiskin.json
 	// TODO best practise to implement all our assets this way?
-	private AssetManager assetManager;
+	public AssetManager assetManager;
 
 	//gemArrow instance 
 	private gemArrow gemArrowUI;
@@ -93,16 +98,63 @@ public class GameScreen implements Screen {
 
 	public GameScreen(TransportGame game) {
 		this.game = game;
+		this.font = game.font;
+		this.skin = game.skin;
 
 		this.batch = game.batch;
 		
 		// for the pause / play feature
 		GAME_STATE = GAME_RUNNING;
+
 		
+//		Load assets - Load all textures, maps, etc here with the assetManager before going to the game screen.
+//		In the mean time show a loading screen
+		assetManager = new AssetManager();
+
 		//loading map 
-		TmxMapLoader loader = new TmxMapLoader();
+		assetManager.setLoader(TiledMap.class,  new TmxMapLoader());
+		assetManager.load("trialMapwithObjects.tmx", TiledMap.class);
+		
+//		Load in the player transport
+		String[] transportPaths = {
+			    "./foot/player_up1.png", "./foot/player_up2.png",
+			    "./foot/player_down1.png", "./foot/player_down2.png",
+			    "./foot/player_left1.png", "./foot/player_left2.png",
+			    "./foot/player_right1.png", "./foot/player_right2.png",
+			    "./bicycle/bike_up1.png", "./bicycle/bike_up2.png",
+			    "./bicycle/bike_down1.png", "./bicycle/bike_down2.png",
+			    "./bicycle/bike_left1.png", "./bicycle/bike_left2.png",
+			    "./bicycle/bike_right1.png", "./bicycle/bike_right2.png",
+			    "./car/car_up.png", "./car/car_up.png",
+			    "./car/car_down.png", "./car/car_down.png",
+			    "./car/car_left.png", "./car/car_left.png",
+			    "./car/car_right.png", "./car/car_right.png"
+			};
+		
+		for(String path: transportPaths) {
+			assetManager.load(path, Texture.class);
+			
+		}
+		
+//		Load in the objects (gem, bike_OBJ, car_OBJ
+		String[] objectPaths = {
+				"gem.png",
+				"./objects/bicycle.png",
+				"./objects/car_left.png"
+		};
+		
+		for(String path: objectPaths) {
+			assetManager.load(path, Texture.class);
+			
+		}
+		
+		
+		
+		assetManager.finishLoading();
+		
+		
 		try {
-			map = loader.load("trialMapwithObjects.tmx");
+			map = assetManager.get("trialMapwithObjects.tmx", TiledMap.class);
 			System.out.println("Map loaded successfully.");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -111,7 +163,7 @@ public class GameScreen implements Screen {
 		// routes for node testing
 		routes = new Array<Route>();
 		for (int i = 1; i < 4; i++) {
-			routes.add(new Route(0, 0, 32, 32, "gem.png", 900, i * 100 + 100));
+			routes.add(new Route(this, 0, 0, 32, 32, "gem.png", 900, i * 100 + 100));
 		}
 
 		// initialise Node array
@@ -127,7 +179,7 @@ public class GameScreen implements Screen {
                     float locX = object.getProperties().get("x", Float.class);
                     float locY = object.getProperties().get("y", Float.class);
 					// pass to Node constructor
-					nodes.add(new Node(locX, locY, 16, 16, "gem.png", routes));
+					nodes.add(new Node(this, locX, locY, 16, 16, "gem.png", routes));
                 }
             }
 		}
@@ -136,16 +188,18 @@ public class GameScreen implements Screen {
 		renderer = new OrthogonalTiledMapRenderer(map);
 		//
 
-		player = new Player(this, 700, 300, 32, 32, "foot/player_down1.png");
+		player = new Player(this, 700, 300, 32, 32, "./foot/player_down1.png");
 		
 		gems = new Array<Gem>();
-		gems.add(new Gem(400, 400, 16, 16, "gem.png"));
-		gems.add(new Gem(200, 200, 16, 16, "gem.png"));
-		gems.add(new Gem(300, 300, 16, 16, "gem.png"));
+		gems.add(new Gem(this, 400, 400, 16, 16, "gem.png"));
+		gems.add(new Gem(this, 200, 200, 16, 16, "gem.png"));
+		gems.add(new Gem(this, 300, 300, 16, 16, "gem.png"));
 		
-		bikes.add(new Bicycle_OBJ(this, 300, 100, true));
-		bikes.add(new Bicycle_OBJ(this, 400, 100, true));
-		bikes.add(new Bicycle_OBJ(this, 500, 100, true));
+		transport_OBJs.add(new Bicycle_OBJ(this, 300, 100, true));
+		transport_OBJs.add(new Bicycle_OBJ(this, 400, 100, true));
+		transport_OBJs.add(new Bicycle_OBJ(this, 500, 100, true));
+		
+		transport_OBJs.add(new Car_OBJ(this, 400, 150, true));
 		
 		// create the camera and the SpriteBatch
 		camera = new Camera(game, player);
@@ -155,10 +209,8 @@ public class GameScreen implements Screen {
 		// the map more complicated and add objects
 		stage = new Stage(new ScreenViewport());
 		Gdx.input.setInputProcessor(stage);
-		skin = new Skin(Gdx.files.internal("uiskin.json"));
 
 		// Asset manager instansiation
-		assetManager = new AssetManager();
 		assetManager.load("uiskin.json", Skin.class);
 
 
@@ -179,11 +231,11 @@ public class GameScreen implements Screen {
 		table.add(gemArrowUI).top().left();
 
 		// fill table with UI scores
-		table.add(new TextField("Points: ", skin));
+		table.add(new Label("Points: ", skin));
 		table.add(points).fillX().uniformX();
-		table.add(new TextField("Carbon: ", skin));
+		table.add(new Label("Carbon: ", skin));
 		table.add(carbon).fillX().uniformX();
-		table.add(new TextField("Freshness: ", skin));
+		table.add(new Label("Freshness: ", skin));
 		table.add(freshness).fillX().uniformX();
 
 		//initalise gemArrow 
@@ -239,7 +291,6 @@ public class GameScreen implements Screen {
 
 			for (Gem gem : gems) {
 				if (player.getRectangle().overlaps(gem.getRectangle())) {
-					gem.dispose();
 					gems.removeValue(gem, true);
 				points.setText("50");
 				}
@@ -247,14 +298,9 @@ public class GameScreen implements Screen {
 
 		
 		
-		for(int i = 0; i < bikes.size(); i++) {
-				bikes.get(i).update(i);
+		for(int i = 0; i < transport_OBJs.size(); i++) {
+				transport_OBJs.get(i).update(i);
 		}
-		
-      // clear the screen with a dark blue color. The
-      // arguments to clear are the red, green
-      // blue and alpha component in the range [0,1]
-      // of the color to be used to clear the screen.
 
 		// tell the camera to update its matrices.
 		camera.update();
@@ -267,9 +313,9 @@ public class GameScreen implements Screen {
 
 		batch.begin();
 		try {
-			for (Bicycle_OBJ bike: bikes) {
-				if (bike != null) {					
-					bike.render(batch);
+			for (Transport_OBJ transport: transport_OBJs) {
+				if (transport != null) {					
+					transport.render(batch);
 				}
 			}
 			
@@ -348,7 +394,11 @@ public class GameScreen implements Screen {
 	}
 	
 	public void addBike(int x, int y) {
-		bikes.add(new Bicycle_OBJ(this, x, y, true));
+		transport_OBJs.add(new Bicycle_OBJ(this, x, y, true));
+	}
+	
+	public void addCar(int x, int y) {
+		transport_OBJs.add(new Car_OBJ(this, x, y, true));
 	}
 
 	
