@@ -100,6 +100,9 @@ public class Player extends Entity {
 		
 		if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !hasInteracted) {
 			switch(currTransport().name) {
+			case "Foot":
+				interact();				
+				break;
 			case "Bicycle":
 				game.addBike(Math.round(this.x), Math.round(this.y));
 				getOnFoot();
@@ -248,7 +251,7 @@ public class Player extends Entity {
 		// interate through all "interactable objects"
 		for (Node node: this.game.nodes) {
 			// if overlaps
-			if (this.rectangle.overlaps(node.rectangle)) {
+			if (canGetOnTransport(node.rectangle)) {
 				// if overlaps
 				// call togglePlanning
 				// pass Routes of overlapped Node
