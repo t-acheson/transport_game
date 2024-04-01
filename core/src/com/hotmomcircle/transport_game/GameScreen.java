@@ -1,6 +1,7 @@
 package com.hotmomcircle.transport_game;
 
 import java.util.ArrayList;
+import java.util.regex.*;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -170,18 +171,23 @@ public class GameScreen implements Screen {
 		nodes = new Array<Node>();
 
 		for (MapLayer layer : map.getLayers()) {
-            // Check if the layer contains objects
-			// AND create Node(s) for the object layer
-            if (layer.getObjects() != null && layer.getName().equals("rec_layer")) {
-                // Retrieve objects from the layer
-                for (MapObject object : layer.getObjects()) {
-					// get X and Y for each object
-                    float locX = object.getProperties().get("x", Float.class);
-                    float locY = object.getProperties().get("y", Float.class);
-					// pass to Node constructor
-					nodes.add(new Node(this, locX, locY, 16, 16, "gem.png", routes));
-                }
-            }
+			// handle collidable
+			if (layer.getName() == "collidable") {
+				// make collidable object
+				break;
+			}
+
+			if (Pattern.compile("route").matcher(layer.getName()).find()) {
+				if (Pattern.compile("bus").matcher(layer.getName()).find()) {
+					// connect bus nodes together
+					break;
+				}
+
+				if (Pattern.compile("tram").matcher(layer.getName()).find()) {
+					// connect tram nodes together
+					break;
+				}
+			}
 		}
 
 
