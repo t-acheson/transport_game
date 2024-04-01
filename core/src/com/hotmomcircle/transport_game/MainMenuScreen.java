@@ -25,6 +25,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.JsonReader;
+import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.hotmomcircle.transport_game.tools.Camera;
@@ -236,7 +238,15 @@ public class MainMenuScreen implements Screen {
         for (FileHandle file : files) {
             // Get the name of each file
             String fileName = file.name();
-            TextButton button = new TextButton(fileName, skin);
+            
+            String text = file.readString();
+            
+            JsonValue json = new JsonReader().parse(text);
+            
+            String name = json.getString("name");
+            String level = json.getString("currLevel");
+            
+            TextButton button = new TextButton(name + "    Level " + level, skin);
 
             
     		button.addListener( new ChangeListener() {
