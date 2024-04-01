@@ -46,7 +46,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 public class GameScreen implements Screen, Json.Serializable {
 
 	TransportGame game;
-	ParentGameScreen parentGame;
+	ParentGame parentGame;
 
 	SpriteBatch batch;
 
@@ -100,7 +100,7 @@ public class GameScreen implements Screen, Json.Serializable {
 	private gemArrow gemArrowUI;
 
 // New level
-	public GameScreen(TransportGame game, ParentGameScreen parentGame) {
+	public GameScreen(TransportGame game, ParentGame parentGame) {
 		this.game = game;
 		this.parentGame = parentGame;
 		
@@ -116,7 +116,7 @@ public class GameScreen implements Screen, Json.Serializable {
 	}
 	
 //	Load level from json
-	public GameScreen(TransportGame game, ParentGameScreen parentGame, JsonValue jsonMap) {
+	public GameScreen(TransportGame game, ParentGame parentGame, JsonValue jsonMap) {
 		this.game = game;
 		this.parentGame = parentGame;
 		loadAssets();

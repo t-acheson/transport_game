@@ -52,14 +52,8 @@ public class TransportGame extends Game {
         LabelStyle labelStyle = skin.get(LabelStyle.class);
         labelStyle.font = font;
         
-        FileHandle fileHandle = Gdx.files.local("saves/output.json"); // Adjust the file path as needed
-        String text = fileHandle.readString();
         
-        JsonValue json = new JsonReader().parse(text);
-        
-        
-        new ParentGameScreen(this, json);
-//		this.setScreen(new MainMenuScreen(this)); 
+		this.setScreen(new MainMenuScreen(this)); 
 		
 	}
 
@@ -84,7 +78,19 @@ public class TransportGame extends Game {
 	}
 	
 	public void newGame() {
-		new ParentGameScreen(this);
+		new ParentGame(this);
+	}
+	
+	public void resumeGame() {
+        FileHandle fileHandle = Gdx.files.local("saves/output.json"); // Adjust the file path as needed
+        String text = fileHandle.readString();
+        
+        JsonValue json = new JsonReader().parse(text);
+		new ParentGame(this, json);
+	}
+	
+	public void loadGame() {
+		
 	}
 	
 }

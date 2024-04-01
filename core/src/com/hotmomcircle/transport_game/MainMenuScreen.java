@@ -44,6 +44,7 @@ public class MainMenuScreen implements Screen {
 	
 	Table table;
 	TextButton newGame;
+	TextButton resumeGame;
 	TextButton loadGame;
 	TextButton settings;
 	TextButton exitGame;
@@ -122,7 +123,8 @@ public class MainMenuScreen implements Screen {
 		
 //		Create the buttons 
 		newGame = new TextButton("New Game", skin);
-		loadGame = new TextButton("Load Game", skin);
+		resumeGame = new TextButton("Resume", skin);
+		loadGame = new TextButton("Load", skin);
 		settings = new TextButton("Settings", skin);
 		exitGame = new TextButton("Exit", skin);
 		
@@ -130,11 +132,13 @@ public class MainMenuScreen implements Screen {
 //		Add buttons to the table
 		table.row();
 		table.add(newGame).fillX().uniformX();
-		table.row().pad(10, 0, 10, 0);
+		table.row().pad(5, 0, 5, 0);
+		table.add(resumeGame).fillX().uniformX();
+		table.row().pad(5, 0, 5, 0);
 		table.add(loadGame).fillX().uniformX();
-		table.row().pad(10,0,10,0);
+		table.row().pad(5,0,5,0);
 		table.add(settings).fillX().uniformX();
-		table.row().pad(10, 0, 30, 0);
+		table.row().pad(5, 0, 15, 0);
 		table.add(exitGame).fillX().uniformX();
 		
 		
@@ -149,12 +153,22 @@ public class MainMenuScreen implements Screen {
 			
 		});
 		
+		resumeGame.addListener( new ChangeListener() {
+
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				// TODO Add continue game functionality
+				dispose();
+				game.resumeGame();
+			}
+			
+		});
+		
 		loadGame.addListener( new ChangeListener() {
 
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				// TODO Add continue game functionality
-				
 			}
 			
 		});
