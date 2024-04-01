@@ -7,6 +7,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -33,6 +34,7 @@ import com.hotmomcircle.transport_game.ui.Pause;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 //
@@ -57,6 +59,9 @@ public class GameScreen implements Screen {
 	public ArrayList<Transport_OBJ> transport_OBJs = new ArrayList<Transport_OBJ>();
 	   
 	public Camera camera;
+	// for the world map on press of "M"
+	public OrthographicCamera worldMap;
+	boolean showWorldMap = false;
 	
 	public Array<Gem> gems;
 
@@ -168,6 +173,21 @@ public class GameScreen implements Screen {
 		// initialise Node array
 		nodes = new Array<Node>();
 
+		// for world map
+		TiledMapTileLayer worldMapLayer = (TiledMapTileLayer) map.getLayers().get(0);
+		int mapWidth = worldMapLayer.getWidth();
+		int tileWidth = (int) worldMapLayer.getTileWidth();
+		int mapWidthInPixels = mapWidth * tileWidth;
+
+		int mapHeightInTiles = worldMapLayer.getHeight();
+		int tileHeight = (int) worldMapLayer.getTileHeight();
+		int mapHeightInPixels = mapHeightInTiles * tileHeight;
+
+		
+		worldMap = new OrthographicCamera();
+		worldMap.setToOrtho(false, mapWidthInPixels, mapHeightInPixels);
+		
+
 		for (MapLayer layer : map.getLayers()) {
             // Check if the layer contains objects
 			// AND create Node(s) for the object layer
@@ -271,11 +291,25 @@ public class GameScreen implements Screen {
 		if(Gdx.input.isKeyPressed(Input.Keys.R) && GAME_STATE != GAME_RUNNING) {
 			resume();
 		} 
+
+		// shows world map
+		if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
+			showWorldMap ^= true; // Toggle the state of showWorldMap
+			if (showWorldMap) {
+				System.out.println("show map");
+			} else {
+				System.out.println("hide map");
+			}
+		}
+
 		if (GAME_STATE == GAME_PAUSED){
 			pauseStage.act(delta);
 			pauseStage.draw();
+		}
 
-			
+		else if (showWorldMap) {
+			renderer.setView(worldMap);
+			renderer.render();
 
 		} else {
 
@@ -286,6 +320,7 @@ public class GameScreen implements Screen {
 			renderer.setView(camera);
 			camera.setPosition();
 			// camera.position.set(player.getX(),player.getY(), 0);
+
 
 			renderer.render();
 			//
