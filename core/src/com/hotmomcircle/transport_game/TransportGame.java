@@ -82,15 +82,21 @@ public class TransportGame extends Game {
 	}
 	
 	public void resumeGame() {
-        FileHandle fileHandle = Gdx.files.local("saves/output.json"); // Adjust the file path as needed
+//		TODO rename most recent save to something else like current.json
+        FileHandle fileHandle = Gdx.files.local("saves/output.json"); // w
         String text = fileHandle.readString();
         
         JsonValue json = new JsonReader().parse(text);
 		new ParentGame(this, json);
 	}
 	
-	public void loadGame() {
-		
+//	Load the game from a given filename
+	public void loadGame(String fileName) {
+        FileHandle fileHandle = Gdx.files.local(fileName);
+        String text = fileHandle.readString();
+        
+        JsonValue json = new JsonReader().parse(text);
+		new ParentGame(this, json);
 	}
 	
 }

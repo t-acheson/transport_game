@@ -92,8 +92,6 @@ public class GameScreen implements Screen, Json.Serializable {
 	public Points carbon;
 	public Points freshness;
 
-	// asset manager to implement uiskin.json
-	// TODO best practise to implement all our assets this way?
 	public AssetManager assetManager;
 
 	//gemArrow instance 
@@ -133,8 +131,9 @@ public class GameScreen implements Screen, Json.Serializable {
 		
 	}
 	
-	public void loadAssets() {
 //		Load assets - Load all textures, maps, etc here with the assetManager before going to the game screen.
+//		Separated from initialize game as assets need to be loaded before player is loaded, player needs to be loaded before rest of game is initialized
+	public void loadAssets() {
 //		In the mean time show a loading screen
 		assetManager = parentGame.assetManager;
 
@@ -178,6 +177,7 @@ public class GameScreen implements Screen, Json.Serializable {
 		assetManager.finishLoading();
 	}
 	
+//	Initializes the game. Put into separate function to allow multiple constructors to call it
 	public void initializeGame() {
 		this.font = game.font;
 		this.skin = game.skin;
@@ -186,9 +186,6 @@ public class GameScreen implements Screen, Json.Serializable {
 		
 		// for the pause / play feature
 		GAME_STATE = GAME_RUNNING;
-
-		
-
 		
 		try {
 			map = assetManager.get("trialMapwithObjects.tmx", TiledMap.class);
@@ -418,7 +415,7 @@ public class GameScreen implements Screen, Json.Serializable {
 		map.dispose();
 		renderer.dispose();
 		stage.dispose();
-		assetManager.dispose();
+		assetManager.dispose(); // This will have to be removed from gamescreen when we have multiple levels and put into ParentGame
 
 	}
 

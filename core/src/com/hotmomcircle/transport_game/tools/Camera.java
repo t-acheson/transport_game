@@ -16,6 +16,8 @@ public class Camera extends OrthographicCamera {
         this.setToOrtho(false, game.SCREEN_WIDTH, game.SCREEN_HEIGHT);
         this.game = game;
         this.player = player;
+        this.position.x = player.getX();
+        this.position.y = player.getY();
     }
 
     public void setPosition() {

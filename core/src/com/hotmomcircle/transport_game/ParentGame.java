@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.JsonValue;
 // Decides which level the player is playing and loads in the logic 
 // Will also load in screens for prologue, level start, end, etc.
 // Allows for multiple levels to be played.
+// This will also be used for things like level selection and end of level screens.
 public class ParentGame implements Json.Serializable{
 	
 	TransportGame game;
@@ -46,6 +47,8 @@ public class ParentGame implements Json.Serializable{
 		
 	}
 	
+//	Initialization
+//	Separated into a different function to allow reuse between new and load game.
 	public void init() {
 		this.assetManager = new AssetManager();
 		
@@ -88,6 +91,7 @@ public class ParentGame implements Json.Serializable{
 		
 	}
 	
+//	Save the game
 	public void saveGame() {
 		
 		Json json = new Json();
@@ -101,6 +105,7 @@ public class ParentGame implements Json.Serializable{
 		
 	}
 
+//	Serialization function to write ParentGame to JSON
 	@Override
 	public void write(Json json) {
 		json.writeValue("name", name);
@@ -109,6 +114,7 @@ public class ParentGame implements Json.Serializable{
 		json.writeValue("currGame", gameScreen);
 	}
 
+//	Serialization function to read ParentGame from JSON
 	@Override
 	public void read(Json json, JsonValue jsonData) {
 		// TODO Auto-generated method stub
