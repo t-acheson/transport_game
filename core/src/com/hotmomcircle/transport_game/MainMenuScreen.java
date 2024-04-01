@@ -17,6 +17,8 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.List;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -199,8 +201,9 @@ public class MainMenuScreen implements Screen {
 	}
 	
 	public void loadGameTable() {
-		table.remove();
-//		We will keep the buttons in a table to make handling the layout easier
+		
+		
+//		Table that holds title, saves, and back button
 		Table loadTable = new Table();
 		loadTable.setFillParent(true);
 		loadTable.defaults().width(game.SCREEN_WIDTH/2).expandX().fillX();
@@ -209,9 +212,21 @@ public class MainMenuScreen implements Screen {
 		
 		Label titleLabel = new Label("Load Game", skin);
 		titleLabel.setAlignment(Align.center);
-        titleLabel.setFontScale(2.0f); // Increase font size
-		loadTable.add(titleLabel).padBottom(10); // Colspan to span across all columns		
+		titleLabel.setFontScale(2.0f); // Increase font size
+		loadTable.add(titleLabel).padBottom(10).padTop(10); // Colspan to span across all columns		
 		
+		table.remove();
+		
+//		table that holds all the save files
+		Table pastSavesTable = new Table();
+		pastSavesTable.defaults().width(game.SCREEN_WIDTH/2).expandX().fillX();
+		pastSavesTable.setWidth(game.SCREEN_WIDTH/2);
+		pastSavesTable.pad(0);
+		pastSavesTable.setDebug(true);
+		
+		
+		
+//		Get a list of all the files in the saves folder
         FileHandle localDir = Gdx.files.local(savePath);
 
         // List all files in the local storage directory
@@ -222,6 +237,7 @@ public class MainMenuScreen implements Screen {
             // Get the name of each file
             String fileName = file.name();
             TextButton button = new TextButton(fileName, skin);
+
             
     		button.addListener( new ChangeListener() {
     			@Override
@@ -229,28 +245,37 @@ public class MainMenuScreen implements Screen {
     				dispose();
     				game.loadGame(savePath + fileName);
     			}
-    			
-    			
     		});
     		
-    		loadTable.row();
-    		loadTable.add(button).fillX().uniformX();
-    		
-            
-            
+    		pastSavesTable.row();
+    		pastSavesTable.add(button).fillX().uniformX();
+    		    
         }
+        
 		
+		ScrollPane scrollPane = new ScrollPane(pastSavesTable, skin);
+		scrollPane.setScrollingDisabled(true, false); // Disable scrolling in both directions
+		scrollPane.setFadeScrollBars(false);
 		
-//		Add buttons to the loadTable
+		TextButton back = new TextButton("Back", skin);
+		
+		back.addListener( new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+//				Remove the load table and add the main menu table back
+				loadTable.remove();
+				stage.addActor(table);
+				
+			}
+		});
+		
 		loadTable.row();
-		loadTable.add(resumeGame).fillX().uniformX();
-		loadTable.row().pad(5, 0, 5, 0);
-		loadTable.add(loadGame).fillX().uniformX();
-		loadTable.row().pad(5,0,5,0);
-		loadTable.add(settings).fillX().uniformX();
-		loadTable.row().pad(5, 0, 15, 0);
-		loadTable.add(exitGame).fillX().uniformX();
+		loadTable.add(scrollPane).fillX().fillY();
 		
+		loadTable.row();
+		loadTable.add(back).fillX().fillY();
+        
+        // Set the position of the scroll pane
 		stage.addActor(loadTable);
 		
 	}
