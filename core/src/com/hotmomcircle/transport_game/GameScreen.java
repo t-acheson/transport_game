@@ -172,20 +172,18 @@ public class GameScreen implements Screen {
 
 		for (MapLayer layer : map.getLayers()) {
 			// handle collidable
-			if (layer.getName() == "collidable") {
+			if (Pattern.compile("collidable").matcher(layer.getName()).find()) {
 				// make collidable object
-				break;
 			}
 
 			if (Pattern.compile("route").matcher(layer.getName()).find()) {
+				System.out.println(layer.getName() + " route");
 				if (Pattern.compile("bus").matcher(layer.getName()).find()) {
 					// connect bus nodes together
-					break;
 				}
 
 				if (Pattern.compile("tram").matcher(layer.getName()).find()) {
 					// connect tram nodes together
-					break;
 				}
 			}
 		}
