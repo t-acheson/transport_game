@@ -98,7 +98,10 @@ public class Player extends Entity {
 	@Override
 	public void render(SpriteBatch batch) throws Exception {
 		
+		
 		if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !hasInteracted) {
+			interact();
+			
 			switch(currTransport().name) {
 			case "Foot":
 				interact();				

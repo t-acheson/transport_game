@@ -1,0 +1,14 @@
+{
+  "name": "Dan",
+  "curr_level": 1,
+  "max_level": 2,
+  "x": 100,
+  "y": 100,
+  "points": 100,
+  "carbon": 100,
+  "freshness": 100,
+  "gems_left": [
+    { "x": 100, "y": 100 },
+    { "x": 200, "y": 300 }
+  ]
+}
