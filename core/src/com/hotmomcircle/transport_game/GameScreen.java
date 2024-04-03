@@ -88,15 +88,15 @@ public class GameScreen implements Screen {
 	public Points carbon;
 	public Points freshness;
 
-	//gem counter 
-	public String gemsLeftText = "Gems left: 0";
-
 	// asset manager to implement uiskin.json
 	// TODO best practise to implement all our assets this way?
 	public AssetManager assetManager;
 
 	//gemArrow instance 
 	private gemArrow gemArrowUI;
+
+	
+	
 
 
 	public GameScreen(TransportGame game) {
@@ -216,6 +216,7 @@ public class GameScreen implements Screen {
 		// Asset manager instansiation
 		assetManager.load("uiskin.json", Skin.class);
 
+		Label gemsLeftLabel = new Label("Gems Left: 0", skin);
 
 		// table to hold UI elements
 		table = new Table();
@@ -241,7 +242,9 @@ public class GameScreen implements Screen {
 		table.add(new Label("Freshness: ", skin));
 		table.add(freshness).fillX().uniformX();
 
+		// Assuming you have a Skin instance for your UI
 		
+		table.add(gemsLeftLabel).bottom().left(); // Adjust the positioning as needed
 
 		// add table to stage
 		stage.addActor(table);
@@ -296,7 +299,7 @@ public class GameScreen implements Screen {
 				if (player.getRectangle().overlaps(gem.getRectangle())) {
 					gems.removeValue(gem, true);
 				points.setText("50");
-				updateGemsLeftText(); //update counter 
+				updateGemsLeftLabel();
 				}
 			}
 
@@ -337,8 +340,6 @@ public class GameScreen implements Screen {
 				player.render(batch);
 			}
 			
-			//drawing gem counter 
-			game.font.draw(batch, gemsLeftText, 10, Gdx.graphics.getHeight() - 20);
 			
 
 		} catch (Exception e) {
@@ -354,6 +355,10 @@ public class GameScreen implements Screen {
 	}
 		 // Update the gemArrow UI with the current player and gem positions
 		gemArrowUI.update(player, gems);
+
+		private void updateGemsLeftLabel() {
+			gemsLeftLabel.setText("Gems Left: " + gems.size);
+		}
 		
 	}
 
@@ -407,7 +412,6 @@ public class GameScreen implements Screen {
 		transport_OBJs.add(new Car_OBJ(this, x, y, true));
 	}
 
-	private void updateGemsLeftText(){
-		gemsLeftText = "Gems Left: " + gems.size;
-	}
+	
+	
 }
