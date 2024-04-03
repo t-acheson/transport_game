@@ -143,7 +143,7 @@ public class GameScreen implements Screen, Json.Serializable {
 
 		//loading map 
 		assetManager.setLoader(TiledMap.class,  new TmxMapLoader());
-		assetManager.load("trialMapwithObjects.tmx", TiledMap.class);
+		assetManager.load("bigMap.tmx", TiledMap.class);
 		
 //		Load in the player transport
 		String[] transportPaths = {
@@ -192,7 +192,7 @@ public class GameScreen implements Screen, Json.Serializable {
 		GAME_STATE = GAME_RUNNING;
 		
 		try {
-			map = assetManager.get("trialMapwithObjects.tmx", TiledMap.class);
+			map = assetManager.get("bigMap.tmx", TiledMap.class);
 			System.out.println("Map loaded successfully.");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -223,7 +223,7 @@ public class GameScreen implements Screen, Json.Serializable {
 		}
 
 
-		renderer = new OrthogonalTiledMapRenderer(map);
+		renderer = new OrthogonalTiledMapRenderer(map,3);
 		//
 
 		
