@@ -88,6 +88,9 @@ public class GameScreen implements Screen {
 	public Points carbon;
 	public Points freshness;
 
+	//gem counter 
+	public String gemsLeftText = "Gems left: 0";
+
 	// asset manager to implement uiskin.json
 	// TODO best practise to implement all our assets this way?
 	public AssetManager assetManager;
@@ -238,7 +241,7 @@ public class GameScreen implements Screen {
 		table.add(new Label("Freshness: ", skin));
 		table.add(freshness).fillX().uniformX();
 
-		//initalise gemArrow 
+		
 
 		// add table to stage
 		stage.addActor(table);
@@ -293,6 +296,7 @@ public class GameScreen implements Screen {
 				if (player.getRectangle().overlaps(gem.getRectangle())) {
 					gems.removeValue(gem, true);
 				points.setText("50");
+				updateGemsLeftText(); //update counter 
 				}
 			}
 
@@ -333,6 +337,8 @@ public class GameScreen implements Screen {
 				player.render(batch);
 			}
 			
+			//drawing gem counter 
+			game.font.draw(batch, gemsLeftText, 10, Gdx.graphics.getHeight() - 20);
 			
 
 		} catch (Exception e) {
@@ -401,5 +407,7 @@ public class GameScreen implements Screen {
 		transport_OBJs.add(new Car_OBJ(this, x, y, true));
 	}
 
-	
+	private void updateGemsLeftText(){
+		gemsLeftText = "Gems Left: " + gems.size;
+	}
 }
