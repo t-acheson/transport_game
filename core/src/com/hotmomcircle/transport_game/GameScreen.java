@@ -33,6 +33,7 @@ import com.hotmomcircle.transport_game.entity.Node;
 import com.hotmomcircle.transport_game.ui.Planning;
 import com.hotmomcircle.transport_game.ui.Points;
 import com.hotmomcircle.transport_game.ui.gemArrow;
+import com.hotmomcircle.transport_game.ui.Pause;
 //map imports below 
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapLayer;
@@ -77,6 +78,9 @@ public class GameScreen implements Screen, Json.Serializable {
 	private final int GAME_PAUSED = 1;
 	public Skin skin;
 	public BitmapFont font;
+
+	public Pause pauseUI;
+	public Stage pauseStage;
 
 	//UI Skin
 
@@ -276,6 +280,11 @@ public class GameScreen implements Screen, Json.Serializable {
 		planningUI = new Planning(game, this, stage, skin, player);
 		
 
+		// Pause UI
+		pauseStage = new Stage(new ScreenViewport());
+		Gdx.input.setInputProcessor(pauseStage);
+
+		pauseUI = new Pause(game, this, pauseStage, skin);
 	}
 
 	@Override
@@ -290,21 +299,17 @@ public class GameScreen implements Screen, Json.Serializable {
 		// pauses the game if it isnt already paused - prevents multiple inputs
 		if(Gdx.input.isKeyPressed(Input.Keys.P) && GAME_STATE != GAME_PAUSED) {
 			pause();
+			pauseUI.showPause();
 		} 
 		// resumes game if it isn't already running
 		if(Gdx.input.isKeyPressed(Input.Keys.R) && GAME_STATE != GAME_RUNNING) {
 			resume();
 		} 
 		if (GAME_STATE == GAME_PAUSED){
-			// Clear the screen
-			Gdx.gl.glClearColor(0, 0, 0, 1);
-			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+			pauseStage.act(delta);
+			pauseStage.draw();
+
 			
-			// draws the text on to the screen in the centre
-			batch.begin();
-			font.draw(batch, "Game Paused", game.getSCREEN_WIDTH() / 2 - 60, game.getSCREEN_HEIGHT() / 2 + 50);
-			font.draw(batch, "Press 'R' to Resume", game.getSCREEN_WIDTH() / 2 - 90, game.getSCREEN_HEIGHT() / 2);
-			batch.end();
 
 		} else {
 
@@ -389,7 +394,6 @@ public class GameScreen implements Screen, Json.Serializable {
 
 	@Override
 	public void pause() {
-		// TODO Auto-generated method stub
 		System.out.println("Game Paused");
 		GAME_STATE = GAME_PAUSED;
 		
@@ -397,7 +401,6 @@ public class GameScreen implements Screen, Json.Serializable {
 
 	@Override
 	public void resume() {
-		// TODO Auto-generated method stub
 		GAME_STATE = GAME_RUNNING;
 	}
 
