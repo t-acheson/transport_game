@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.hotmomcircle.transport_game.GameScreen;
-import com.hotmomcircle.transport_game.TransportGame;
 
 // Transport superclass.
 // Foot, bike and car will all be instances of this class
@@ -15,12 +14,15 @@ public class Transport {
 	private GameScreen game;
 	public String name;
 	public int speed;
-	private int footprint;
-	private int staminaCost;
+	// passing these as strings because that's the argument
+	// Points.setText method takes (because extends Label)
+	private String footprint;
+	private String staminaCost;
 	
 	private long imgDuration = 500000000; //How long each image should be displayed
 	private long imgChangeTime = 0; //Time since the image was last changed
 	private int imgIdx = 0;
+	private int imgScale; //Size of the image relative to the tile size, assumes all images same size
 	
 	public Texture image;
 	public Texture[] up;
@@ -29,10 +31,12 @@ public class Transport {
 	public Texture[] right;
 	
 
-	public Transport(GameScreen game, String name, int speed, Texture[] images) {
+	public Transport(GameScreen game, String name, int speed, Texture[] images, String footprint, String staminaCost) {
 		this.game = game;
 		this.name = name;
 		this.speed = speed;
+		this.footprint = footprint;
+		this.staminaCost = staminaCost;
 		
 		up = new Texture[2];
 		down = new Texture[2];
@@ -53,12 +57,16 @@ public class Transport {
 	
 	public void render(SpriteBatch batch) throws Exception{
 		Texture currImg = getCurrentImage();
-		batch.draw(currImg, game.player.getX(), game.player.getY(), 0, 0, currImg.getWidth(), currImg.getHeight(), game.scale, game.scale, 0, 0, 0, currImg.getWidth(), currImg.getHeight(), false, false);
+//		System.out.println(currImg.getWidth());
+//		System.out.println(currImg.getHeight());
+//		System.out.println(game.getTileSize());
+//		batch.draw(currImg, game.player.getX(), game.player.getY(), 0, 0, currImg.getWidth(), currImg.getHeight(), game.scale, game.scale, 0, 0, 0, currImg.getWidth(), currImg.getHeight(), false, false);
+		batch.draw(currImg, game.player.getX(), game.player.getY(), 0, 0, game.getTileSize(), game.getTileSize(), 1, 1, 0, 0, 0, currImg.getWidth(), currImg.getHeight(), false, false);
 	}
 	
 	public Texture getCurrentImage() throws Exception {
 		
-		if(TimeUtils.nanoTime() - imgChangeTime > imgDuration) {
+		if(TimeUtils.nanoTime() - imgChangeTime > imgDuration && game.player.isMoving()) {
 			imgChangeTime = TimeUtils.nanoTime();
 			imgIdx = (imgIdx + 1) % 2;
 		}
@@ -75,6 +83,14 @@ public class Transport {
 		default:
 			throw new Exception("Error: incorrect direction string");
 		}
+	}
+
+	public String getFootprint() {
+		return footprint;
+	}
+
+	public String getStaminaCost() {
+		return staminaCost;
 	}
 	
 }
