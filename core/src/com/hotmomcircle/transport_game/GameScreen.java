@@ -399,6 +399,7 @@ public class GameScreen implements Screen, Json.Serializable {
 		
 	}
 
+	
 	@Override
 	public void resume() {
 		GAME_STATE = GAME_RUNNING;
