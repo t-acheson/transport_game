@@ -18,6 +18,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.hotmomcircle.transport_game.entity.Gem;
@@ -31,6 +33,7 @@ import com.hotmomcircle.transport_game.entity.Node;
 import com.hotmomcircle.transport_game.ui.Planning;
 import com.hotmomcircle.transport_game.ui.Points;
 import com.hotmomcircle.transport_game.ui.gemArrow;
+import com.hotmomcircle.transport_game.ui.Pause;
 //map imports below 
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapLayer;
@@ -39,10 +42,12 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 //
 
-// This will be the screen 
-public class GameScreen implements Screen {
+// Screen of the level the player is currently playing
+// Separation of game and level to allow 
+public class GameScreen implements Screen, Json.Serializable {
 
 	TransportGame game;
+	ParentGame parentGame;
 
 	SpriteBatch batch;
 
@@ -74,6 +79,9 @@ public class GameScreen implements Screen {
 	public Skin skin;
 	public BitmapFont font;
 
+	public Pause pauseUI;
+	public Stage pauseStage;
+
 	//UI Skin
 
 	// Stage for UI components
@@ -88,28 +96,50 @@ public class GameScreen implements Screen {
 	public Points carbon;
 	public Points freshness;
 
-	// asset manager to implement uiskin.json
-	// TODO best practise to implement all our assets this way?
 	public AssetManager assetManager;
 
 	//gemArrow instance 
 	private gemArrow gemArrowUI;
 
-
-	public GameScreen(TransportGame game) {
+// New level
+	public GameScreen(TransportGame game, ParentGame parentGame) {
 		this.game = game;
-		this.font = game.font;
-		this.skin = game.skin;
-
-		this.batch = game.batch;
+		this.parentGame = parentGame;
 		
-		// for the pause / play feature
-		GAME_STATE = GAME_RUNNING;
-
+		loadAssets();
+		player = new Player(this, 700, 300, 32, 32, "./foot/player_down1.png");
 		
+		gems = new Array<Gem>();
+		gems.add(new Gem(this, 400, 400, 16, 16));
+		gems.add(new Gem(this, 200, 200, 16, 16));
+		gems.add(new Gem(this, 300, 300, 16, 16));
+
+		initializeGame();
+	}
+	
+//	Load level from json
+	public GameScreen(TransportGame game, ParentGame parentGame, JsonValue jsonMap) {
+		this.game = game;
+		this.parentGame = parentGame;
+		loadAssets();
+//		Read in the serializable data
+		read(null, jsonMap);
+		
+//		For now write the gems in manually, these will be serialized too
+		gems = new Array<Gem>();
+		gems.add(new Gem(this, 400, 400, 16, 16));
+		gems.add(new Gem(this, 200, 200, 16, 16));
+		gems.add(new Gem(this, 300, 300, 16, 16));
+		initializeGame();
+		
+		
+	}
+	
 //		Load assets - Load all textures, maps, etc here with the assetManager before going to the game screen.
+//		Separated from initialize game as assets need to be loaded before player is loaded, player needs to be loaded before rest of game is initialized
+	public void loadAssets() {
 //		In the mean time show a loading screen
-		assetManager = new AssetManager();
+		assetManager = parentGame.assetManager;
 
 		//loading map 
 		assetManager.setLoader(TiledMap.class,  new TmxMapLoader());
@@ -148,10 +178,18 @@ public class GameScreen implements Screen {
 			
 		}
 		
-		
-		
 		assetManager.finishLoading();
+	}
+	
+//	Initializes the game. Put into separate function to allow multiple constructors to call it
+	public void initializeGame() {
+		this.font = game.font;
+		this.skin = game.skin;
+
+		this.batch = game.batch;
 		
+		// for the pause / play feature
+		GAME_STATE = GAME_RUNNING;
 		
 		try {
 			map = assetManager.get("bigMap.tmx", TiledMap.class);
@@ -188,12 +226,7 @@ public class GameScreen implements Screen {
 		renderer = new OrthogonalTiledMapRenderer(map,3);
 		//
 
-		player = new Player(this, 700, 300, 32, 32, "./foot/player_down1.png");
 		
-		gems = new Array<Gem>();
-		gems.add(new Gem(this, 400, 400, 16, 16, "gem.png"));
-		gems.add(new Gem(this, 200, 200, 16, 16, "gem.png"));
-		gems.add(new Gem(this, 300, 300, 16, 16, "gem.png"));
 		
 		transport_OBJs.add(new Bicycle_OBJ(this, 300, 100, true));
 		transport_OBJs.add(new Bicycle_OBJ(this, 400, 100, true));
@@ -245,7 +278,13 @@ public class GameScreen implements Screen {
 
 		// Planning UI
 		planningUI = new Planning(game, this, stage, skin, player);
+		
 
+		// Pause UI
+		pauseStage = new Stage(new ScreenViewport());
+		Gdx.input.setInputProcessor(pauseStage);
+
+		pauseUI = new Pause(game, this, pauseStage, skin);
 	}
 
 	@Override
@@ -260,21 +299,17 @@ public class GameScreen implements Screen {
 		// pauses the game if it isnt already paused - prevents multiple inputs
 		if(Gdx.input.isKeyPressed(Input.Keys.P) && GAME_STATE != GAME_PAUSED) {
 			pause();
+			pauseUI.showPause();
 		} 
 		// resumes game if it isn't already running
 		if(Gdx.input.isKeyPressed(Input.Keys.R) && GAME_STATE != GAME_RUNNING) {
 			resume();
 		} 
 		if (GAME_STATE == GAME_PAUSED){
-			// Clear the screen
-			Gdx.gl.glClearColor(0, 0, 0, 1);
-			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+			pauseStage.act(delta);
+			pauseStage.draw();
+
 			
-			// draws the text on to the screen in the centre
-			batch.begin();
-			font.draw(batch, "Game Paused", game.getSCREEN_WIDTH() / 2 - 60, game.getSCREEN_HEIGHT() / 2 + 50);
-			font.draw(batch, "Press 'R' to Resume", game.getSCREEN_WIDTH() / 2 - 90, game.getSCREEN_HEIGHT() / 2);
-			batch.end();
 
 		} else {
 
@@ -359,7 +394,6 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void pause() {
-		// TODO Auto-generated method stub
 		System.out.println("Game Paused");
 		GAME_STATE = GAME_PAUSED;
 		
@@ -367,7 +401,6 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void resume() {
-		// TODO Auto-generated method stub
 		GAME_STATE = GAME_RUNNING;
 	}
 
@@ -385,7 +418,7 @@ public class GameScreen implements Screen {
 		map.dispose();
 		renderer.dispose();
 		stage.dispose();
-		assetManager.dispose();
+		assetManager.dispose(); // This will have to be removed from gamescreen when we have multiple levels and put into ParentGame
 
 	}
 
@@ -399,6 +432,22 @@ public class GameScreen implements Screen {
 	
 	public void addCar(int x, int y) {
 		transport_OBJs.add(new Car_OBJ(this, x, y, true));
+	}
+
+	@Override
+	public void write(Json json) {
+		json.writeValue("playerX", player.getX());
+		json.writeValue("playerY", player.getY());
+		
+	}
+
+	@Override
+	public void read(Json json, JsonValue jsonData) {
+		// TODO Auto-generated method stub
+		int x = jsonData.getInt("playerX");
+		int y = jsonData.getInt("playerY");
+		player = new Player(this, x, y, 32, 32, "./foot/player_down1.png");
+		
 	}
 
 	

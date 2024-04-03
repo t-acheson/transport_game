@@ -2,6 +2,7 @@ package com.hotmomcircle.transport_game;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
@@ -9,6 +10,8 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFont
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.utils.JsonReader;
+import com.badlogic.gdx.utils.JsonValue;
 
 public class TransportGame extends Game {
 	
@@ -18,7 +21,7 @@ public class TransportGame extends Game {
 	
 	SpriteBatch batch;
 	
-	public Skin skin;
+	public Skin skin; 
 	public BitmapFont font;
 
    
@@ -39,7 +42,7 @@ public class TransportGame extends Game {
 		
 		
 //		Use default UISKIN for now
-		skin = new Skin(Gdx.files.internal("uiskin.json"));
+		skin = new Skin(Gdx.files.internal("skin/star-soldier-ui.json"));
         
 //		Change the font for buttons
         TextButtonStyle style = skin.get(TextButtonStyle.class);
@@ -49,7 +52,8 @@ public class TransportGame extends Game {
         LabelStyle labelStyle = skin.get(LabelStyle.class);
         labelStyle.font = font;
         
-		this.setScreen(new MainMenuScreen(this)); // I'm not sure what the set screen function does
+        
+		this.setScreen(new MainMenuScreen(this)); 
 		
 	}
 
@@ -71,6 +75,28 @@ public class TransportGame extends Game {
 
 	public int getSCREEN_HEIGHT(){
 		return SCREEN_HEIGHT;
+	}
+	
+	public void newGame() {
+		new ParentGame(this);
+	}
+	
+	public void resumeGame() {
+//		TODO rename most recent save to something else like current.json
+        FileHandle fileHandle = Gdx.files.local("saves/output.json"); // w
+        String text = fileHandle.readString();
+        
+        JsonValue json = new JsonReader().parse(text);
+		new ParentGame(this, json);
+	}
+	
+//	Load the game from a given filename
+	public void loadGame(String fileName) {
+        FileHandle fileHandle = Gdx.files.local(fileName);
+        String text = fileHandle.readString();
+        
+        JsonValue json = new JsonReader().parse(text);
+		new ParentGame(this, json);
 	}
 	
 }
