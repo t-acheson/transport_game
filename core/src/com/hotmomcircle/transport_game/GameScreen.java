@@ -216,7 +216,7 @@ public class GameScreen implements Screen {
 		// Asset manager instansiation
 		assetManager.load("uiskin.json", Skin.class);
 
-		Label gemsLeftLabel = new Label("Gems Left: 0", skin);
+		//! Label gemsLeftLabel = new Label("Gems Left: 0", skin);
 
 		// table to hold UI elements
 		table = new Table();
@@ -244,7 +244,7 @@ public class GameScreen implements Screen {
 
 		// Assuming you have a Skin instance for your UI
 		
-		table.add(gemsLeftLabel).bottom().left(); // Adjust the positioning as needed
+		//! table.add(gemsLeftLabel).bottom().left(); // Adjust the positioning as needed
 
 		// add table to stage
 		stage.addActor(table);
@@ -299,7 +299,8 @@ public class GameScreen implements Screen {
 				if (player.getRectangle().overlaps(gem.getRectangle())) {
 					gems.removeValue(gem, true);
 				points.setText("50");
-				updateGemsLeftLabel();
+				//TODO this is how to implement like points  gemCounter.setText(deltaValue: 1)
+				
 				}
 			}
 
@@ -353,12 +354,10 @@ public class GameScreen implements Screen {
 		stage.draw();
 
 	}
-		 // Update the gemArrow UI with the current player and gem positions
+		 //Update the gemArrow UI with the current player and gem positions
 		gemArrowUI.update(player, gems);
 
-		private void updateGemsLeftLabel() {
-			gemsLeftLabel.setText("Gems Left: " + gems.size);
-		}
+		
 		
 	}
 
