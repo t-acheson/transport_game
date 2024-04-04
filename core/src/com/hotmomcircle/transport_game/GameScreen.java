@@ -34,6 +34,7 @@ import com.hotmomcircle.transport_game.ui.Planning;
 import com.hotmomcircle.transport_game.ui.Points;
 import com.hotmomcircle.transport_game.ui.gemArrow;
 import com.hotmomcircle.transport_game.ui.Pause;
+import com.hotmomcircle.transport_game.ui.gemCounter;
 //map imports below 
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapLayer;
@@ -100,7 +101,7 @@ public class GameScreen implements Screen, Json.Serializable {
 
 	//gemArrow instance 
 	private gemArrow gemArrowUI;
-
+	private gemCounter gemCounter;
 // New level
 	public GameScreen(TransportGame game, ParentGame parentGame) {
 		this.game = game;
@@ -120,21 +121,15 @@ public class GameScreen implements Screen, Json.Serializable {
 //	Load level from json
 	public GameScreen(TransportGame game, ParentGame parentGame, JsonValue jsonMap) {
 		this.game = game;
-		this.parentGame = parentGame;
-		loadAssets();
-//		Read in the serializable data
-		read(null, jsonMap);
+		this.font = game.font;
+		this.skin = game.skin;
+
+		this.batch = game.batch;
 		
-//		For now write the gems in manually, these will be serialized too
-		gems = new Array<Gem>();
-		gems.add(new Gem(this, 400, 400, 16, 16));
-		gems.add(new Gem(this, 200, 200, 16, 16));
-		gems.add(new Gem(this, 300, 300, 16, 16));
-		initializeGame();
-		
-		
+		// for the pause / play feature
+		GAME_STATE = GAME_RUNNING;
+
 	}
-	
 //		Load assets - Load all textures, maps, etc here with the assetManager before going to the game screen.
 //		Separated from initialize game as assets need to be loaded before player is loaded, player needs to be loaded before rest of game is initialized
 	public void loadAssets() {
@@ -246,6 +241,7 @@ public class GameScreen implements Screen, Json.Serializable {
 		// Asset manager instansiation
 		assetManager.load("uiskin.json", Skin.class);
 
+	
 
 		// table to hold UI elements
 		table = new Table();
@@ -260,8 +256,10 @@ public class GameScreen implements Screen, Json.Serializable {
 		freshness = new Points("100", skin);
 		
 		gemArrowUI = new gemArrow(skin, player, gems, table); 
+		gemCounter = new gemCounter(gems, skin);
 
 		table.add(gemArrowUI).top().left();
+		table.add(gemCounter).bottom().left();
 
 		// fill table with UI scores
 		table.add(new Label("Points: ", skin));
@@ -271,8 +269,8 @@ public class GameScreen implements Screen, Json.Serializable {
 		table.add(new Label("Freshness: ", skin));
 		table.add(freshness).fillX().uniformX();
 
-		//initalise gemArrow 
-
+		// Assuming you have a Skin instance for your UI
+		
 		// add table to stage
 		stage.addActor(table);
 
@@ -328,6 +326,8 @@ public class GameScreen implements Screen, Json.Serializable {
 				if (player.getRectangle().overlaps(gem.getRectangle())) {
 					gems.removeValue(gem, true);
 				points.setText("50");
+				gemCounter.update();
+				
 				}
 			}
 
@@ -381,8 +381,10 @@ public class GameScreen implements Screen, Json.Serializable {
 		stage.draw();
 
 	}
-		 // Update the gemArrow UI with the current player and gem positions
+		 //Update the gemArrow UI with the current player and gem positions
 		gemArrowUI.update(player, gems);
+
+		
 		
 	}
 
