@@ -78,9 +78,10 @@ public class GameScreen implements Screen, Json.Serializable {
 	// Rectangle currentScreenMarker;
 	boolean showWorldMap = false;
 	ShapeRenderer shape;
+	double panSpeed = 250;
 	int mapWidthInPixels;
 	int mapHeightInPixels;
-	Texture playerMap = new Texture("assets/foot/player_right1.png");
+	Texture playerMap = new Texture("assets/phoneScreen.png");
 	
 	public Array<Gem> gems;
 
@@ -358,22 +359,37 @@ public class GameScreen implements Screen, Json.Serializable {
 
 			if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
 				worldMap.zoom -= 0.02; // Zoom in
-				worldMap.update();
+				panSpeed -= 250;
 			}
 			
 			if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
 				worldMap.zoom += 0.02; // Zoom out
-				worldMap.update();
+				panSpeed += 250;
 			}
+			if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+				worldMap.translate((float) (-panSpeed * Gdx.graphics.getDeltaTime()), 0);
+			}
+			if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+				worldMap.translate((float)(panSpeed * Gdx.graphics.getDeltaTime()), 0);
+			}
+			if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+				worldMap.translate(0, (float)(panSpeed * Gdx.graphics.getDeltaTime()));
+			}
+			if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+				worldMap.translate(0, (float) (-panSpeed * Gdx.graphics.getDeltaTime()));
+			}
+			
+			worldMap.update();
 			renderer.setView(worldMap);
 			batch.setProjectionMatrix(worldMap.combined);
 			renderer.render();
 			batch.begin();
 			try{
+				// batch.draw(playerMap,0,0);
 				batch.draw(player.image, player.getX(),player.getY(), 256,256);
 				for (Gem gem : gems) {
 					batch.draw(gem.image, gem.getX(), gem.getY(), 750,750);
-					}
+				}
 				
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
