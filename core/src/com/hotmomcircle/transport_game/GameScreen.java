@@ -386,7 +386,7 @@ public class GameScreen implements Screen, Json.Serializable {
 			float minX = halfCamWidth;
 			float maxX = mapWidthInPixels - halfCamWidth;
 			float minY = halfCamHeight;
-			float maxY = mapHeightInPixels - halfCamHeight;
+			float maxY = 8000 - halfCamHeight;
 
 			// Clamp the worldMap's position
 			worldMap.position.x = Math.max(minX, Math.min(maxX, worldMap.position.x));
