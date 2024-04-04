@@ -11,11 +11,16 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.hotmomcircle.transport_game.entity.Gem;
@@ -30,6 +35,7 @@ import com.hotmomcircle.transport_game.ui.Planning;
 import com.hotmomcircle.transport_game.ui.Points;
 import com.hotmomcircle.transport_game.ui.gemArrow;
 import com.hotmomcircle.transport_game.ui.Pause;
+import com.hotmomcircle.transport_game.ui.gemCounter;
 //map imports below 
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapLayer;
@@ -39,10 +45,12 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 //
 
-// This will be the screen 
-public class GameScreen implements Screen {
+// Screen of the level the player is currently playing
+// Separation of game and level to allow 
+public class GameScreen implements Screen, Json.Serializable {
 
 	TransportGame game;
+	ParentGame parentGame;
 
 	SpriteBatch batch;
 
@@ -74,13 +82,13 @@ public class GameScreen implements Screen {
 	private int GAME_STATE;
 	private final int GAME_RUNNING = 0;
 	private final int GAME_PAUSED = 1;
-	private BitmapFont font = new BitmapFont();
+	public Skin skin;
+	public BitmapFont font;
 
 	public Pause pauseUI;
 	public Stage pauseStage;
 
 	//UI Skin
-	public Skin skin;
 
 	// Stage for UI components
 	private Stage stage;
@@ -94,30 +102,48 @@ public class GameScreen implements Screen {
 	public Points carbon;
 	public Points freshness;
 
-	// asset manager to implement uiskin.json
-	// TODO best practise to implement all our assets this way?
 	public AssetManager assetManager;
 
 	//gemArrow instance 
 	private gemArrow gemArrowUI;
-
-
-	public GameScreen(TransportGame game) {
+	private gemCounter gemCounter;
+// New level
+	public GameScreen(TransportGame game, ParentGame parentGame) {
 		this.game = game;
+		this.parentGame = parentGame;
+		
+		loadAssets();
+		player = new Player(this, 700, 300, 32, 32, "./foot/player_down1.png");
+		
+		gems = new Array<Gem>();
+		gems.add(new Gem(this, 400, 400, 16, 16));
+		gems.add(new Gem(this, 200, 200, 16, 16));
+		gems.add(new Gem(this, 300, 300, 16, 16));
+
+		initializeGame();
+	}
+	
+//	Load level from json
+	public GameScreen(TransportGame game, ParentGame parentGame, JsonValue jsonMap) {
+		this.game = game;
+		this.font = game.font;
+		this.skin = game.skin;
 
 		this.batch = game.batch;
 		
 		// for the pause / play feature
 		GAME_STATE = GAME_RUNNING;
-		
-		
+
+	}
 //		Load assets - Load all textures, maps, etc here with the assetManager before going to the game screen.
+//		Separated from initialize game as assets need to be loaded before player is loaded, player needs to be loaded before rest of game is initialized
+	public void loadAssets() {
 //		In the mean time show a loading screen
-		assetManager = new AssetManager();
+		assetManager = parentGame.assetManager;
 
 		//loading map 
 		assetManager.setLoader(TiledMap.class,  new TmxMapLoader());
-		assetManager.load("trialMapwithObjects.tmx", TiledMap.class);
+		assetManager.load("bigMap.tmx", TiledMap.class);
 		
 //		Load in the player transport
 		String[] transportPaths = {
@@ -152,13 +178,21 @@ public class GameScreen implements Screen {
 			
 		}
 		
-		
-		
 		assetManager.finishLoading();
+	}
+	
+//	Initializes the game. Put into separate function to allow multiple constructors to call it
+	public void initializeGame() {
+		this.font = game.font;
+		this.skin = game.skin;
+
+		this.batch = game.batch;
 		
+		// for the pause / play feature
+		GAME_STATE = GAME_RUNNING;
 		
 		try {
-			map = assetManager.get("trialMapwithObjects.tmx", TiledMap.class);
+			map = assetManager.get("bigMap.tmx", TiledMap.class);
 			System.out.println("Map loaded successfully.");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -204,15 +238,10 @@ public class GameScreen implements Screen {
 		}
 
 
-		renderer = new OrthogonalTiledMapRenderer(map);
+		renderer = new OrthogonalTiledMapRenderer(map,3);
 		//
 
-		player = new Player(this, 700, 300, 32, 32, "./foot/player_down1.png");
 		
-		gems = new Array<Gem>();
-		gems.add(new Gem(this, 400, 400, 16, 16, "gem.png"));
-		gems.add(new Gem(this, 200, 200, 16, 16, "gem.png"));
-		gems.add(new Gem(this, 300, 300, 16, 16, "gem.png"));
 		
 		transport_OBJs.add(new Bicycle_OBJ(this, 300, 100, true));
 		transport_OBJs.add(new Bicycle_OBJ(this, 400, 100, true));
@@ -228,11 +257,11 @@ public class GameScreen implements Screen {
 		// the map more complicated and add objects
 		stage = new Stage(new ScreenViewport());
 		Gdx.input.setInputProcessor(stage);
-		skin = new Skin(Gdx.files.internal("uiskin.json"));
 
 		// Asset manager instansiation
 		assetManager.load("uiskin.json", Skin.class);
 
+	
 
 		// table to hold UI elements
 		table = new Table();
@@ -247,24 +276,27 @@ public class GameScreen implements Screen {
 		freshness = new Points("100", skin);
 		
 		gemArrowUI = new gemArrow(skin, player, gems, table); 
+		gemCounter = new gemCounter(gems, skin);
 
 		table.add(gemArrowUI).top().left();
+		table.add(gemCounter).bottom().left();
 
 		// fill table with UI scores
-		table.add(new TextField("Points: ", skin));
+		table.add(new Label("Points: ", skin));
 		table.add(points).fillX().uniformX();
-		table.add(new TextField("Carbon: ", skin));
+		table.add(new Label("Carbon: ", skin));
 		table.add(carbon).fillX().uniformX();
-		table.add(new TextField("Freshness: ", skin));
+		table.add(new Label("Freshness: ", skin));
 		table.add(freshness).fillX().uniformX();
 
-		//initalise gemArrow 
-
+		// Assuming you have a Skin instance for your UI
+		
 		// add table to stage
 		stage.addActor(table);
 
 		// Planning UI
 		planningUI = new Planning(game, this, stage, skin, player);
+		
 
 		// Pause UI
 		pauseStage = new Stage(new ScreenViewport());
@@ -329,6 +361,8 @@ public class GameScreen implements Screen {
 				if (player.getRectangle().overlaps(gem.getRectangle())) {
 					gems.removeValue(gem, true);
 				points.setText("50");
+				gemCounter.update();
+				
 				}
 			}
 
@@ -337,11 +371,6 @@ public class GameScreen implements Screen {
 		for(int i = 0; i < transport_OBJs.size(); i++) {
 				transport_OBJs.get(i).update(i);
 		}
-		
-      // clear the screen with a dark blue color. The
-      // arguments to clear are the red, green
-      // blue and alpha component in the range [0,1]
-      // of the color to be used to clear the screen.
 
 		// tell the camera to update its matrices.
 		camera.update();
@@ -387,8 +416,10 @@ public class GameScreen implements Screen {
 		stage.draw();
 
 	}
-		 // Update the gemArrow UI with the current player and gem positions
+		 //Update the gemArrow UI with the current player and gem positions
 		gemArrowUI.update(player, gems);
+
+		
 		
 	}
 
@@ -425,7 +456,7 @@ public class GameScreen implements Screen {
 		map.dispose();
 		renderer.dispose();
 		stage.dispose();
-		assetManager.dispose();
+		assetManager.dispose(); // This will have to be removed from gamescreen when we have multiple levels and put into ParentGame
 
 	}
 
@@ -439,6 +470,22 @@ public class GameScreen implements Screen {
 	
 	public void addCar(int x, int y) {
 		transport_OBJs.add(new Car_OBJ(this, x, y, true));
+	}
+
+	@Override
+	public void write(Json json) {
+		json.writeValue("playerX", player.getX());
+		json.writeValue("playerY", player.getY());
+		
+	}
+
+	@Override
+	public void read(Json json, JsonValue jsonData) {
+		// TODO Auto-generated method stub
+		int x = jsonData.getInt("playerX");
+		int y = jsonData.getInt("playerY");
+		player = new Player(this, x, y, 32, 32, "./foot/player_down1.png");
+		
 	}
 
 	
