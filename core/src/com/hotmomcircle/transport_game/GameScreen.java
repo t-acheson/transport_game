@@ -31,6 +31,7 @@ import com.hotmomcircle.transport_game.entity.Node;
 import com.hotmomcircle.transport_game.ui.Planning;
 import com.hotmomcircle.transport_game.ui.Points;
 import com.hotmomcircle.transport_game.ui.gemArrow;
+import com.hotmomcircle.transport_game.ui.gemCounter;
 //map imports below 
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapLayer;
@@ -94,7 +95,7 @@ public class GameScreen implements Screen {
 
 	//gemArrow instance 
 	private gemArrow gemArrowUI;
-
+ 	private gemCounter gemCounter;
 	
 	
 
@@ -216,7 +217,7 @@ public class GameScreen implements Screen {
 		// Asset manager instansiation
 		assetManager.load("uiskin.json", Skin.class);
 
-		//! Label gemsLeftLabel = new Label("Gems Left: 0", skin);
+	
 
 		// table to hold UI elements
 		table = new Table();
@@ -231,8 +232,10 @@ public class GameScreen implements Screen {
 		freshness = new Points("100", skin);
 		
 		gemArrowUI = new gemArrow(skin, player, gems, table); 
+		gemCounter = new gemCounter(gems, skin);
 
 		table.add(gemArrowUI).top().left();
+		table.add(gemCounter).bottom().left();
 
 		// fill table with UI scores
 		table.add(new Label("Points: ", skin));
@@ -244,8 +247,6 @@ public class GameScreen implements Screen {
 
 		// Assuming you have a Skin instance for your UI
 		
-		//! table.add(gemsLeftLabel).bottom().left(); // Adjust the positioning as needed
-
 		// add table to stage
 		stage.addActor(table);
 
@@ -299,7 +300,7 @@ public class GameScreen implements Screen {
 				if (player.getRectangle().overlaps(gem.getRectangle())) {
 					gems.removeValue(gem, true);
 				points.setText("50");
-				//TODO this is how to implement like points  gemCounter.setText(deltaValue: 1)
+				gemCounter.update();
 				
 				}
 			}
