@@ -129,7 +129,7 @@ public class GameScreen implements Screen, Json.Serializable {
 		// for the pause / play feature
 		GAME_STATE = GAME_RUNNING;
 
-		
+	}
 //		Load assets - Load all textures, maps, etc here with the assetManager before going to the game screen.
 //		Separated from initialize game as assets need to be loaded before player is loaded, player needs to be loaded before rest of game is initialized
 	public void loadAssets() {
