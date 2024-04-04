@@ -47,6 +47,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.MathUtils;
 //
 import com.badlogic.gdx.math.Rectangle;
 
@@ -353,6 +354,17 @@ public class GameScreen implements Screen, Json.Serializable {
 		}
 
 		else if (showWorldMap) {
+			worldMap.zoom = MathUtils.clamp(worldMap.zoom, 0.1f, 1f);
+
+			if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+				worldMap.zoom -= 0.02; // Zoom in
+				worldMap.update();
+			}
+			
+			if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+				worldMap.zoom += 0.02; // Zoom out
+				worldMap.update();
+			}
 			renderer.setView(worldMap);
 			batch.setProjectionMatrix(worldMap.combined);
 			renderer.render();
