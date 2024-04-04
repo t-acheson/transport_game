@@ -1,7 +1,8 @@
 {
-    "java.project.sourcePaths": [
-        "src/main",
-        "footprint/src/main/java/com/hotmomcircle"
-    ],
-    "maven.view": "flat"
+  "java.project.sourcePaths": [
+    "src/main",
+    "footprint/src/main/java/com/hotmomcircle"
+  ],
+  "maven.view": "flat",
+  "java.configuration.updateBuildConfiguration": "interactive"
 }
