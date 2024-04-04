@@ -81,7 +81,7 @@ public class GameScreen implements Screen, Json.Serializable {
 	double panSpeed = 250;
 	int mapWidthInPixels;
 	int mapHeightInPixels;
-	Texture playerMap = new Texture("assets/phoneScreen.png");
+	// Texture playerMap = new Texture("assets/phoneScreen.png");
 	
 	public Array<Gem> gems;
 
@@ -378,6 +378,20 @@ public class GameScreen implements Screen, Json.Serializable {
 			if (Gdx.input.isKeyPressed(Input.Keys.W)) {
 				worldMap.translate(0, (float) (-panSpeed * Gdx.graphics.getDeltaTime()));
 			}
+			// Calculate the edges of the worldMap view in world coordinates
+			float halfCamWidth = worldMap.viewportWidth * worldMap.zoom * 0.5f;
+			float halfCamHeight = worldMap.viewportHeight * worldMap.zoom * 0.5f;
+
+			// Calculate the minimum and maximum x and y values the worldMap can have
+			float minX = halfCamWidth;
+			float maxX = mapWidthInPixels - halfCamWidth;
+			float minY = halfCamHeight;
+			float maxY = mapHeightInPixels - halfCamHeight;
+
+			// Clamp the worldMap's position
+			worldMap.position.x = Math.max(minX, Math.min(maxX, worldMap.position.x));
+			worldMap.position.y = Math.max(minY, Math.min(maxY, worldMap.position.y));
+
 			
 			worldMap.update();
 			renderer.setView(worldMap);
