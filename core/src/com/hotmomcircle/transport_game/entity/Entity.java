@@ -13,7 +13,7 @@ public class Entity {
 	protected float y;
 	public Rectangle rectangle;
 	public String imagePath;
-	private Texture image;
+	public Texture image;
 	
 	public float getX() {
 		return x;

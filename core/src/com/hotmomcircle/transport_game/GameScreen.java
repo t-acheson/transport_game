@@ -79,6 +79,7 @@ public class GameScreen implements Screen, Json.Serializable {
 	ShapeRenderer shape;
 	int mapWidthInPixels;
 	int mapHeightInPixels;
+	Texture playerMap = new Texture("assets/foot/player_right1.png");
 	
 	public Array<Gem> gems;
 
@@ -353,15 +354,29 @@ public class GameScreen implements Screen, Json.Serializable {
 
 		else if (showWorldMap) {
 			renderer.setView(worldMap);
+			batch.setProjectionMatrix(worldMap.combined);
+			renderer.render();
+			batch.begin();
+			try{
+				batch.draw(player.image, player.getX(),player.getY(), 256,256);
+				for (Gem gem : gems) {
+					batch.draw(gem.image, gem.getX(), gem.getY(), 750,750);
+					}
+				
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			batch.end();
 
-			shape.setAutoShapeType(true);
-			shape.begin(shape.ShapeType.Line);
+			shape.setProjectionMatrix(worldMap.combined);
+
+			shape.begin(ShapeRenderer.ShapeType.Line);
 
         	shape.setColor(Color.RED);
-			shape.rect(player.getX(), player.getY(), mapHeightInPixels/3, mapWidthInPixels/3);
+			shape.rect((player.getX()-(camera.viewportWidth/2)), (player.getY()-(camera.viewportHeight/2)), camera.viewportWidth, camera.viewportHeight);
 			shape.end();
 
-			renderer.render();
 
 		} else {
 
