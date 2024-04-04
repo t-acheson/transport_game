@@ -2,10 +2,13 @@ package com.hotmomcircle.transport_game;
 
 import java.util.ArrayList;
 
+import javax.security.sasl.SaslException;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -13,6 +16,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -44,6 +48,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 //
+import com.badlogic.gdx.math.Rectangle;
 
 // Screen of the level the player is currently playing
 // Separation of game and level to allow 
@@ -69,7 +74,11 @@ public class GameScreen implements Screen, Json.Serializable {
 	public Camera camera;
 	// for the world map on press of "M"
 	public OrthographicCamera worldMap;
+	// Rectangle currentScreenMarker;
 	boolean showWorldMap = false;
+	ShapeRenderer shape;
+	int mapWidthInPixels;
+	int mapHeightInPixels;
 	
 	public Array<Gem> gems;
 
@@ -208,14 +217,14 @@ public class GameScreen implements Screen, Json.Serializable {
 		nodes = new Array<Node>();
 
 		// for world map
-		TiledMapTileLayer worldMapLayer = (TiledMapTileLayer) map.getLayers().get(0);
+		TiledMapTileLayer worldMapLayer = (TiledMapTileLayer) map.getLayers().get(1);
 		int mapWidth = worldMapLayer.getWidth();
 		int tileWidth = (int) worldMapLayer.getTileWidth();
-		int mapWidthInPixels = mapWidth * tileWidth;
+		mapWidthInPixels = mapWidth * tileWidth*3;
 
 		int mapHeightInTiles = worldMapLayer.getHeight();
 		int tileHeight = (int) worldMapLayer.getTileHeight();
-		int mapHeightInPixels = mapHeightInTiles * tileHeight;
+		int mapHeightInPixels = mapHeightInTiles * tileHeight*3;
 
 		
 		worldMap = new OrthographicCamera();
@@ -303,6 +312,8 @@ public class GameScreen implements Screen, Json.Serializable {
 		Gdx.input.setInputProcessor(pauseStage);
 
 		pauseUI = new Pause(game, this, pauseStage, skin);
+
+		shape = new ShapeRenderer();
 	}
 
 	@Override
@@ -331,6 +342,7 @@ public class GameScreen implements Screen, Json.Serializable {
 				System.out.println("show map");
 			} else {
 				System.out.println("hide map");
+				// shape.dispose();
 			}
 		}
 
@@ -341,6 +353,14 @@ public class GameScreen implements Screen, Json.Serializable {
 
 		else if (showWorldMap) {
 			renderer.setView(worldMap);
+
+			shape.setAutoShapeType(true);
+			shape.begin(shape.ShapeType.Line);
+
+        	shape.setColor(Color.RED);
+			shape.rect(player.getX(), player.getY(), mapHeightInPixels/3, mapWidthInPixels/3);
+			shape.end();
+
 			renderer.render();
 
 		} else {
