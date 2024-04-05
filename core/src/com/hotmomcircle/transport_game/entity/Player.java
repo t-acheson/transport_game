@@ -1,16 +1,11 @@
 package com.hotmomcircle.transport_game.entity;
 
-import com.badlogic.gdx.utils.Array;
-
-import org.w3c.dom.css.Rect;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.hotmomcircle.transport_game.GameScreen;
-import com.hotmomcircle.transport_game.TransportGame;
 import com.hotmomcircle.transport_game.transport.Transport;
 
 //This will hold the player class. 
@@ -20,59 +15,81 @@ import com.hotmomcircle.transport_game.transport.Transport;
 public class Player extends Entity {
 	
 	GameScreen game;
-	private Texture bikeImage;
-	private Texture carImage;
 	private Transport[] transport = new Transport[3]; // [foot, bike, car]
-	private int transIdx = 0; //Index corresponding to which transport the player is currently on
+	public int transIdx = 0; //Index corresponding to which transport the player is currently on
+	public int FOOT = 0;
+	public int BIKE = 1;
+	public int CAR = 2;
 	private int stamina;
 	public Rectangle playerRectangle;
 	
 	private String direction = "down";
-	
+	private boolean hasInteracted = false;
 	
 	public Player(GameScreen game, int locX, int locY, int width, int height, String imagePath) {
-		super(locX, locY, width, height, imagePath);
+		super(game, locX, locY, width, height, imagePath);
 		this.game = game;
-//		Initialize the textures
-//		Initialize player x and y positions
-
+//		Initialize the textures	and create transport classes
+//		Game assetManager has already loaded these
+		String[] paths = {
+			    "./foot/player_up1.png",
+			    "./foot/player_up2.png",
+			    "./foot/player_down1.png",
+			    "./foot/player_down2.png",
+			    "./foot/player_left1.png",
+			    "./foot/player_left2.png",
+			    "./foot/player_right1.png",
+			    "./foot/player_right2.png"
+			};
+		
 		Texture[] playerTextures = new Texture[8];
-		playerTextures[0] = new Texture(Gdx.files.internal("./foot/player_up1.png"));
-		playerTextures[1] = new Texture(Gdx.files.internal("./foot/player_up2.png"));
-		playerTextures[2] = new Texture(Gdx.files.internal("./foot/player_down1.png"));
-		playerTextures[3] = new Texture(Gdx.files.internal("./foot/player_down2.png"));
-		playerTextures[4] = new Texture(Gdx.files.internal("./foot/player_left1.png"));
-		playerTextures[5] = new Texture(Gdx.files.internal("./foot/player_left2.png"));
-		playerTextures[6] = new Texture(Gdx.files.internal("./foot/player_right1.png"));
-		playerTextures[7] = new Texture(Gdx.files.internal("./foot/player_right2.png"));
+
+		for(int i = 0; i<paths.length; i++) {
+			playerTextures[i] = game.assetManager.get(paths[i], Texture.class);
+		}
 
 		transport[0] = new Transport(game, "Foot", 200, playerTextures, "0", "-5");
 		
 		
+		
 		Texture[] bikeTextures = new Texture[8];
+		
+		String[] bikePaths = {
+			    "./bicycle/bike_up1.png",
+			    "./bicycle/bike_up2.png",
+			    "./bicycle/bike_down1.png",
+			    "./bicycle/bike_down2.png",
+			    "./bicycle/bike_left1.png",
+			    "./bicycle/bike_left2.png",
+			    "./bicycle/bike_right1.png",
+			    "./bicycle/bike_right2.png"
+			};
 
-		bikeTextures[0] = new Texture(Gdx.files.internal("./bicycle/bike_up1.png"));
-		bikeTextures[1] = new Texture(Gdx.files.internal("./bicycle/bike_up2.png"));
-		bikeTextures[2] = new Texture(Gdx.files.internal("./bicycle/bike_down1.png"));
-		bikeTextures[3] = new Texture(Gdx.files.internal("./bicycle/bike_down2.png"));
-		bikeTextures[4] = new Texture(Gdx.files.internal("./bicycle/bike_left1.png"));
-		bikeTextures[5] = new Texture(Gdx.files.internal("./bicycle/bike_left2.png"));
-		bikeTextures[6] = new Texture(Gdx.files.internal("./bicycle/bike_right1.png"));
-		bikeTextures[7] = new Texture(Gdx.files.internal("./bicycle/bike_right2.png"));
+		
+		for(int i = 0; i<bikePaths.length; i++) {
+			bikeTextures[i] = game.assetManager.get(bikePaths[i], Texture.class);
+		}
+		
 		
 		// footprint for the bike? we gotta nerf it somehow, could just crank up the stamina cost?
 		transport[1] = new Transport(game, "Bicycle", 300, bikeTextures, "2", "-10"); 
 		
 		Texture[] carTextures = new Texture[8];
-
-		carTextures[0] = new Texture(Gdx.files.internal("./car/car_up.png"));
-		carTextures[1] = new Texture(Gdx.files.internal("./car/car_up.png"));
-		carTextures[2] = new Texture(Gdx.files.internal("./car/car_down.png"));
-		carTextures[3] = new Texture(Gdx.files.internal("./car/car_down.png"));
-		carTextures[4] = new Texture(Gdx.files.internal("./car/car_left.png"));
-		carTextures[5] = new Texture(Gdx.files.internal("./car/car_left.png"));
-		carTextures[6] = new Texture(Gdx.files.internal("./car/car_right.png"));
-		carTextures[7] = new Texture(Gdx.files.internal("./car/car_right.png"));
+		
+		String[] carPaths = {
+			    "./car/car_up.png",
+			    "./car/car_up.png",
+			    "./car/car_down.png",
+			    "./car/car_down.png",
+			    "./car/car_left.png",
+			    "./car/car_left.png",
+			    "./car/car_right.png",
+			    "./car/car_right.png"
+			};
+		
+		for(int i = 0; i<carPaths.length; i++) {
+			carTextures[i] = game.assetManager.get(carPaths[i], Texture.class);
+		}
 		
 		transport[2] = new Transport(game, "Car", 400, carTextures, "10", "0"); 
 
@@ -81,9 +98,27 @@ public class Player extends Entity {
 	@Override
 	public void render(SpriteBatch batch) throws Exception {
 		
+		
+		if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !hasInteracted) {
+			interact();
+			
+			switch(currTransport().name) {
+			case "Foot":
+				interact();				
+				break;
+			case "Bicycle":
+				game.addBike(Math.round(this.x), Math.round(this.y));
+				getOnFoot();
+				break;
+			case "Car":
+				game.addCar(Math.round(this.x), Math.round(this.y));
+				getOnFoot();
+				break;
+			}
+		}
 //		Can press 'f' to go on foot
-		if(Gdx.input.isKeyPressed(Input.Keys.B)) {
-			getOnBike();
+		if(Gdx.input.isKeyPressed(Input.Keys.F)) {
+			getOnFoot();
 		}
 		
 //		Can press 'c' to go in car
@@ -145,14 +180,11 @@ public class Player extends Entity {
 		
 		
 		// Player interaction
-		if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-			this.interact();
-		}
-		
-		
 		
 		currTransport().render(batch);
 //		batch.draw(transport[transIdx].image, x, y, 0, 0, transport[transIdx].image.getWidth(), transport[transIdx].image.getHeight(), game.scale, game.scale, 0, 0, 0, transport[transIdx].image.getWidth(), transport[transIdx].image.getHeight(), false, false);
+	
+		hasInteracted = false;
 	}
 	
 	public int getSpeed() {
@@ -170,7 +202,7 @@ public class Player extends Entity {
 	}
 
 	public Rectangle getPlayerRectangle() {
-		return playerRectangle;
+		return this.rectangle;
 	}
 	
 	public boolean isMoving() {
@@ -190,11 +222,13 @@ public class Player extends Entity {
 	
 //  Go on foot
 	public void getOnFoot() {
+		hasInteracted = true;
 		transIdx = 0;
 	}
 	
 //	Changes player transport
 	public void getOnBike() {
+		hasInteracted = true;
 //		Can only get on bike if you are on foot
 		if(transIdx == 0) {
 			transIdx = 1;
@@ -203,6 +237,7 @@ public class Player extends Entity {
 	
 //	 Changes player transport
 	public void getOnCar() {
+		hasInteracted = true;
 //		Can only get in car if on foot
 		if(transIdx == 0) {
 			transIdx = 2;
@@ -212,10 +247,14 @@ public class Player extends Entity {
 	// naive method to handle Player interaction
 
 	public void interact() {
+		
+		if(hasInteracted)
+			return;
+		
 		// interate through all "interactable objects"
 		for (Node node: this.game.nodes) {
 			// if overlaps
-			if (this.rectangle.overlaps(node.rectangle)) {
+			if (canGetOnTransport(node.rectangle)) {
 				// if overlaps
 				// call togglePlanning
 				// pass Routes of overlapped Node
@@ -234,8 +273,14 @@ public class Player extends Entity {
 	public Transport[] getTransport() {
 		return transport;
 	}
-
+	
+	
 	public int getTransIdx() {
 		return transIdx;
+	}
+	
+//	Can the player interact with an object
+	public boolean canGetOnTransport(Rectangle rect) {
+		return !hasInteracted && getPlayerRectangle().overlaps(rect) && transIdx == FOOT;
 	}
 }
