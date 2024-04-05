@@ -299,7 +299,7 @@ public class GameScreen implements Screen, Json.Serializable {
 
 		pauseUI = new Pause(game, this, pauseStage, skin);
 
-		worldMap = new WorldMap(OrthogonalTiledMapRenderer renderer,);
+		worldMap = new WorldMap(renderer, map, batch);
 
 		
 
@@ -342,7 +342,7 @@ public class GameScreen implements Screen, Json.Serializable {
 		}
 
 		else if (showWorldMap) {
-			worldMap.render();
+			worldMap.render(player, gems, camera);
 
 
 		} else {

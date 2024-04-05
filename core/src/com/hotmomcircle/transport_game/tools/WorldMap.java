@@ -4,25 +4,34 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthoCachedTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.utils.Array;
 import com.hotmomcircle.transport_game.entity.Gem;
+import com.hotmomcircle.transport_game.entity.Player;
 
 public class WorldMap {
     
 
-    public WorldMap(OrthogonalTiledMapRenderer renderer){
-        ShapeRenderer shape;
-        double panSpeed = 250;
-        int mapWidthInPixels;
-        int mapHeightInPixels;
+    ShapeRenderer shape;
+    double panSpeed = 250;
+    int mapWidthInPixels;
+    int mapHeightInPixels;
+    OrthographicCamera worldMap;
+    TiledMap map;
+    OrthogonalTiledMapRenderer renderer;
+    SpriteBatch batch;
 
 
+    public WorldMap(OrthogonalTiledMapRenderer rend, TiledMap map, SpriteBatch bat){
 
-        public OrthographicCamera worldMap;
+        batch = bat;
+        renderer = rend;
         // Rectangle currentScreenMarker;
     
         // for world map
@@ -42,7 +51,7 @@ public class WorldMap {
 
     }
 
-    public void render(){
+    public void render(Player player, Array<Gem> gems, Camera camera){
         
 			worldMap.zoom = MathUtils.clamp(worldMap.zoom, 0.1f, 1f);
 			if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
