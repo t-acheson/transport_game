@@ -2,16 +2,21 @@ package com.hotmomcircle.transport_game;
 
 import java.util.ArrayList;
 
+import javax.security.sasl.SaslException;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -29,6 +34,7 @@ import com.hotmomcircle.transport_game.object.Car_OBJ;
 import com.hotmomcircle.transport_game.object.Transport_OBJ;
 import com.hotmomcircle.transport_game.entity.Route;
 import com.hotmomcircle.transport_game.tools.Camera;
+import com.hotmomcircle.transport_game.tools.WorldMap;
 import com.hotmomcircle.transport_game.entity.Node;
 import com.hotmomcircle.transport_game.ui.Planning;
 import com.hotmomcircle.transport_game.ui.Points;
@@ -39,9 +45,12 @@ import com.hotmomcircle.transport_game.ui.gemCounter;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.MathUtils;
 //
+import com.badlogic.gdx.math.Rectangle;
 
 // Screen of the level the player is currently playing
 // Separation of game and level to allow 
@@ -65,6 +74,11 @@ public class GameScreen implements Screen, Json.Serializable {
 	public ArrayList<Transport_OBJ> transport_OBJs = new ArrayList<Transport_OBJ>();
 	   
 	public Camera camera;
+	// for the world map on press of "M"
+	boolean showWorldMap = false;
+	WorldMap worldMap;
+	
+	// Texture playerMap = new Texture("assets/phoneScreen.png");
 	
 	public Array<Gem> gems;
 
@@ -201,6 +215,7 @@ public class GameScreen implements Screen, Json.Serializable {
 
 		// initialise Node array
 		nodes = new Array<Node>();
+		
 
 		for (MapLayer layer : map.getLayers()) {
             // Check if the layer contains objects
@@ -283,6 +298,12 @@ public class GameScreen implements Screen, Json.Serializable {
 		Gdx.input.setInputProcessor(pauseStage);
 
 		pauseUI = new Pause(game, this, pauseStage, skin);
+
+		worldMap = new WorldMap(renderer, map, batch);
+
+		
+
+		
 	}
 
 	@Override
@@ -303,11 +324,26 @@ public class GameScreen implements Screen, Json.Serializable {
 		if(Gdx.input.isKeyPressed(Input.Keys.R) && GAME_STATE != GAME_RUNNING) {
 			resume();
 		} 
+
+		// shows world map
+		if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
+			showWorldMap ^= true; // Toggle the state of showWorldMap
+			if (showWorldMap) {
+				System.out.println("show map");
+			} else {
+				System.out.println("hide map");
+				// shape.dispose();
+			}
+		}
+
 		if (GAME_STATE == GAME_PAUSED){
 			pauseStage.act(delta);
 			pauseStage.draw();
+		}
 
-			
+		else if (showWorldMap) {
+			worldMap.render(player, gems, camera);
+
 
 		} else {
 
@@ -318,6 +354,7 @@ public class GameScreen implements Screen, Json.Serializable {
 			renderer.setView(camera);
 			camera.setPosition();
 			// camera.position.set(player.getX(),player.getY(), 0);
+
 
 			renderer.render();
 			//
