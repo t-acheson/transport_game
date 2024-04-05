@@ -53,8 +53,8 @@ public class gemArrow extends Actor {
         try {
             // Load arrow
             Texture arrowTexture = new Texture(Gdx.files.internal("arrow.png"));
-            TextureRegion arrowRegion = new TextureRegion(arrowTexture);
-            arrowImage = new Image(arrowRegion);
+            arrowImage = new Image(arrowTexture);
+            arrowImage.setOrigin(arrowImage.getWidth() / 2, arrowImage.getHeight() / 2);
             
             // Calls findClosestGem
             // Returns gem 

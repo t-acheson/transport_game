@@ -247,8 +247,8 @@ public class GameScreen implements Screen, Json.Serializable {
 		// table to hold UI elements
 		table = new Table();
 		table.setFillParent(true);
-		table.defaults().width(game.SCREEN_WIDTH / 8).expandX().fillX();
-		table.setWidth(game.SCREEN_WIDTH / 8);
+		table.defaults().width(game.SCREEN_WIDTH / 9).expandX().fillX();
+		table.setWidth(game.SCREEN_WIDTH / 9);
 		table.left().top();
 
 		// UI scores
@@ -268,7 +268,7 @@ public class GameScreen implements Screen, Json.Serializable {
 		table.add(carbon).fillX().uniformX();
 		table.add(new Label("Fresh: ", skin));
 		table.add(freshness).fillX().uniformX();
-
+		// table.add(new Label("Arrow", skin));
 		// table.add(gemArrowUI).fillX().uniformX();
 
 		// Assuming you have a Skin instance for your UI
