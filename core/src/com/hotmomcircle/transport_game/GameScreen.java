@@ -218,7 +218,6 @@ public class GameScreen implements Screen, Json.Serializable {
 		}
 
 		obstacles = new ArrayList<Obstacle>(); 
-		obstacles.add(new Obstacle(900, 200, 200, 200));
 
 		// initialise Node array
 		nodes = new Array<Node>();
@@ -237,6 +236,17 @@ public class GameScreen implements Screen, Json.Serializable {
 					nodes.add(new Node(this, locX, locY, 16, 16, "gem.png", routes));
                 }
             }
+
+			if (layer.getName().equals("collidable")) {
+				for (MapObject obstacle: layer.getObjects()) {
+					float x = obstacle.getProperties().get("x", Float.class);
+                    float y = obstacle.getProperties().get("y", Float.class);
+					float width = obstacle.getProperties().get("width", Float.class);
+                    float height = obstacle.getProperties().get("height", Float.class);
+					System.out.println(x + " " + y + " "  + width  + " " + height);
+					obstacles.add(new Obstacle(x, y, width, height));
+				}
+			}
 		}
 
 
