@@ -12,8 +12,6 @@ import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 
-import com.hotmomcircle.transport_game.entity.Collidable;
-
 // Holds an instance of the game
 // Decides which level the player is playing and loads in the logic 
 // Will also load in screens for prologue, level start, end, etc.
@@ -28,8 +26,6 @@ public class ParentGame implements Json.Serializable{
 	
 	int currLevel;
 	int maxLevel;
-
-	public ArrayList<Collidable> collidables;
 	
 	String name = "test";
 	
@@ -61,9 +57,6 @@ public class ParentGame implements Json.Serializable{
 		//loading map 
 		assetManager.setLoader(TiledMap.class,  new TmxMapLoader());
 		assetManager.load("trialMapwithObjects.tmx", TiledMap.class);
-
-		collidables = new ArrayList<Collidable>(); 
-		collidables.add(new Collidable(900, 200, 200, 200));
 		
 //		Load in the player transport
 		String[] transportPaths = {

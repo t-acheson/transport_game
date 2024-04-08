@@ -36,6 +36,7 @@ import com.hotmomcircle.transport_game.entity.Route;
 import com.hotmomcircle.transport_game.tools.Camera;
 import com.hotmomcircle.transport_game.tools.WorldMap;
 import com.hotmomcircle.transport_game.entity.Node;
+import com.hotmomcircle.transport_game.entity.Obstacle;
 import com.hotmomcircle.transport_game.ui.Planning;
 import com.hotmomcircle.transport_game.ui.Points;
 import com.hotmomcircle.transport_game.ui.gemArrow;
@@ -116,6 +117,9 @@ public class GameScreen implements Screen, Json.Serializable {
 	//gemArrow instance 
 	private gemArrow gemArrowUI;
 	private gemCounter gemCounter;
+
+	// Obstacles
+	public ArrayList<Obstacle> obstacles; 
 // New level
 	public GameScreen(TransportGame game, ParentGame parentGame) {
 		this.game = game;
@@ -212,6 +216,9 @@ public class GameScreen implements Screen, Json.Serializable {
 		for (int i = 1; i < 4; i++) {
 			routes.add(new Route(this, 0, 0, 32, 32, "gem.png", 900, i * 100 + 100));
 		}
+
+		obstacles = new ArrayList<Obstacle>(); 
+		obstacles.add(new Obstacle(900, 200, 200, 200));
 
 		// initialise Node array
 		nodes = new Array<Node>();

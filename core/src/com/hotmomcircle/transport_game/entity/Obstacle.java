@@ -2,9 +2,9 @@ package com.hotmomcircle.transport_game.entity;
 
 import com.badlogic.gdx.math.Rectangle;
 
-public class Collidable extends Entity{
+public class Obstacle extends Entity{
     
-    public Collidable (float x, float y, float w, float h) {
+    public Obstacle (float x, float y, float w, float h) {
         this.x = x;
         this.y = y;
 

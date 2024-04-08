@@ -171,8 +171,8 @@ public class Player extends Entity {
 			dy = dy / movementMagnitude * speed;
 		}
 
-		for (Collidable c: this.game.parentGame.collidables) {
-			int collision = handleCollision(c.rectangle);
+		for (Obstacle obstacle: this.game.obstacles) {
+			int collision = handleCollision(obstacle.rectangle);
 
 			switch (collision) {
 				case 1:
