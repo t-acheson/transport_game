@@ -172,10 +172,19 @@ public class Player extends Entity {
 		}
 
 		for (Collidable c: this.game.parentGame.collidables) {
-			if (detectCollision(c)) {
-				dx = 0;
-				dy = 0;
-				break;
+			int collision = handleCollision(c.rectangle);
+
+			switch (collision) {
+				case 1:
+					dx = 0;
+					break;
+
+				case 2:
+					dy = 0;
+					break;
+			
+				default:
+					break;
 			}
 		}
 
@@ -195,14 +204,37 @@ public class Player extends Entity {
 		hasInteracted = false;
 	}
 
-	private boolean detectCollision(Collidable collidable) {
-        if (this.rectangle.overlaps(collidable.getRectangle())) {
-			return true;
-    }	else {
-		return false;
+	private int handleCollision(Rectangle obstacle) {
+		if (this.rectangle.overlaps(obstacle)) {
+			// Calculate the overlap between player and obstacle
+			float overlapX = Math.max(0, Math.min(x + this.rectangle.getWidth(), obstacle.x + obstacle.width) - Math.max(x, obstacle.x));
+			float overlapY = Math.max(0, Math.min(y + this.rectangle.getHeight(), obstacle.y + obstacle.height) - Math.max(y, obstacle.y));
+	
+			// Adjust player position based on overlap and movement direction
+			if (overlapX < overlapY) {
+				// Adjust horizontally
+				if (x < obstacle.x) {
+					x -= overlapX;
+				} else {
+					x += overlapX;
+				}
+				// Stop horizontal movement
+				return 1;
+			} else {
+				// Adjust vertically
+				if (y < obstacle.y) {
+					y -= overlapY;
+				} else {
+					y += overlapY;
+				}
+				// Stop vertical movement
+				return 2;
+			}
+		}
+		return 0;
 	}
 	
-	}
+	
 	public int getSpeed() {
 		return transport[transIdx].speed;
 	}
