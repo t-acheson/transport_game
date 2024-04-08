@@ -171,6 +171,14 @@ public class Player extends Entity {
 			dy = dy / movementMagnitude * speed;
 		}
 
+		for (Collidable c: this.game.parentGame.collidables) {
+			if (detectCollision(c)) {
+				dx = 0;
+				dy = 0;
+				break;
+			}
+		}
+
 		// finally apply the movement
 		x += dx;
 		y += dy;
@@ -186,7 +194,15 @@ public class Player extends Entity {
 	
 		hasInteracted = false;
 	}
+
+	private boolean detectCollision(Collidable collidable) {
+        if (this.rectangle.overlaps(collidable.getRectangle())) {
+			return true;
+    }	else {
+		return false;
+	}
 	
+	}
 	public int getSpeed() {
 		return transport[transIdx].speed;
 	}

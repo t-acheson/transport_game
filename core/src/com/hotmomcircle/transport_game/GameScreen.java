@@ -57,7 +57,7 @@ import com.badlogic.gdx.math.Rectangle;
 public class GameScreen implements Screen, Json.Serializable {
 
 	TransportGame game;
-	ParentGame parentGame;
+	public ParentGame parentGame;
 
 	SpriteBatch batch;
 
