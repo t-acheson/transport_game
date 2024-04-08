@@ -18,7 +18,7 @@ public class WorldMap {
     
 
     ShapeRenderer shape;
-    double panSpeed = 250;
+    double panSpeed = 10000;
     int mapWidthInPixels;
     int mapHeightInPixels;
     OrthographicCamera worldMap;
@@ -31,7 +31,6 @@ public class WorldMap {
 
         batch = bat;
         renderer = rend;
-        // Rectangle currentScreenMarker;
     
         // for world map
         TiledMapTileLayer worldMapLayer = (TiledMapTileLayer) map.getLayers().get(1);
@@ -55,25 +54,23 @@ public class WorldMap {
     public void render(Player player, Array<Gem> gems, Camera camera){
         
 			worldMap.zoom = MathUtils.clamp(worldMap.zoom, 0.1f, 1f);
-			if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+			if (Gdx.input.isKeyPressed(Input.Keys.EQUALS)) {
 				worldMap.zoom -= 0.02; // Zoom in
-				panSpeed -= 250;
 			}
 			
-			if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+			if (Gdx.input.isKeyPressed(Input.Keys.MINUS)) {
 				worldMap.zoom += 0.02; // Zoom out
-				panSpeed += 250;
-			}
-			if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-				worldMap.translate((float) (-panSpeed * Gdx.graphics.getDeltaTime()), 0);
 			}
 			if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+				worldMap.translate((float) (-panSpeed * Gdx.graphics.getDeltaTime()), 0);
+			}
+			if (Gdx.input.isKeyPressed(Input.Keys.D)) {
 				worldMap.translate((float)(panSpeed * Gdx.graphics.getDeltaTime()), 0);
 			}
-			if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+			if (Gdx.input.isKeyPressed(Input.Keys.W)) {
 				worldMap.translate(0, (float)(panSpeed * Gdx.graphics.getDeltaTime()));
 			}
-			if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+			if (Gdx.input.isKeyPressed(Input.Keys.S)) {
 				worldMap.translate(0, (float) (-panSpeed * Gdx.graphics.getDeltaTime()));
 			}
 			// Calculate the edges of the worldMap view in world coordinates
@@ -97,7 +94,6 @@ public class WorldMap {
 			renderer.render();
 			batch.begin();
 			try{
-				// batch.draw(playerMap,0,0);
 				batch.draw(player.image, player.getX(),player.getY(), 256,256);
 				for (Gem gem : gems) {
 					batch.draw(gem.image, gem.getX(), gem.getY(), 750,750);

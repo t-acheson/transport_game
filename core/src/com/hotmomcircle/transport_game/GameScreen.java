@@ -304,6 +304,7 @@ public class GameScreen implements Screen, Json.Serializable {
 
 		worldMap = new WorldMap(renderer, map, batch);
 		worldMapStage = new Stage(new ScreenViewport());
+
 		worldMapUI = new WorldMapUI(game, this, worldMapStage, skin);
 
 		
@@ -348,6 +349,7 @@ public class GameScreen implements Screen, Json.Serializable {
 		else if (showWorldMap) {
 			worldMap.render(player, gems, camera);
 			worldMapUI.showUI();
+			worldMapStage.draw();
 
 
 		} else {

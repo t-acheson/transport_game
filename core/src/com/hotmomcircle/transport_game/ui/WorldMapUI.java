@@ -36,7 +36,7 @@ public class WorldMapUI {
         uiTable.row().pad(10, 0, 10, 0);
         uiTable.bottom();
 
-        Label zoomLabel = new Label("Zoom: ↑↓", skin);
+        Label zoomLabel = new Label("Zoom: +/-", skin);
         Label panLabel = new Label("Pan: WASD", skin);
         Label closeMapLabel = new Label("Close Map: M", skin);
 
