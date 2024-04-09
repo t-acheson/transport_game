@@ -58,7 +58,6 @@ public class GameScreen implements Screen, Json.Serializable {
 
 	Texture img;
 	public Player player;
-	public ArrayList<Transport_OBJ> transport_OBJs = new ArrayList<Transport_OBJ>();
 	public ArrayList<Transport_OBJ> bike_OBJs = new ArrayList<Transport_OBJ>();
 	public ArrayList<Transport_OBJ> car_OBJs = new ArrayList<Transport_OBJ>();
 	   
@@ -116,24 +115,23 @@ public class GameScreen implements Screen, Json.Serializable {
 		int pY = levelData.get("player").getInt("y");
 		player = new Player(this, pX, pY, 32, 32, "./foot/player_down1.png");
 		
+//		Load gems from levels file
 		for (JsonValue gemLoc = levelData.get("gems").child; gemLoc != null; gemLoc = gemLoc.next) {
 			gems.add(new Gem(this, gemLoc.getInt("x"), gemLoc.getInt("y"), 16, 16));
 		}
 		
+//		Load cars from levels file
 		for (JsonValue carLoc = levelData.get("cars").child; carLoc != null; carLoc = carLoc.next) {
 			car_OBJs.add(new Car_OBJ(this, carLoc.getInt("x"), carLoc.getInt("y"), true));
 		}
 		
+		
+//		Load bikes from levels file
 		for (JsonValue bikeLoc = levelData.get("bikes").child; bikeLoc != null; bikeLoc = bikeLoc.next) {
-			car_OBJs.add(new Car_OBJ(this, bikeLoc.getInt("x"), bikeLoc.getInt("y"), true));
+			bike_OBJs.add(new Bicycle_OBJ(this, bikeLoc.getInt("x"), bikeLoc.getInt("y"), true));
 		}
 		
-		
-		transport_OBJs.add(new Bicycle_OBJ(this, 300, 100, true));
-		transport_OBJs.add(new Bicycle_OBJ(this, 400, 100, true));
-		transport_OBJs.add(new Bicycle_OBJ(this, 500, 100, true));
-		
-		transport_OBJs.add(new Car_OBJ(this, 400, 150, true));
+
 		
 		
 
@@ -246,11 +244,7 @@ public class GameScreen implements Screen, Json.Serializable {
 
 		
 		
-		transport_OBJs.add(new Bicycle_OBJ(this, 300, 100, true));
-		transport_OBJs.add(new Bicycle_OBJ(this, 400, 100, true));
-		transport_OBJs.add(new Bicycle_OBJ(this, 500, 100, true));
-		
-		transport_OBJs.add(new Car_OBJ(this, 400, 150, true));
+
 		
 		// create the camera and the SpriteBatch
 		camera = new Camera(game, player);
@@ -377,13 +371,8 @@ public class GameScreen implements Screen, Json.Serializable {
 			}
 
 		
-		
-		for(int i = 0; i < transport_OBJs.size(); i++) {
-				transport_OBJs.get(i).update(i);
-		}
-		
 		for(int i = 0; i < car_OBJs.size(); i++) {
-			car_OBJS.get(i).update(i);
+			car_OBJs.get(i).update(i);
 	}
 		
 		for(int i = 0; i < bike_OBJs.size(); i++) {
@@ -401,11 +390,19 @@ public class GameScreen implements Screen, Json.Serializable {
 
 		batch.begin();
 		try {
-			for (Transport_OBJ transport: transport_OBJs) {
+			for (Transport_OBJ transport: car_OBJs) {
 				if (transport != null) {					
 					transport.render(batch);
 				}
 			}
+			
+			for (Transport_OBJ transport: bike_OBJs) {
+				if (transport != null) {		
+					transport.render(batch);
+				}
+			}
+			
+			
 			
 			for (Gem gem : gems) {
 				gem.render(batch);
@@ -483,11 +480,11 @@ public class GameScreen implements Screen, Json.Serializable {
 	}
 	
 	public void addBike(int x, int y) {
-		transport_OBJs.add(new Bicycle_OBJ(this, x, y, true));
+		bike_OBJs.add(new Bicycle_OBJ(this, x, y, true));
 	}
 	
 	public void addCar(int x, int y) {
-		transport_OBJs.add(new Car_OBJ(this, x, y, true));
+		car_OBJs.add(new Car_OBJ(this, x, y, true));
 	}
 
 	@Override
