@@ -53,8 +53,8 @@ public class gemArrow extends Actor {
         try {
             // Load arrow
             Texture arrowTexture = new Texture(Gdx.files.internal("arrow.png"));
-            TextureRegion arrowRegion = new TextureRegion(arrowTexture);
-            arrowImage = new Image(arrowRegion);
+            arrowImage = new Image(arrowTexture);
+            arrowImage.setOrigin(arrowImage.getWidth() / 2, arrowImage.getHeight() / 2);
             
             // Calls findClosestGem
             // Returns gem 
@@ -68,7 +68,7 @@ public class gemArrow extends Actor {
             arrowImage.setRotation((float) angleToGem);
     
             // Add arrowImage to the table
-            table.add(arrowImage).size(arrowTexture.getWidth(), arrowTexture.getHeight()).pad(20);
+            table.add(arrowImage).size(arrowTexture.getWidth(), arrowTexture.getHeight()).pad(1);
         } catch (Exception e) {
             // Handle any exceptions that might occur
             e.printStackTrace();

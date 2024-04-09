@@ -19,6 +19,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFont
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
@@ -261,8 +262,8 @@ public class GameScreen implements Screen, Json.Serializable {
 		// table to hold UI elements
 		table = new Table();
 		table.setFillParent(true);
-		table.defaults().width(game.SCREEN_WIDTH / 6).expandX().fillX();
-		table.setWidth(game.SCREEN_WIDTH / 6);
+		table.defaults().width(game.SCREEN_WIDTH / 9).expandX().fillX();
+		table.setWidth(game.SCREEN_WIDTH / 9);
 		table.left().top();
 
 		// UI scores
@@ -273,16 +274,17 @@ public class GameScreen implements Screen, Json.Serializable {
 		gemArrowUI = new gemArrow(skin, player, gems, table); 
 		gemCounter = new gemCounter(gems, skin);
 
-		table.add(gemArrowUI).top().left();
-		table.add(gemCounter).bottom().left();
-
 		// fill table with UI scores
+		table.add(new Label("Gems: ", skin));
+		table.add(gemCounter).fillX().uniformX();
 		table.add(new Label("Points: ", skin));
 		table.add(points).fillX().uniformX();
 		table.add(new Label("Carbon: ", skin));
 		table.add(carbon).fillX().uniformX();
-		table.add(new Label("Freshness: ", skin));
+		table.add(new Label("Fresh: ", skin));
 		table.add(freshness).fillX().uniformX();
+		// table.add(new Label("Arrow", skin));
+		// table.add(gemArrowUI).fillX().uniformX();
 
 		// Assuming you have a Skin instance for your UI
 		
