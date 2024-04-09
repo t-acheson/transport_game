@@ -1,5 +1,7 @@
 package com.hotmomcircle.transport_game;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.files.FileHandle;
@@ -24,13 +26,21 @@ public class ParentGame implements Json.Serializable{
 	
 	int currLevel;
 	int maxLevel;
+	JsonValue levelData;
+	ArrayList<JsonValue> levels;
 	
 	String name = "test";
+
 	
 //	Constructor for new game
 	public ParentGame(TransportGame game) {
 		this.game = game;
 		init();
+		loadLevels();
+		
+//		System.out.println(levels.getInt("time"));
+		
+		
 		
 		currLevel = 0;
 		maxLevel = 0;
@@ -43,6 +53,7 @@ public class ParentGame implements Json.Serializable{
 	public ParentGame(TransportGame game, JsonValue jsonData) {
 		this.game = game;
 		init();
+		loadLevels();
 		read(null, jsonData);
 		
 	}
@@ -89,6 +100,19 @@ public class ParentGame implements Json.Serializable{
 			
 		}
 		
+	}
+
+//	Loads levels from the levels.json file
+	public void loadLevels() {
+        FileHandle fileHandle = Gdx.files.internal("levels/levels.json"); // w
+        String text = fileHandle.readString();
+        
+        levelData = new JsonReader().parse(text).get("levels");
+        
+        for (JsonValue level = levelData.child; level != null; level = level.next){
+ 
+                levels.add(level);
+        }
 	}
 	
 //	Save the game
