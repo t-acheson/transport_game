@@ -59,6 +59,8 @@ public class GameScreen implements Screen, Json.Serializable {
 	Texture img;
 	public Player player;
 	public ArrayList<Transport_OBJ> transport_OBJs = new ArrayList<Transport_OBJ>();
+	public ArrayList<Transport_OBJ> bike_OBJs = new ArrayList<Transport_OBJ>();
+	public ArrayList<Transport_OBJ> car_OBJs = new ArrayList<Transport_OBJ>();
 	   
 	public Camera camera;
 	// for the world map on press of "M"
@@ -67,7 +69,7 @@ public class GameScreen implements Screen, Json.Serializable {
 	
 	// Texture playerMap = new Texture("assets/phoneScreen.png");
 	
-	public Array<Gem> gems;
+	public Array<Gem> gems = new Array<Gem>();;
 
 	// list of Nodes for interaction
 	public Array<Node> nodes;
@@ -104,23 +106,42 @@ public class GameScreen implements Screen, Json.Serializable {
 	private gemArrow gemArrowUI;
 	private gemCounter gemCounter;
 // New level
-	public GameScreen(TransportGame game, ParentGame parentGame) {
+	public GameScreen(TransportGame game, ParentGame parentGame, JsonValue levelData) {
 		this.game = game;
 		this.parentGame = parentGame;
 		
 		loadAssets();
-		player = new Player(this, 700, 300, 32, 32, "./foot/player_down1.png");
 		
-		gems = new Array<Gem>();
-		gems.add(new Gem(this, 400, 400, 16, 16));
-		gems.add(new Gem(this, 200, 200, 16, 16));
-		gems.add(new Gem(this, 300, 300, 16, 16));
+		int pX = levelData.get("player").getInt("x");
+		int pY = levelData.get("player").getInt("y");
+		player = new Player(this, pX, pY, 32, 32, "./foot/player_down1.png");
+		
+		for (JsonValue gemLoc = levelData.get("gems").child; gemLoc != null; gemLoc = gemLoc.next) {
+			gems.add(new Gem(this, gemLoc.getInt("x"), gemLoc.getInt("y"), 16, 16));
+		}
+		
+		for (JsonValue carLoc = levelData.get("cars").child; carLoc != null; carLoc = carLoc.next) {
+			car_OBJs.add(new Car_OBJ(this, carLoc.getInt("x"), carLoc.getInt("y"), true));
+		}
+		
+		for (JsonValue bikeLoc = levelData.get("bikes").child; bikeLoc != null; bikeLoc = bikeLoc.next) {
+			car_OBJs.add(new Car_OBJ(this, bikeLoc.getInt("x"), bikeLoc.getInt("y"), true));
+		}
+		
+		
+		transport_OBJs.add(new Bicycle_OBJ(this, 300, 100, true));
+		transport_OBJs.add(new Bicycle_OBJ(this, 400, 100, true));
+		transport_OBJs.add(new Bicycle_OBJ(this, 500, 100, true));
+		
+		transport_OBJs.add(new Car_OBJ(this, 400, 150, true));
+		
+		
 
 		initializeGame();
 	}
 	
 //	Load level from json
-	public GameScreen(TransportGame game, ParentGame parentGame, JsonValue jsonMap) {
+	public GameScreen(TransportGame game, ParentGame parentGame, JsonValue levelData, JsonValue jsonMap) {
 		this.game = game;
 		this.font = game.font;
 		this.skin = game.skin;
@@ -360,6 +381,14 @@ public class GameScreen implements Screen, Json.Serializable {
 		for(int i = 0; i < transport_OBJs.size(); i++) {
 				transport_OBJs.get(i).update(i);
 		}
+		
+		for(int i = 0; i < car_OBJs.size(); i++) {
+			car_OBJS.get(i).update(i);
+	}
+		
+		for(int i = 0; i < bike_OBJs.size(); i++) {
+			bike_OBJs.get(i).update(i);
+	}
 
 		// tell the camera to update its matrices.
 		camera.update();

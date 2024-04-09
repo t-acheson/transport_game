@@ -27,7 +27,7 @@ public class ParentGame implements Json.Serializable{
 	int currLevel;
 	int maxLevel;
 	JsonValue levelData;
-	ArrayList<JsonValue> levels;
+	ArrayList<JsonValue> levels = new ArrayList<>();
 	
 	String name = "test";
 
@@ -37,14 +37,9 @@ public class ParentGame implements Json.Serializable{
 		this.game = game;
 		init();
 		loadLevels();
-		
-//		System.out.println(levels.getInt("time"));
-		
-		
-		
 		currLevel = 0;
 		maxLevel = 0;
-		gameScreen = new GameScreen(game, this);
+		gameScreen = new GameScreen(game, this, levelData.get(currLevel));
 		game.setScreen(gameScreen);
 		
 	}
