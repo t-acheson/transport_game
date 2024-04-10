@@ -120,7 +120,7 @@ public class GameScreen implements Screen, Json.Serializable {
 		this.parentGame = parentGame;
 		
 		loadAssets();
-		player = new Player(this, 700, 300, 32, 32, "./foot/player_down1.png");
+		player = new Player(this, 6300, 4500, 32, 32, "./foot/player_down1.png");
 		
 		gems = new Array<Gem>();
 		gems.add(new Gem(this, 400, 400, 16, 16));
