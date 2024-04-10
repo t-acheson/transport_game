@@ -140,7 +140,7 @@ public class ParentGame implements Json.Serializable{
 		currLevel = jsonData.getInt("currLevel");
 		maxLevel = jsonData.getInt("maxLevel");
 		
-		gameScreen = new GameScreen(game, this, jsonData.get("currGame"));
+		gameScreen = new GameScreen(game, this, levelData.get(currLevel), jsonData.get("currGame"));
 		game.setScreen(gameScreen);
 	}
 	
