@@ -188,6 +188,24 @@ public class Player extends Entity {
 			}
 		}
 
+		if (transIdx == CAR) {
+			boolean onRoad = false;
+			Obstacle boundary_road = null;
+
+			for (Obstacle road: this.game.roads) {
+				if (this.rectangle.overlaps(road.rectangle)) {
+					onRoad = true;
+					boundary_road = road;
+					break;
+				}
+			}
+
+			if (!onRoad) {
+				dx = 0;
+				dy = 0;
+				}
+		}
+
 		// finally apply the movement
 		x += dx;
 		y += dy;
