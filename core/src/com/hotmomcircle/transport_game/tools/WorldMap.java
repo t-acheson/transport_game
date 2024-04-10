@@ -40,8 +40,9 @@ public class WorldMap {
     
         int mapHeightInTiles = worldMapLayer.getHeight();
         int tileHeight = (int) worldMapLayer.getTileHeight();
-        mapHeightInPixels = mapHeightInTiles * tileHeight*3;
+        mapHeightInPixels = mapHeightInTiles * tileHeight*3; //TODO change the *3 to variable as it is scale of player which may change 
     
+		
         
         worldMap = new OrthographicCamera();
         worldMap.setToOrtho(false, mapWidthInPixels, mapHeightInPixels);
