@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Array;
@@ -29,6 +30,7 @@ import com.hotmomcircle.transport_game.tools.WorldMap;
 import com.hotmomcircle.transport_game.entity.Node;
 import com.hotmomcircle.transport_game.ui.Planning;
 import com.hotmomcircle.transport_game.ui.Points;
+import com.hotmomcircle.transport_game.ui.WorldMapUI;
 import com.hotmomcircle.transport_game.ui.gemArrow;
 import com.hotmomcircle.transport_game.ui.Pause;
 import com.hotmomcircle.transport_game.ui.gemCounter;
@@ -65,6 +67,8 @@ public class GameScreen implements Screen, Json.Serializable {
 	// for the world map on press of "M"
 	boolean showWorldMap = false;
 	WorldMap worldMap;
+	WorldMapUI worldMapUI;
+	Stage worldMapStage;
 	
 	// Texture playerMap = new Texture("assets/phoneScreen.png");
 	
@@ -142,13 +146,21 @@ public class GameScreen implements Screen, Json.Serializable {
 	public GameScreen(TransportGame game, ParentGame parentGame, JsonValue levelData, JsonValue jsonMap) {
 		this.game = game;
 		this.font = game.font;
-		this.skin = game.skin;
-
-		this.batch = game.batch;
-		
+		this.parentGame = parentGame;
 		// for the pause / play feature
-		GAME_STATE = GAME_RUNNING;
 
+		loadAssets();
+//		Read in the serializable data
+		read(null, jsonMap);
+		
+//		For now write the gems in manually, these will be serialized too
+		gems = new Array<Gem>();
+		gems.add(new Gem(this, 400, 400, 16, 16));
+		gems.add(new Gem(this, 200, 200, 16, 16));
+		gems.add(new Gem(this, 300, 300, 16, 16));
+		initializeGame();
+		
+		
 	}
 //		Load assets - Load all textures, maps, etc here with the assetManager before going to the game screen.
 //		Separated from initialize game as assets need to be loaded before player is loaded, player needs to be loaded before rest of game is initialized
@@ -263,8 +275,8 @@ public class GameScreen implements Screen, Json.Serializable {
 		// table to hold UI elements
 		table = new Table();
 		table.setFillParent(true);
-		table.defaults().width(game.SCREEN_WIDTH / 6).expandX().fillX();
-		table.setWidth(game.SCREEN_WIDTH / 6);
+		table.defaults().width(game.SCREEN_WIDTH / 9).expandX().fillX();
+		table.setWidth(game.SCREEN_WIDTH / 9);
 		table.left().top();
 
 		// UI scores
@@ -275,16 +287,17 @@ public class GameScreen implements Screen, Json.Serializable {
 		gemArrowUI = new gemArrow(skin, player, gems, table); 
 		gemCounter = new gemCounter(gems, skin);
 
-		table.add(gemArrowUI).top().left();
-		table.add(gemCounter).bottom().left();
-
 		// fill table with UI scores
+		table.add(new Label("Gems: ", skin));
+		table.add(gemCounter).fillX().uniformX();
 		table.add(new Label("Points: ", skin));
 		table.add(points).fillX().uniformX();
 		table.add(new Label("Carbon: ", skin));
 		table.add(carbon).fillX().uniformX();
-		table.add(new Label("Freshness: ", skin));
+		table.add(new Label("Fresh: ", skin));
 		table.add(freshness).fillX().uniformX();
+		// table.add(new Label("Arrow", skin));
+		// table.add(gemArrowUI).fillX().uniformX();
 
 		// Assuming you have a Skin instance for your UI
 		
@@ -302,6 +315,9 @@ public class GameScreen implements Screen, Json.Serializable {
 		pauseUI = new Pause(game, this, pauseStage, skin);
 
 		worldMap = new WorldMap(renderer, map, batch);
+		worldMapStage = new Stage(new ScreenViewport());
+
+		worldMapUI = new WorldMapUI(game, this, worldMapStage, skin);
 
 		
 
@@ -334,7 +350,6 @@ public class GameScreen implements Screen, Json.Serializable {
 				System.out.println("show map");
 			} else {
 				System.out.println("hide map");
-				// shape.dispose();
 			}
 		}
 
@@ -345,6 +360,8 @@ public class GameScreen implements Screen, Json.Serializable {
 
 		else if (showWorldMap) {
 			worldMap.render(player, gems, camera);
+			worldMapUI.showUI();
+			worldMapStage.draw();
 
 
 		} else {
