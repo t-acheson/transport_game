@@ -8,20 +8,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
@@ -39,6 +33,7 @@ import com.hotmomcircle.transport_game.entity.Node;
 import com.hotmomcircle.transport_game.entity.Obstacle;
 import com.hotmomcircle.transport_game.ui.Planning;
 import com.hotmomcircle.transport_game.ui.Points;
+import com.hotmomcircle.transport_game.ui.WorldMapUI;
 import com.hotmomcircle.transport_game.ui.gemArrow;
 import com.hotmomcircle.transport_game.ui.Pause;
 import com.hotmomcircle.transport_game.ui.gemCounter;
@@ -46,12 +41,9 @@ import com.hotmomcircle.transport_game.ui.gemCounter;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.MathUtils;
-//
-import com.badlogic.gdx.math.Rectangle;
+
 
 // Screen of the level the player is currently playing
 // Separation of game and level to allow 
@@ -78,6 +70,8 @@ public class GameScreen implements Screen, Json.Serializable {
 	// for the world map on press of "M"
 	boolean showWorldMap = false;
 	WorldMap worldMap;
+	WorldMapUI worldMapUI;
+	Stage worldMapStage;
 	
 	// Texture playerMap = new Texture("assets/phoneScreen.png");
 	
@@ -280,8 +274,8 @@ public class GameScreen implements Screen, Json.Serializable {
 		// table to hold UI elements
 		table = new Table();
 		table.setFillParent(true);
-		table.defaults().width(game.SCREEN_WIDTH / 6).expandX().fillX();
-		table.setWidth(game.SCREEN_WIDTH / 6);
+		table.defaults().width(game.SCREEN_WIDTH / 9).expandX().fillX();
+		table.setWidth(game.SCREEN_WIDTH / 9);
 		table.left().top();
 
 		// UI scores
@@ -292,16 +286,17 @@ public class GameScreen implements Screen, Json.Serializable {
 		gemArrowUI = new gemArrow(skin, player, gems, table); 
 		gemCounter = new gemCounter(gems, skin);
 
-		table.add(gemArrowUI).top().left();
-		table.add(gemCounter).bottom().left();
-
 		// fill table with UI scores
+		table.add(new Label("Gems: ", skin));
+		table.add(gemCounter).fillX().uniformX();
 		table.add(new Label("Points: ", skin));
 		table.add(points).fillX().uniformX();
 		table.add(new Label("Carbon: ", skin));
 		table.add(carbon).fillX().uniformX();
-		table.add(new Label("Freshness: ", skin));
+		table.add(new Label("Fresh: ", skin));
 		table.add(freshness).fillX().uniformX();
+		// table.add(new Label("Arrow", skin));
+		// table.add(gemArrowUI).fillX().uniformX();
 
 		// Assuming you have a Skin instance for your UI
 		
@@ -319,6 +314,9 @@ public class GameScreen implements Screen, Json.Serializable {
 		pauseUI = new Pause(game, this, pauseStage, skin);
 
 		worldMap = new WorldMap(renderer, map, batch);
+		worldMapStage = new Stage(new ScreenViewport());
+
+		worldMapUI = new WorldMapUI(game, this, worldMapStage, skin);
 
 		
 
@@ -351,7 +349,6 @@ public class GameScreen implements Screen, Json.Serializable {
 				System.out.println("show map");
 			} else {
 				System.out.println("hide map");
-				// shape.dispose();
 			}
 		}
 
@@ -362,6 +359,8 @@ public class GameScreen implements Screen, Json.Serializable {
 
 		else if (showWorldMap) {
 			worldMap.render(player, gems, camera);
+			worldMapUI.showUI();
+			worldMapStage.draw();
 
 
 		} else {
