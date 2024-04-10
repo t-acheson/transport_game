@@ -237,8 +237,9 @@ public class GameScreen implements Screen, Json.Serializable {
                     float y = obstacle.getProperties().get("y", Float.class);
 					float width = obstacle.getProperties().get("width", Float.class);
                     float height = obstacle.getProperties().get("height", Float.class);
+					int id = obstacle.getProperties().get("id", Integer.class);
 					Obstacle newObstacle = new Obstacle(x, y, width, height);
-					System.out.println(newObstacle.getX() + " " + " " + newObstacle.getY() + " " + newObstacle.rectangle.getWidth() + " " + newObstacle.rectangle.getHeight());
+					System.out.println(id + " " + newObstacle.getX() + " " + " " + newObstacle.getY() + " " + newObstacle.rectangle.getWidth() + " " + newObstacle.rectangle.getHeight());
 					obstacles.add(newObstacle);
 
 				}
