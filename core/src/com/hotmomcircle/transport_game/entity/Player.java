@@ -1,5 +1,7 @@
 package com.hotmomcircle.transport_game.entity;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
@@ -25,6 +27,7 @@ public class Player extends Entity {
 	
 	private String direction = "down";
 	private boolean hasInteracted = false;
+	private ArrayList<Obstacle> boundaryRoads;
 	
 	public Player(GameScreen game, int locX, int locY, int width, int height, String imagePath) {
 		super(game, locX, locY, width, height, imagePath);
@@ -176,11 +179,11 @@ public class Player extends Entity {
 
 			switch (collision) {
 				case 1:
-					dx = 0;
+					dx = -dx;
 					break;
 
 				case 2:
-					dy = 0;
+					dy = -dy;
 					break;
 			
 				default:
@@ -189,21 +192,20 @@ public class Player extends Entity {
 		}
 
 		if (transIdx == CAR) {
-			boolean onRoad = false;
-			Obstacle boundary_road = null;
+			boundaryRoads = new ArrayList<Obstacle>();
 
 			for (Obstacle road: this.game.roads) {
 				if (this.rectangle.overlaps(road.rectangle)) {
-					onRoad = true;
-					boundary_road = road;
-					break;
+					boundaryRoads.add(road);
 				}
 			}
 
-			if (!onRoad) {
+			boolean internalCollision = handleInteralCollision(boundaryRoads, dx, dy);
+
+			if (internalCollision) {
 				dx = 0;
 				dy = 0;
-				}
+			}
 		}
 
 		// finally apply the movement
@@ -230,27 +232,25 @@ public class Player extends Entity {
 	
 			// Adjust player position based on overlap and movement direction
 			if (overlapX < overlapY) {
-				// Adjust horizontally
-				if (x < obstacle.x) {
-					x -= overlapX;
-				} else {
-					x += overlapX;
-				}
-				// Stop horizontal movement
 				return 1;
 			} else {
-				// Adjust vertically
-				if (y < obstacle.y) {
-					y -= overlapY;
-				} else {
-					y += overlapY;
-				}
-				// Stop vertical movement
 				return 2;
 			}
 		}
 		return 0;
 	}
+
+	private boolean handleInteralCollision(ArrayList<Obstacle> boundaryRoads, float dx, float dy) {
+		boolean ob = true;
+		for (Obstacle road: boundaryRoads) {
+			if (road.rectangle.contains(x + dx, y + dy)) {
+				ob = false;
+				break;
+			}
+		}
+		return ob;
+	}
+	
 	
 	
 	public int getSpeed() {
