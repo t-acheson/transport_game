@@ -130,13 +130,21 @@ public class GameScreen implements Screen, Json.Serializable {
 	public GameScreen(TransportGame game, ParentGame parentGame, JsonValue jsonMap) {
 		this.game = game;
 		this.font = game.font;
-		this.skin = game.skin;
-
-		this.batch = game.batch;
-		
+		this.parentGame = parentGame;
 		// for the pause / play feature
-		GAME_STATE = GAME_RUNNING;
 
+		loadAssets();
+//		Read in the serializable data
+		read(null, jsonMap);
+		
+//		For now write the gems in manually, these will be serialized too
+		gems = new Array<Gem>();
+		gems.add(new Gem(this, 400, 400, 16, 16));
+		gems.add(new Gem(this, 200, 200, 16, 16));
+		gems.add(new Gem(this, 300, 300, 16, 16));
+		initializeGame();
+		
+		
 	}
 //		Load assets - Load all textures, maps, etc here with the assetManager before going to the game screen.
 //		Separated from initialize game as assets need to be loaded before player is loaded, player needs to be loaded before rest of game is initialized
