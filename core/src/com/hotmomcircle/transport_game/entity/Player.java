@@ -28,6 +28,7 @@ public class Player extends Entity {
 	private String direction = "down";
 	private boolean hasInteracted = false;
 	private ArrayList<Obstacle> boundaryRoads;
+	private ArrayList<Obstacle> boundaryRoadsAndPaths;
 	
 	public Player(GameScreen game, int locX, int locY, int width, int height, String imagePath) {
 		super(game, locX, locY, width, height, imagePath);
@@ -131,8 +132,8 @@ public class Player extends Entity {
 		
 		
 //		Can press 'B' to get on bike
-		if(Gdx.input.isKeyPressed(Input.Keys.F)) {
-			getOnFoot();
+		if(Gdx.input.isKeyPressed(Input.Keys.B)) {
+			getOnBike();
 		}
 		
 		
@@ -208,6 +209,29 @@ public class Player extends Entity {
 			}
 		}
 
+		if (transIdx == BIKE) {
+			boundaryRoadsAndPaths = new ArrayList<Obstacle>();
+
+			for (Obstacle road: this.game.roads) {
+				if (this.rectangle.overlaps(road.rectangle)) {
+					boundaryRoadsAndPaths.add(road);
+				}
+			}
+
+			for (Obstacle path: this.game.paths) {
+				if (this.rectangle.overlaps(path.rectangle)) {
+					boundaryRoadsAndPaths.add(path);
+				}
+			}
+
+			boolean internalCollision = handleInteralCollision(boundaryRoadsAndPaths, dx, dy);
+
+			if (internalCollision) {
+				dx = 0;
+				dy = 0;
+			}
+		}
+
 		// finally apply the movement
 		x += dx;
 		y += dy;
@@ -250,8 +274,6 @@ public class Player extends Entity {
 		}
 		return ob;
 	}
-	
-	
 	
 	public int getSpeed() {
 		return transport[transIdx].speed;

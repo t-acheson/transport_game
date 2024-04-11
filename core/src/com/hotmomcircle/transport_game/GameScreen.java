@@ -115,6 +115,7 @@ public class GameScreen implements Screen, Json.Serializable {
 	// Obstacles
 	public ArrayList<Obstacle> obstacles; 
 	public ArrayList<Obstacle> roads; 
+	public ArrayList<Obstacle> paths; 
 // New level
 	public GameScreen(TransportGame game, ParentGame parentGame) {
 		this.game = game;
@@ -214,6 +215,7 @@ public class GameScreen implements Screen, Json.Serializable {
 
 		obstacles = new ArrayList<Obstacle>(); 
 		roads = new ArrayList<Obstacle>();
+		paths = new ArrayList<Obstacle>();
 
 		// initialise Node array
 		nodes = new Array<Node>();
@@ -252,6 +254,17 @@ public class GameScreen implements Screen, Json.Serializable {
                     float height = obstacle.getProperties().get("height", Float.class) * 3;
 					Obstacle newRoad = new Obstacle(x, y, width, height);
 					roads.add(newRoad);
+				}
+			}
+
+			if (layer.getName().equals("roadsWalk")) {
+				for (MapObject obstacle: layer.getObjects()) {
+					float x = obstacle.getProperties().get("x", Float.class) * 3;
+                    float y = obstacle.getProperties().get("y", Float.class) * 3;
+					float width = obstacle.getProperties().get("width", Float.class) * 3;
+                    float height = obstacle.getProperties().get("height", Float.class) * 3;
+					Obstacle newPath = new Obstacle(x, y, width, height);
+					paths.add(newPath);
 				}
 			}
 		}
