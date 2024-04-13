@@ -12,20 +12,24 @@ import com.badlogic.gdx.math.Rectangle;
 public class NavMeshGen {
     // Define a field to store the generated graph
     private HashMap<Node, ArrayList<Node>> graph;
+    private MapLayer mapLayer;
     private TiledMapTileLayer layer;
 
     // Constructor
     public NavMeshGen() {
         // get every cell in the layer
-        TmxMapLoader mapLoader = new TmxMapLoader();
-        TiledMap map = mapLoader.load("bigMap.tmx");
+        TiledMap map = new TmxMapLoader().load("bigMap.tmx");
 
+        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get("road");
 
-        for (MapLayer mapLayer : map.getLayers()) {
-            // System.out.println(mapLayer.getName());
-            if (mapLayer.getName().equals("roadsDrive")) {
-
-                System.out.println(mapLayer.getName());
+        for (int x = 0; x < layer.getWidth(); x ++) {
+            for (int y = 0; y < layer.getHeight(); y ++) {
+                TiledMapTileLayer.Cell cell = layer.getCell(x, y);
+                if (cell != null) {
+                    System.out.println(cell.toString());
+                }
+            }
+        }
                 // for (MapObject obstacle: layer.getObjects()) {
                 //     float x = obstacle.getProperties().get("x", Float.class) * 3;
                 //     float y = obstacle.getProperties().get("y", Float.class) * 3;
@@ -34,8 +38,6 @@ public class NavMeshGen {
                 //     Obstacle newRoad = new Obstacle(x, y, width, height);
                 //     roads.add(newRoad);
                 // }
-            }
-        }
 
 
         // for every cell in the layer, create a new node
