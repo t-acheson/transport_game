@@ -29,6 +29,8 @@ import com.hotmomcircle.transport_game.object.Transport_OBJ;
 import com.hotmomcircle.transport_game.entity.Route;
 import com.hotmomcircle.transport_game.tools.Camera;
 import com.hotmomcircle.transport_game.tools.WorldMap;
+import com.hotmomcircle.transport_game.tools.pathfinding.AStar;
+import com.hotmomcircle.transport_game.tools.pathfinding.PathfindingGraph;
 import com.hotmomcircle.transport_game.entity.Node;
 import com.hotmomcircle.transport_game.ui.Planning;
 import com.hotmomcircle.transport_game.ui.Points;
@@ -71,6 +73,10 @@ public class GameScreen implements Screen, Json.Serializable {
 	WorldMap worldMap;
 	WorldMapUI worldMapUI;
 	Stage worldMapStage;
+
+	// Pathfinding resources
+	public PathfindingGraph pathfindingGraph;
+	public AStar astar; // algorithm for finding the path
 	
 	// Texture playerMap = new Texture("assets/phoneScreen.png");
 	
@@ -116,7 +122,7 @@ public class GameScreen implements Screen, Json.Serializable {
 		this.parentGame = parentGame;
 		
 		loadAssets();
-		player = new Player(this, 700, 300, 32, 32, "./foot/player_down1.png");
+		player = new Player(this, 6300, 4500, 32, 32, "./foot/player_down1.png");
 		
 		gems = new Array<Gem>();
 		gems.add(new Gem(this, 400, 400, 16, 16));
@@ -208,6 +214,9 @@ public class GameScreen implements Screen, Json.Serializable {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
+		// graph representing the 'roads' layer
+		pathfindingGraph = new PathfindingGraph(map, tileSize);
 
 		// routes for node testing
 		routes = new Array<Route>();

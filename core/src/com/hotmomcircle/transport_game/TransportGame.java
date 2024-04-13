@@ -12,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
-import com.hotmomcircle.transport_game.tools.pathfinding.NavMeshGen;
 
 public class TransportGame extends Game {
 	
@@ -24,8 +23,6 @@ public class TransportGame extends Game {
 	
 	public Skin skin; 
 	public BitmapFont font;
-
-	public NavMeshGen navMesh;
 
 	@Override
 	public void create () {

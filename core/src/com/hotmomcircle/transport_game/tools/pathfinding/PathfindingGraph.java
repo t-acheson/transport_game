@@ -6,17 +6,16 @@ import java.util.HashMap;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Rectangle;
 
-public class NavMeshGen {
+public class PathfindingGraph {
     // Define a field to store the generated graph
-    private HashMap<Node, ArrayList<Node>> graph;
+    public HashMap<Node, ArrayList<Node>> graph;
     private MapLayer mapLayer;
     private TiledMapTileLayer layer;
 
     // Constructor
-    public NavMeshGen(TiledMap map, int tileSize) {
+    public PathfindingGraph(TiledMap map, int tileSize) {
 
         TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get("road");
 

@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.hotmomcircle.transport_game.GameScreen;
 import com.hotmomcircle.transport_game.transport.Transport;
+import com.hotmomcircle.transport_game.tools.pathfinding.NodeFinder;
 
 //This will hold the player class. 
 //Player should be able to move, be drawn, and will own the transport methods
@@ -157,6 +158,18 @@ public class Player extends Entity {
 		if (Gdx.input.isKeyPressed(Input.Keys.D)) {
 			direction = "right";
 			dx += speed;
+		}
+
+		if (Gdx.input.isKeyJustPressed(Input.Keys.X)) {
+			System.out.println(NodeFinder.findNode(this.game.pathfindingGraph.graph, x, y));
+		}
+
+		if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
+			System.out.println(getX() + " " + getY());
+		}
+
+		if (Gdx.input.isKeyJustPressed(Input.Keys.Z)) {
+			System.out.println(game.pathfindingGraph.graph.keySet().toString());
 		}
 
 		// the diagonal vector is the same as the 
