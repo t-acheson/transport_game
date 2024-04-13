@@ -169,7 +169,7 @@ public class Player extends Entity {
 		}
 
 		if (Gdx.input.isKeyJustPressed(Input.Keys.Z)) {
-			System.out.println(game.pathfindingGraph.graph.keySet().toString());
+			System.out.println(NodeFinder.findNode(this.game.pathfindingGraph.graph, 6300, 4669));
 		}
 
 		// the diagonal vector is the same as the 
@@ -194,7 +194,7 @@ public class Player extends Entity {
 		
 		// Player interaction
 		
-		currTransport().render(batch);
+		currTransport().render(batch, dx, dy);
 //		batch.draw(transport[transIdx].image, x, y, 0, 0, transport[transIdx].image.getWidth(), transport[transIdx].image.getHeight(), game.scale, game.scale, 0, 0, 0, transport[transIdx].image.getWidth(), transport[transIdx].image.getHeight(), false, false);
 	
 		hasInteracted = false;
@@ -218,11 +218,11 @@ public class Player extends Entity {
 		return this.rectangle;
 	}
 	
-	public boolean isMoving() {
-		boolean up = Gdx.input.isKeyPressed(Input.Keys.W);
-		boolean down = Gdx.input.isKeyPressed(Input.Keys.S);
-		boolean left = Gdx.input.isKeyPressed(Input.Keys.A);
-		boolean right = Gdx.input.isKeyPressed(Input.Keys.D);
+	public boolean isMoving(float dx, float dy) {
+		boolean up = dy > 0 ? true : false;
+		boolean down = dy < 0 ? true : false;
+		boolean left = dx < 0 ? true : false;
+		boolean right = dx > 0 ? true : false;
 
 		if (up || down || left || right) {
 			String staminaCost = transport[transIdx].getStaminaCost();

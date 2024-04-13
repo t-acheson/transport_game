@@ -55,8 +55,8 @@ public class Transport {
 		
 	}
 	
-	public void render(SpriteBatch batch) throws Exception{
-		Texture currImg = getCurrentImage();
+	public void render(SpriteBatch batch, float dx, float dy) throws Exception{
+		Texture currImg = getCurrentImage(dx, dy);
 //		System.out.println(currImg.getWidth());
 //		System.out.println(currImg.getHeight());
 //		System.out.println(game.getTileSize());
@@ -64,9 +64,9 @@ public class Transport {
 		batch.draw(currImg, game.player.getX(), game.player.getY(), 0, 0, game.getTileSize(), game.getTileSize(), 1, 1, 0, 0, 0, currImg.getWidth(), currImg.getHeight(), false, false);
 	}
 	
-	public Texture getCurrentImage() throws Exception {
+	public Texture getCurrentImage(float dx, float dy) throws Exception {
 		
-		if(TimeUtils.nanoTime() - imgChangeTime > imgDuration && game.player.isMoving()) {
+		if(TimeUtils.nanoTime() - imgChangeTime > imgDuration && game.player.isMoving(dx, dy)) {
 			imgChangeTime = TimeUtils.nanoTime();
 			imgIdx = (imgIdx + 1) % 2;
 		}
