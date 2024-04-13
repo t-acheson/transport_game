@@ -1,12 +1,11 @@
 package com.hotmomcircle.transport_game.tools.pathfinding;
-
 import java.util.*;
 
 public class AStar {
     // Method to perform A* pathfinding
     public static ArrayList<Node> findPath(HashMap<Node, ArrayList<Node>> graph, Node start, Node goal) {
         // Initialize open and closed sets
-        Queue<Node> openSet = new LinkedList<>();
+        LinkedList<Node> openSet = new LinkedList<>();
         HashSet<Node> closedSet = new HashSet<>();
         HashMap<Node, Node> cameFrom = new HashMap<>();
 
@@ -19,13 +18,13 @@ public class AStar {
 
             // Goal check
             if (current.equals(goal)) {
-                // Reconstruct path
+                // Reconstruct and print path
                 ArrayList<Node> path = reconstructPath(cameFrom, current);
                 System.out.println("Path found:");
                 for (Node node : path) {
                     System.out.println(node.toString());
                 }
-                return reconstructPath(cameFrom, current);
+                return path;
             }
 
             closedSet.add(current);
@@ -36,7 +35,6 @@ public class AStar {
                     continue; // Skip neighbors already evaluated
                 }
 
-                // Check if neighbor is not already in the open set
                 if (!openSet.contains(neighbor)) {
                     cameFrom.put(neighbor, current);
                     openSet.add(neighbor);
@@ -45,6 +43,7 @@ public class AStar {
         }
 
         // No path found
+        System.out.println("No path found.");
         return null;
     }
 
@@ -61,5 +60,6 @@ public class AStar {
         return path;
     }
 }
+
 
 

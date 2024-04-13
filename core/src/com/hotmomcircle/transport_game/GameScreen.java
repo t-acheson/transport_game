@@ -31,7 +31,7 @@ import com.hotmomcircle.transport_game.tools.Camera;
 import com.hotmomcircle.transport_game.tools.WorldMap;
 import com.hotmomcircle.transport_game.tools.pathfinding.AStar;
 import com.hotmomcircle.transport_game.tools.pathfinding.PathfindingGraph;
-import com.hotmomcircle.transport_game.entity.Node;
+import com.hotmomcircle.transport_game.entity.Hub;
 import com.hotmomcircle.transport_game.ui.Planning;
 import com.hotmomcircle.transport_game.ui.Points;
 import com.hotmomcircle.transport_game.ui.WorldMapUI;
@@ -82,8 +82,8 @@ public class GameScreen implements Screen, Json.Serializable {
 	
 	public Array<Gem> gems;
 
-	// list of Nodes for interaction
-	public Array<Node> nodes;
+	// list of Hub for interaction
+	public Array<Hub> hubs;
 	// list of Routes for planning UI
 	public Array<Route> routes;
 	   
@@ -122,7 +122,7 @@ public class GameScreen implements Screen, Json.Serializable {
 		this.parentGame = parentGame;
 		
 		loadAssets();
-		player = new Player(this, 6300, 4500, 32, 32, "./foot/player_down1.png");
+		player = new Player(this, 5900, 4608, 32, 32, "./foot/player_down1.png");
 		
 		gems = new Array<Gem>();
 		gems.add(new Gem(this, 400, 400, 16, 16));
@@ -218,14 +218,14 @@ public class GameScreen implements Screen, Json.Serializable {
 		// graph representing the 'roads' layer
 		pathfindingGraph = new PathfindingGraph(map, originalTileSize);
 
-		// routes for node testing
+		// routes for hub testing
 		routes = new Array<Route>();
 		for (int i = 1; i < 4; i++) {
 			routes.add(new Route(this, 0, 0, 32, 32, "gem.png", 900, i * 100 + 100));
 		}
 
 		// initialise Node array
-		nodes = new Array<Node>();
+		hubs = new Array<Hub>();
 		
 
 		for (MapLayer layer : map.getLayers()) {
@@ -238,7 +238,7 @@ public class GameScreen implements Screen, Json.Serializable {
                     float locX = object.getProperties().get("x", Float.class);
                     float locY = object.getProperties().get("y", Float.class);
 					// pass to Node constructor
-					nodes.add(new Node(this, locX, locY, 16, 16, "gem.png", routes));
+					hubs.add(new Hub(this, locX, locY, 16, 16, "gem.png", routes));
                 }
             }
 		}
@@ -411,8 +411,8 @@ public class GameScreen implements Screen, Json.Serializable {
 				gem.render(batch);
 			}
 			
-			for (Node node: nodes) {
-				node.render(batch);
+			for (Hub hub: hubs) {
+				hub.render(batch);
 			}
 			
 //			Render the player last so they appear on top of everything

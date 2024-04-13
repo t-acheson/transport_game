@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.hotmomcircle.transport_game.GameScreen;
 import com.hotmomcircle.transport_game.transport.Transport;
+import com.hotmomcircle.transport_game.tools.pathfinding.AStar;
+import com.hotmomcircle.transport_game.tools.pathfinding.Node;
 import com.hotmomcircle.transport_game.tools.pathfinding.NodeFinder;
 
 //This will hold the player class. 
@@ -169,7 +171,9 @@ public class Player extends Entity {
 		}
 
 		if (Gdx.input.isKeyJustPressed(Input.Keys.Z)) {
-			System.out.println(NodeFinder.findNode(this.game.pathfindingGraph.graph, 6300, 4669));
+			// Node source = NodeFinder.findNode(this.game.pathfindingGraph.graph, x, y);
+			// Node dest = NodeFinder.findNode(this.game.pathfindingGraph.graph, 6288, 4608);
+			// AStar.findPath(this.game.pathfindingGraph.graph, source, dest);
 		}
 
 		// the diagonal vector is the same as the 
@@ -265,14 +269,14 @@ public class Player extends Entity {
 			return;
 		
 		// interate through all "interactable objects"
-		for (Node node: this.game.nodes) {
+		for (Hub hub: this.game.hubs) {
 			// if overlaps
-			if (canGetOnTransport(node.rectangle)) {
+			if (canGetOnTransport(hub.rectangle)) {
 				// if overlaps
 				// call togglePlanning
 				// pass Routes of overlapped Node
-				System.out.println(node);
-				this.game.planningUI.activatePlanning(node.getRoutes());
+				System.out.println(hub);
+				this.game.planningUI.activatePlanning(hub.getRoutes());
 				this.game.camera.zoomOut();
 				break;
 			}
