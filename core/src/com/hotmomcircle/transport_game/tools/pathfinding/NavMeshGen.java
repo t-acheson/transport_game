@@ -22,43 +22,50 @@ public class NavMeshGen {
 
         TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get("road");
 
-        for (int x = 0; x < layer.getWidth(); x ++) {
-            for (int y = 0; y < layer.getHeight(); y ++) {
+        float regionWidth = 16; // Example width of each region
+        float regionHeight = 16; // Example height of each region
+
+        this.graph = new HashMap<Node, ArrayList<Node>>();
+
+        for (int x = 0; x < layer.getWidth(); x++) {
+            for (int y = 0; y < layer.getHeight(); y++) {
                 TiledMapTileLayer.Cell cell = layer.getCell(x, y);
                 if (cell != null) {
-                    System.out.println(cell.toString());
+                    // for every cell in the layer, create a new node
+                    Rectangle region = new Rectangle(x * regionWidth, y * regionHeight, regionWidth, regionHeight);
+                    Node node = new Node(region);
+                    graph.put(node, new ArrayList<>());
+
+                    if (layer.getCell(x, y + 1) != null) {
+                        Rectangle neighborRegion = new Rectangle(x * regionWidth, (y + 1) * regionHeight, regionWidth,
+                                regionHeight);
+                        Node neighbor = new Node(neighborRegion);
+                        graph.get(node).add(neighbor);
+                    }
+
+                    if (layer.getCell(x, y - 1) != null) {
+                        Rectangle neighborRegion = new Rectangle(x * regionWidth, (y - 1) * regionHeight, regionWidth,
+                                regionHeight);
+                        Node neighbor = new Node(neighborRegion);
+                        graph.get(node).add(neighbor);
+                    }
+
+                    if (layer.getCell(x + 1, y) != null) {
+                        Rectangle neighborRegion = new Rectangle((x + 1) * regionWidth, y * regionHeight, regionWidth,
+                                regionHeight);
+                        Node neighbor = new Node(neighborRegion);
+                        graph.get(node).add(neighbor);
+                    }
+
+                    if (layer.getCell(x - 1, y) != null) {
+                        Rectangle neighborRegion = new Rectangle((x - 1) * regionWidth, y * regionHeight, regionWidth,
+                                regionHeight);
+                        Node neighbor = new Node(neighborRegion);
+                        graph.get(node).add(neighbor);
+                    }
+
                 }
             }
         }
-                // for (MapObject obstacle: layer.getObjects()) {
-                //     float x = obstacle.getProperties().get("x", Float.class) * 3;
-                //     float y = obstacle.getProperties().get("y", Float.class) * 3;
-                //     float width = obstacle.getProperties().get("width", Float.class) * 3;
-                //     float height = obstacle.getProperties().get("height", Float.class) * 3;
-                //     Obstacle newRoad = new Obstacle(x, y, width, height);
-                //     roads.add(newRoad);
-                // }
-
-
-        // for every cell in the layer, create a new node
-
-            // check what nodes are adjacent 
-            // add to hashmap
-        }
-
-    
-
-    public boolean areNodesConnected(Rectangle rect1, Rectangle rect2) {
-
-        boolean horizontallyAdjacent = (rect1.x + rect1.width == rect2.x || rect2.x + rect2.width == rect1.x) &&
-                                        !(rect1.y >= rect2.y + rect2.height || rect2.y >= rect1.y + rect1.height);
-
-        boolean verticallyAdjacent = (rect1.y + rect1.height == rect2.y || rect2.y + rect2.height == rect1.y) &&
-                                    !(rect1.x >= rect2.x + rect2.width || rect2.x >= rect1.x + rect1.width);
-
-        return horizontallyAdjacent || verticallyAdjacent;
     }
-
 }
-
-
