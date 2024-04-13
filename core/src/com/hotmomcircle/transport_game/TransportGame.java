@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
+import com.hotmomcircle.transport_game.tools.pathfinding.Pathfinder;
 
 public class TransportGame extends Game {
 	
@@ -24,10 +25,13 @@ public class TransportGame extends Game {
 	public Skin skin; 
 	public BitmapFont font;
 
-   
+	public Pathfinder pathfinder;
 
 	@Override
 	public void create () {
+
+		//TODO remove Pathfinder testing placeholder
+		pathfinder = new Pathfinder();
 
 		batch = new SpriteBatch();
 		
