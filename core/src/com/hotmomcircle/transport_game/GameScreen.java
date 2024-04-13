@@ -216,7 +216,7 @@ public class GameScreen implements Screen, Json.Serializable {
 		}
 
 		// graph representing the 'roads' layer
-		pathfindingGraph = new PathfindingGraph(map, tileSize);
+		pathfindingGraph = new PathfindingGraph(map, originalTileSize);
 
 		// routes for node testing
 		routes = new Array<Route>();

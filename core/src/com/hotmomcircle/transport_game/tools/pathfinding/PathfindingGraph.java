@@ -15,12 +15,12 @@ public class PathfindingGraph {
     private TiledMapTileLayer layer;
 
     // Constructor
-    public PathfindingGraph(TiledMap map, int tileSize) {
+    public PathfindingGraph(TiledMap map, int originalTileSize) {
 
         TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get("road");
 
-        float regionWidth = tileSize; // Example width of each region
-        float regionHeight = tileSize; // Example height of each region
+        float regionWidth = originalTileSize * 3; // Example width of each region
+        float regionHeight = originalTileSize * 3; // Example height of each region
 
         this.graph = new HashMap<Node, ArrayList<Node>>();
 
