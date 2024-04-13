@@ -13,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import com.hotmomcircle.transport_game.tools.pathfinding.NavMeshGen;
-import com.hotmomcircle.transport_game.tools.pathfinding.Pathfinder;
 
 public class TransportGame extends Game {
 	
@@ -30,9 +29,6 @@ public class TransportGame extends Game {
 
 	@Override
 	public void create () {
-
-		//TODO remove Pathfinder testing placeholder
-		navMesh = new NavMeshGen();
 
 		batch = new SpriteBatch();
 		

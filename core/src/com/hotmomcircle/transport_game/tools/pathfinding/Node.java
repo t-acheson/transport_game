@@ -8,4 +8,12 @@ public class Node {
     public Node(Rectangle region) {
         this.region = region;
     }
+
+    @Override
+    public String toString() {
+        return (
+            region.getX() + " " + region.getY() + " " + 
+            region.getWidth() + " " + region.getHeight()
+        );
+    }
 }

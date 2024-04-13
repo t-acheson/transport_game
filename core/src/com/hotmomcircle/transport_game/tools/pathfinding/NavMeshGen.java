@@ -16,14 +16,12 @@ public class NavMeshGen {
     private TiledMapTileLayer layer;
 
     // Constructor
-    public NavMeshGen() {
-        // get every cell in the layer
-        TiledMap map = new TmxMapLoader().load("bigMap.tmx");
+    public NavMeshGen(TiledMap map, int tileSize) {
 
         TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get("road");
 
-        float regionWidth = 16; // Example width of each region
-        float regionHeight = 16; // Example height of each region
+        float regionWidth = tileSize; // Example width of each region
+        float regionHeight = tileSize; // Example height of each region
 
         this.graph = new HashMap<Node, ArrayList<Node>>();
 
