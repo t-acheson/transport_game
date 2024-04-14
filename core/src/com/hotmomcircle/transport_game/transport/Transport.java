@@ -31,10 +31,6 @@ public class Transport {
 	public Texture[] left;
 	public Texture[] right;
 
-	Rectangle ground_rect;
-	Rectangle player_rect;
-	
-
 	public Transport(GameScreen game, String name, int speed, Texture[] images, String footprint, String staminaCost) {
 		this.game = game;
 		this.name = name;
