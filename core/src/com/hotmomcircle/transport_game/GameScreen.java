@@ -152,11 +152,7 @@ public class GameScreen implements Screen, Json.Serializable {
 //		Read in the serializable data
 		read(null, jsonMap);
 		
-//		For now write the gems in manually, these will be serialized too
-		gems = new Array<Gem>();
-		gems.add(new Gem(this, 400, 400, 16, 16));
-		gems.add(new Gem(this, 200, 200, 16, 16));
-		gems.add(new Gem(this, 300, 300, 16, 16));
+
 		initializeGame();
 		
 		
@@ -510,6 +506,7 @@ public class GameScreen implements Screen, Json.Serializable {
 		json.writeValue("playerY", player.getY());
 		json.writeValue("cars", car_OBJs);
 		json.writeValue("bikes", bike_OBJs);
+		json.writeValue("gems", gems);
 	}
 
 	@Override
@@ -518,6 +515,22 @@ public class GameScreen implements Screen, Json.Serializable {
 		int x = jsonData.getInt("playerX");
 		int y = jsonData.getInt("playerY");
 		player = new Player(this, x, y, 32, 32, "./foot/player_down1.png");
+		
+//		Load gems from levels file
+		for (JsonValue gemLoc = jsonData.get("gems").child; gemLoc != null; gemLoc = gemLoc.next) {
+			gems.add(new Gem(this, gemLoc.getInt("x"), gemLoc.getInt("y"), 16, 16));
+		}
+		
+//		Load cars from levels file
+		for (JsonValue carLoc = jsonData.get("cars").child; carLoc != null; carLoc = carLoc.next) {
+			car_OBJs.add(new Car_OBJ(this, carLoc.getInt("x"), carLoc.getInt("y"), true));
+		}
+		
+		
+//		Load bikes from levels file
+		for (JsonValue bikeLoc = jsonData.get("bikes").child; bikeLoc != null; bikeLoc = bikeLoc.next) {
+			bike_OBJs.add(new Bicycle_OBJ(this, bikeLoc.getInt("x"), bikeLoc.getInt("y"), true));
+		}
 		
 	}
 	
