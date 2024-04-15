@@ -8,6 +8,7 @@ public class Object {
 	protected int y;
 	protected Texture objImg;
 	protected Rectangle interactionRadius;
+	protected String popUp;
 	boolean interactable = false;
 	
 	

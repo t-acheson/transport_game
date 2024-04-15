@@ -99,6 +99,8 @@ public class Player extends Entity {
 	
 	@Override
 	public void render(SpriteBatch batch) throws Exception {
+
+
 		if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !hasInteracted) {
 			interact();
 			
@@ -184,7 +186,6 @@ public class Player extends Entity {
 		
 		
 		// Player interaction
-		
 		currTransport().render(batch);
 //		batch.draw(transport[transIdx].image, x, y, 0, 0, transport[transIdx].image.getWidth(), transport[transIdx].image.getHeight(), game.scale, game.scale, 0, 0, 0, transport[transIdx].image.getWidth(), transport[transIdx].image.getHeight(), false, false);
 	
@@ -224,8 +225,8 @@ public class Player extends Entity {
 		return up || down || left || right;
 	}
 
-	public void Collision(){
-		this.rectangle = new Rectangle(prevx, prevy, this.rectangle.getWidth(), this.rectangle.getHeight());
+	public void Collision(Rectangle playersPreviousPosition){
+		this.rectangle = new Rectangle(playersPreviousPosition.x, playersPreviousPosition.y, playersPreviousPosition.getWidth(), playersPreviousPosition.getHeight());
 	}
 	
 //  Go on foot
