@@ -143,10 +143,6 @@ public class Player extends Entity {
 		return transport[transIdx].speed;
 	}
 	
-	public String getDirection() {
-		return direction;
-	}
-	
 	
 //	Returns the current transport method
 	public Transport currTransport() {
@@ -155,21 +151,6 @@ public class Player extends Entity {
 
 	public Rectangle getPlayerRectangle() {
 		return this.rectangle;
-	}
-	
-	public boolean isMoving() {
-		boolean up = Gdx.input.isKeyPressed(Input.Keys.W);
-		boolean down = Gdx.input.isKeyPressed(Input.Keys.S);
-		boolean left = Gdx.input.isKeyPressed(Input.Keys.A);
-		boolean right = Gdx.input.isKeyPressed(Input.Keys.D);
-
-		if (up || down || left || right) {
-			String staminaCost = transport[transIdx].getStaminaCost();
-			String footprint = transport[transIdx].getFootprint();
-			this.game.freshness.setText(staminaCost);
-			this.game.carbon.setText(footprint);
-		}
-		return up || down || left || right;
 	}
 
 	public void Collision(){

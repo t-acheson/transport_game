@@ -73,12 +73,12 @@ public class Transport {
 	
 	public Texture getCurrentImage() throws Exception {
 		
-		if(TimeUtils.nanoTime() - imgChangeTime > imgDuration && game.player.isMoving()) {
+		if(TimeUtils.nanoTime() - imgChangeTime > imgDuration && isMoving()) {
 			imgChangeTime = TimeUtils.nanoTime();
 			imgIdx = (imgIdx + 1) % 2;
 		}
 		
-		switch(game.player.getDirection()) {
+		switch(getDirection()) {
 		case "up":
 			return up[imgIdx];
 		case "down":
@@ -150,6 +150,25 @@ public class Transport {
 	private float getSpeed() {
 		// TODO Auto-generated method stub
 		return this.speed;
+	}
+
+	public boolean isMoving() {
+		boolean up = Gdx.input.isKeyPressed(Input.Keys.W);
+		boolean down = Gdx.input.isKeyPressed(Input.Keys.S);
+		boolean left = Gdx.input.isKeyPressed(Input.Keys.A);
+		boolean right = Gdx.input.isKeyPressed(Input.Keys.D);
+
+		if (up || down || left || right) {
+			String staminaCost = getStaminaCost();
+			String footprint = getFootprint();
+			this.game.freshness.setText(staminaCost);
+			this.game.carbon.setText(footprint);
+		}
+		return up || down || left || right;
+	}
+
+	public String getDirection() {
+		return direction;
 	}
 	
 }
