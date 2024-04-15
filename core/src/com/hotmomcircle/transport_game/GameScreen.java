@@ -29,7 +29,7 @@ import com.hotmomcircle.transport_game.tools.WorldMap;
 import com.hotmomcircle.transport_game.entity.Node;
 import com.hotmomcircle.transport_game.ui.Planning;
 import com.hotmomcircle.transport_game.ui.Points;
-import com.hotmomcircle.transport_game.ui.WMUI;
+import com.hotmomcircle.transport_game.ui.WorldMapUI;
 import com.hotmomcircle.transport_game.ui.gemArrow;
 import com.hotmomcircle.transport_game.ui.Pause;
 import com.hotmomcircle.transport_game.ui.gemCounter;
@@ -66,7 +66,7 @@ public class GameScreen implements Screen, Json.Serializable {
 	// for the world map on press of "M"
 	boolean showWorldMap = false;
 	WorldMap worldMap;
-	WMUI worldMapUI;
+	WorldMapUI worldMapUI;
 	Stage worldMapStage;
 	
 	// Texture playerMap = new Texture("assets/phoneScreen.png");
@@ -312,7 +312,7 @@ public class GameScreen implements Screen, Json.Serializable {
 		worldMap = new WorldMap(renderer, map, batch);
 		worldMapStage = new Stage(new ScreenViewport());
 
-		worldMapUI = new WMUI(game, this, worldMapStage, skin);
+		worldMapUI = new WorldMapUI(game, this, worldMapStage, skin);
 
 		
 
