@@ -164,6 +164,7 @@ public class Player extends Entity {
 
 		if (Gdx.input.isKeyJustPressed(Input.Keys.X)) {
 			System.out.println(NodeFinder.findNode(this.game.pathfindingGraph.graph, x, y));
+			NodeFinder.findNeighbours(this.game.pathfindingGraph.graph, x, y);
 		}
 
 		if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
@@ -171,9 +172,9 @@ public class Player extends Entity {
 		}
 
 		if (Gdx.input.isKeyJustPressed(Input.Keys.Z)) {
-			// Node source = NodeFinder.findNode(this.game.pathfindingGraph.graph, x, y);
-			// Node dest = NodeFinder.findNode(this.game.pathfindingGraph.graph, 6288, 4608);
-			// AStar.findPath(this.game.pathfindingGraph.graph, source, dest);
+			Node source = NodeFinder.findNode(this.game.pathfindingGraph.graph, x, y);
+			Node dest = NodeFinder.findNode(this.game.pathfindingGraph.graph, 6288, 4608);
+			AStar.findPath(this.game.pathfindingGraph.graph, source, dest);
 		}
 
 		// the diagonal vector is the same as the 

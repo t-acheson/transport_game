@@ -12,4 +12,12 @@ public class NodeFinder {
         }
         return null;
     }
+
+    public static void findNeighbours(HashMap<Node, ArrayList<Node>> graph, float x, float y) {
+        for (Node node : graph.keySet()) {
+            if (node.region.contains(x, y)) {
+                System.out.println(graph.get(node));
+            }
+    }
+}
 }
