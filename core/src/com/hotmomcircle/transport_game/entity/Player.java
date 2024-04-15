@@ -101,7 +101,7 @@ public class Player extends Entity {
 	public void render(SpriteBatch batch) throws Exception {
 		if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !hasInteracted) {
 			interact();
-			
+			 
 			switch(currTransport().name) {
 			case "Foot":
 				interact();				
@@ -115,6 +115,8 @@ public class Player extends Entity {
 				getOnFoot();
 				break;
 			}
+			// used to signal to the game that a transport change has occurred and a popup needs to be shown
+			game.showPopup = true;
 		}
 //		Can press 'f' to go on foot
 		if(Gdx.input.isKeyPressed(Input.Keys.F)) {

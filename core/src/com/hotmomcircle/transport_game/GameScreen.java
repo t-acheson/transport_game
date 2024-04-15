@@ -13,7 +13,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Array;
@@ -34,6 +33,7 @@ import com.hotmomcircle.transport_game.ui.Planning;
 import com.hotmomcircle.transport_game.ui.Points;
 import com.hotmomcircle.transport_game.ui.WorldMapUI;
 import com.hotmomcircle.transport_game.ui.gemArrow;
+import com.hotmomcircle.transport_game.ui.EducationalPopup;
 import com.hotmomcircle.transport_game.ui.Pause;
 import com.hotmomcircle.transport_game.ui.gemCounter;
 //map imports below 
@@ -42,6 +42,7 @@ import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+
 
 
 // Screen of the level the player is currently playing
@@ -71,6 +72,10 @@ public class GameScreen implements Screen, Json.Serializable {
 	WorldMap worldMap;
 	WorldMapUI worldMapUI;
 	Stage worldMapStage;
+
+	// for the educationalPopups
+	public EducationalPopup educationalPopup;
+	public boolean showPopup = false;
 	
 	// Texture playerMap = new Texture("assets/phoneScreen.png");
 	
@@ -307,8 +312,7 @@ public class GameScreen implements Screen, Json.Serializable {
 
 		worldMapUI = new WorldMapUI(game, this, worldMapStage, skin);
 
-		
-
+		educationalPopup = new EducationalPopup(game, this, stage, skin);
 		
 	}
 
@@ -420,6 +424,10 @@ public class GameScreen implements Screen, Json.Serializable {
 		}
 		batch.end();
 
+		if (showPopup){
+			showPopup = false;
+			educationalPopup.showUI();
+		}
 		// UI draw
 		stage.act(delta);
 		stage.draw();
