@@ -51,7 +51,7 @@ public class Player extends Entity {
 			playerTextures[i] = game.assetManager.get(paths[i], Texture.class);
 		}
 
-		transport[0] = new Transport(game, "Foot", 200, playerTextures, "0", "-5");
+		transport[0] = new Transport(game, this, "Foot", 200, playerTextures, "0", "-5");
 		
 		
 		
@@ -75,7 +75,7 @@ public class Player extends Entity {
 		
 		
 		// footprint for the bike? we gotta nerf it somehow, could just crank up the stamina cost?
-		transport[1] = new Transport(game, "Bicycle", 300, bikeTextures, "2", "-10"); 
+		transport[1] = new Transport(game, this, "Bicycle", 300, bikeTextures, "2", "-10"); 
 		
 		Texture[] carTextures = new Texture[8];
 		
@@ -94,7 +94,7 @@ public class Player extends Entity {
 			carTextures[i] = game.assetManager.get(carPaths[i], Texture.class);
 		}
 		
-		transport[2] = new Transport(game, "Car", 400, carTextures, "10", "0"); 
+		transport[2] = new Transport(game, this, "Car", 400, carTextures, "10", "0"); 
 	}
 	
 	@Override
@@ -130,60 +130,8 @@ public class Player extends Entity {
 //		Can press 'B' to get on bike
 		if(Gdx.input.isKeyPressed(Input.Keys.F)) {
 			getOnFoot();
-		}
-		
-		
-//		Move the player 
-		// define speed at render time
-		float speed = getSpeed() * Gdx.graphics.getDeltaTime();
+		}		
 
-		// determine movement direction
-		// TODO find a way to reintroduce the moonwalk bug, i mean FEATURE
-		float dx = 0;
-		float dy = 0;
-
-		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-			direction = "up";
-			dy += speed;
-			prevy = dy;
-		}
-		if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-			direction = "down";
-			dy -= speed;
-			prevy = dy;
-		}
-		if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-			direction = "left";
-			dx -= speed;
-			prevx = dx;
-		}
-		if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-			direction = "right";
-			dx += speed;
-			prevx = dx;
-		}
-
-		// the diagonal vector is the same as the 
-		// square root of the sum of the squared
-		// vertical and horizontal vectors
-
-		float movementMagnitude = (float) Math.sqrt(dx * dx + dy * dy);
-		if (movementMagnitude > speed) {
-			// if it exceeds it, we normalise the speed
-			// by the magnitude
-			dx = dx / movementMagnitude * speed;	
-			dy = dy / movementMagnitude * speed;
-		}
-
-		// finally apply the movement
-		x += dx;
-		y += dy;
-
-		this.rectangle.x = this.getX();
-		this.rectangle.y = this.getY();
-		
-		
-		// Player interaction
 		
 		currTransport().render(batch);
 //		batch.draw(transport[transIdx].image, x, y, 0, 0, transport[transIdx].image.getWidth(), transport[transIdx].image.getHeight(), game.scale, game.scale, 0, 0, 0, transport[transIdx].image.getWidth(), transport[transIdx].image.getHeight(), false, false);
