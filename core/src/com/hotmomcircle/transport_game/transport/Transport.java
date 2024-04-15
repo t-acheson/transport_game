@@ -62,8 +62,7 @@ public class Transport {
 	}
 	
 	public void render(SpriteBatch batch) throws Exception{
-		Texture currImg = getCurrentImage();
-		update();
+		Texture currImg = update();
 //		System.out.println(currImg.getWidth());
 //		System.out.println(currImg.getHeight());
 //		System.out.println(game.getTileSize());
@@ -71,9 +70,9 @@ public class Transport {
 		batch.draw(currImg, game.player.getX(), game.player.getY(), 0, 0, game.getTileSize(), game.getTileSize(), 1, 1, 0, 0, 0, currImg.getWidth(), currImg.getHeight(), false, false);
 	}
 	
-	public Texture getCurrentImage() throws Exception {
+	public Texture getCurrentImage(float dx, float dy) {
 		
-		if(TimeUtils.nanoTime() - imgChangeTime > imgDuration && isMoving()) {
+		if(TimeUtils.nanoTime() - imgChangeTime > imgDuration && isMoving(dx, dy)) {
 			imgChangeTime = TimeUtils.nanoTime();
 			imgIdx = (imgIdx + 1) % 2;
 		}
@@ -88,7 +87,7 @@ public class Transport {
 		case "right":
 			return right[imgIdx];
 		default:
-			throw new Exception("Error: incorrect direction string");
+		return down[0];
 		}
 	}
 
@@ -100,7 +99,7 @@ public class Transport {
 		return staminaCost;
 	}
 
-	public void update() {
+	public Texture update() {
 		//		Move the player 
 		// define speed at render time
 		float speed = getSpeed() * Gdx.graphics.getDeltaTime();
@@ -145,6 +144,8 @@ public class Transport {
 
 		this.player.rectangle.x = this.player.getX();
 		this.player.rectangle.y = this.player.getY();
+
+		return getCurrentImage(dx, dy);
 	}
 
 	private float getSpeed() {
@@ -152,11 +153,11 @@ public class Transport {
 		return this.speed;
 	}
 
-	public boolean isMoving() {
-		boolean up = Gdx.input.isKeyPressed(Input.Keys.W);
-		boolean down = Gdx.input.isKeyPressed(Input.Keys.S);
-		boolean left = Gdx.input.isKeyPressed(Input.Keys.A);
-		boolean right = Gdx.input.isKeyPressed(Input.Keys.D);
+	public boolean isMoving(float dx, float dy) {
+		boolean up = dy > 0 ? true : false;
+		boolean down = dy < 0 ? true : false;
+		boolean left = dx < 0 ? true : false;
+		boolean right = dx > 0 ? true : false;
 
 		if (up || down || left || right) {
 			String staminaCost = getStaminaCost();
