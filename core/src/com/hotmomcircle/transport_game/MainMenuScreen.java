@@ -166,8 +166,10 @@ public class MainMenuScreen implements Screen {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				// TODO Add continue game functionality
-				dispose();
-				game.resumeGame();
+				int successful = game.resumeGame();
+				if (successful ==1) {
+					dispose();
+				}
 			}
 			
 		});
@@ -247,14 +249,14 @@ public class MainMenuScreen implements Screen {
             String name = json.getString("name");
             String level = json.getString("currLevel");
             
-            TextButton button = new TextButton(name + "    Level " + level, skin);
+            TextButton button = new TextButton(name + "    Level: " + level, skin);
 
             
     		button.addListener( new ChangeListener() {
     			@Override
     			public void changed(ChangeEvent event, Actor actor) {
     				dispose();
-    				game.loadGame(savePath + fileName);
+    				game.loadGame(fileName);
     			}
     		});
     		

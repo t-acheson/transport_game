@@ -29,12 +29,15 @@ public class ParentGame implements Json.Serializable{
 	JsonValue levelData;
 	ArrayList<JsonValue> levels = new ArrayList<>();
 	
-	String name = "test";
+	String name;
+	String fileName;
 
 	
 //	Constructor for new game
-	public ParentGame(TransportGame game, String name) {
+	public ParentGame(TransportGame game, String name, String fileName) {
 		this.game = game;
+		this.name = name;
+		this.fileName = fileName;
 		init();
 		loadLevels();
 		currLevel = 0;
@@ -45,8 +48,9 @@ public class ParentGame implements Json.Serializable{
 	}
 	
 //	Constructor for loading game
-	public ParentGame(TransportGame game, JsonValue jsonData) {
+	public ParentGame(TransportGame game, JsonValue jsonData, String fileName) {
 		this.game = game;
+		this.fileName = fileName;
 		init();
 		loadLevels();
 		read(null, jsonData);
@@ -116,11 +120,11 @@ public class ParentGame implements Json.Serializable{
 		Json json = new Json();
 		String text = json.toJson(this);
 		
-        FileHandle fileHandle = Gdx.files.local("saves/output.json"); // Adjust the file path as needed
+        FileHandle fileHandle = Gdx.files.local("saves/" + fileName); // Adjust the file path as needed
         fileHandle.writeString(json.toJson(this), false);
 //        text = fileHandle.readString();
         
-//        JsonValue root = new JsonReader().parse(text);
+//        JsonValue root = new JsonReader().parse(text); 
 		
 	}
 
