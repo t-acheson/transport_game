@@ -1,14 +1,11 @@
 package com.hotmomcircle.transport_game.object;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.hotmomcircle.transport_game.GameScreen;
 
 // Interactable transport objects (car, bike etc.)
 public abstract class Transport_OBJ extends Object {
-	
 	GameScreen game;
 	
 	public void render(SpriteBatch batch) throws Exception{
@@ -28,5 +25,7 @@ public abstract class Transport_OBJ extends Object {
 	public Rectangle getObjectRectangle() {
 		return interactionRadius;
 	}
+	
+
 	
 }
