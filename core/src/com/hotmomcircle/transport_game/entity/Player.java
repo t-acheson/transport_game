@@ -22,7 +22,10 @@ public class Player extends Entity {
 	public int CAR = 2;
 	private int stamina;
 	public Rectangle playerRectangle;
-	
+
+	public float prevx = 0;
+	public float prevy = 0;
+
 	private String direction = "down";
 	private boolean hasInteracted = false;
 	
@@ -92,13 +95,10 @@ public class Player extends Entity {
 		}
 		
 		transport[2] = new Transport(game, "Car", 400, carTextures, "10", "0"); 
-
 	}
 	
 	@Override
 	public void render(SpriteBatch batch) throws Exception {
-		
-		
 		if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !hasInteracted) {
 			interact();
 			
@@ -145,18 +145,22 @@ public class Player extends Entity {
 		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
 			direction = "up";
 			dy += speed;
+			prevy = dy;
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.S)) {
 			direction = "down";
 			dy -= speed;
+			prevy = dy;
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.A)) {
 			direction = "left";
 			dx -= speed;
+			prevx = dx;
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.D)) {
 			direction = "right";
 			dx += speed;
+			prevx = dx;
 		}
 
 		// the diagonal vector is the same as the 
@@ -218,6 +222,10 @@ public class Player extends Entity {
 			this.game.carbon.setText(footprint);
 		}
 		return up || down || left || right;
+	}
+
+	public void Collision(){
+		this.rectangle = new Rectangle(prevx, prevy, this.rectangle.getWidth(), this.rectangle.getHeight());
 	}
 	
 //  Go on foot

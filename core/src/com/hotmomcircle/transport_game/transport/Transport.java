@@ -2,6 +2,7 @@ package com.hotmomcircle.transport_game.transport;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.hotmomcircle.transport_game.GameScreen;
 
@@ -29,7 +30,6 @@ public class Transport {
 	public Texture[] down;
 	public Texture[] left;
 	public Texture[] right;
-	
 
 	public Transport(GameScreen game, String name, int speed, Texture[] images, String footprint, String staminaCost) {
 		this.game = game;

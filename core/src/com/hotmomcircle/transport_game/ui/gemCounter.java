@@ -5,18 +5,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import com.hotmomcircle.transport_game.entity.Gem;
 
-public class gemCounter extends Label{
-
-    private Array<Gem> gems;; // Field to store the gem array
-
+public class gemCounter extends Label {
+    public Array<Gem>  gems;
+    
     public gemCounter(Array<Gem> gems, Skin skin) {
-        super("Gems Left: " + gems.size, skin); // Initialize with the initial count
-        this.gems = gems; // Store the gem array
+        super(Integer.toString(gems.size), skin);
+        this.gems = gems;
     }
 
-
-    public void update(){
-        setText("Gems Left: " + gems.size);
+    public void update() {        
+        super.setText(Integer.toString(this.gems.size));
     }
-
 }
