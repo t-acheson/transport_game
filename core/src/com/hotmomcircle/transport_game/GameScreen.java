@@ -312,7 +312,7 @@ public class GameScreen implements Screen, Json.Serializable {
 
 		worldMapUI = new WorldMapUI(game, this, worldMapStage, skin);
 
-		educationalPopup = new EducationalPopup(game, this, stage, skin);
+		educationalPopup = new EducationalPopup(game, this, stage, skin, player);
 		
 	}
 

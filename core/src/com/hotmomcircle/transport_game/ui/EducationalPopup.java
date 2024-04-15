@@ -21,6 +21,7 @@ public class EducationalPopup {
     private Stage stage;
     private Skin skin;
     private Table uiTable;
+    private boolean uiShow = false;
 
     public EducationalPopup(TransportGame game, GameScreen screen, Stage stage, Skin skin, Player player) {
         // constructor just needs to know what it can work with
@@ -31,43 +32,47 @@ public class EducationalPopup {
     }
 
     public void showUI () {
-		// takes Routes as argument from togglePlanning
-		// creates new table with screen options
-		uiTable = new Table();
-		uiTable.setFillParent(true);
-		uiTable.defaults().width(this.game.SCREEN_WIDTH / 6).expandX().fillX();
-		uiTable.setWidth(game.SCREEN_WIDTH /3);
-        uiTable.row().pad(10, 0, 10, 0);
-        uiTable.bottom();
+        if (uiShow == false){
+            uiShow = true;
+            // takes Routes as argument from togglePlanning
+            // creates new table with screen options
+            uiTable = new Table();
+            uiTable.setFillParent(true);
+            uiTable.defaults().width(this.game.SCREEN_WIDTH / 6).expandX().fillX();
+            uiTable.setWidth(game.SCREEN_WIDTH /3);
+            uiTable.row().pad(10, 0, 10, 0);
+            uiTable.bottom();
 
-        Label zoomLabel = new Label("Zoom: +/-", skin);
-        Label panLabel = new Label("Pan: WASD", skin);
-        Label closeMapLabel = new Label("Close Map: M", skin);
+            Label zoomLabel = new Label("Zoom: +/-", skin);
+            Label panLabel = new Label("Pan: WASD", skin);
+            Label closeMapLabel = new Label("Close Map: M", skin);
 
-        uiTable.add(zoomLabel);
-        uiTable.add(panLabel);
-        uiTable.add(closeMapLabel);
-
-
-		stage.addActor(uiTable);
-
-        uiTable.addAction(Actions.sequence(
-            Actions.delay(7), // Delay for 7 seconds
-            Actions.run(new Runnable() {
-                @Override
-                public void run() {
-                    uiTable.remove(); // Remove the table from the stage
-                }
-            })
-        ));
-	}
-
-    public String getMessage(String inputType){
-        String message;
+            uiTable.add(zoomLabel);
+            uiTable.add(panLabel);
+            uiTable.add(closeMapLabel);
 
 
-        return message;
-    }
+            stage.addActor(uiTable);
+
+            uiTable.addAction(Actions.sequence(
+                Actions.delay(7), // Delay for 7 seconds
+                Actions.run(new Runnable() {
+                    @Override
+                    public void run() {
+                        uiShow = false;
+                        uiTable.remove(); // Remove the table from the stage
+                    }
+                })
+            ));
+	}}
+
+
+    // public String getMessage(String inputType){
+    //     String message;
+
+
+    //     return message;
+    // }
     
 
 
