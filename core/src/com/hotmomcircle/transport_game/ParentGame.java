@@ -33,7 +33,7 @@ public class ParentGame implements Json.Serializable{
 
 	
 //	Constructor for new game
-	public ParentGame(TransportGame game) {
+	public ParentGame(TransportGame game, String name) {
 		this.game = game;
 		init();
 		loadLevels();

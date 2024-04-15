@@ -15,6 +15,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
@@ -23,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.JsonReader;
@@ -154,8 +156,7 @@ public class MainMenuScreen implements Screen {
 		newGame.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				dispose();
-				game.newGame();
+				newGameDialog();
 			}
 			
 		});
@@ -290,6 +291,56 @@ public class MainMenuScreen implements Screen {
 		
 	}
 	
+//	Pops up the "Please enter your name" dialogue
+	public void newGameDialog() {
+//		Table that holds title, saves, and back button
+		Table newGameTable = new Table();
+		newGameTable.setFillParent(true);
+		newGameTable.defaults().width(game.SCREEN_WIDTH/2).expandX().fillX();
+		newGameTable.setWidth(game.SCREEN_WIDTH/2);
+		newGameTable.setDebug(true);
+		
+		Label titleLabel = new Label("Please enter your name:", skin);
+		titleLabel.setAlignment(Align.center);
+		titleLabel.setFontScale(2.0f); // Increase font size
+		newGameTable.add(titleLabel).colspan(2).padBottom(10).padTop(10); // Colspan to span across all columns		
+		
+		
+		
+        // Create text field for entering name
+        final TextField textField = new TextField("", skin);
+		newGameTable.row();
+		newGameTable.add(textField).colspan(2).fillX().uniformX();
+
+        // Add OK button
+        TextButton okButton = new TextButton("OK", skin);
+        okButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.newGame(textField.getText());
+                dispose();
+            }
+        });
+        
+
+        // Add Cancel button
+        TextButton cancelButton = new TextButton("Cancel", skin);
+        cancelButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+				newGameTable.remove();
+				stage.addActor(table);
+            }
+        });
+        
+        newGameTable.row();
+        newGameTable.add(okButton);
+        newGameTable.add(cancelButton);
+
+        // Show dialog
+        table.remove();
+        stage.addActor(newGameTable);
+	}
 	
 	@Override
 	public void show() {

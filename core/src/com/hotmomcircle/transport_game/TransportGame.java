@@ -77,8 +77,8 @@ public class TransportGame extends Game {
 		return SCREEN_HEIGHT;
 	}
 	
-	public void newGame() {
-		new ParentGame(this);
+	public void newGame(String name) {
+		new ParentGame(this, name);
 	}
 	
 	public void resumeGame() {
