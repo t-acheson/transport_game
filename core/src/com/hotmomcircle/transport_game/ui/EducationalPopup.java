@@ -1,5 +1,11 @@
 package com.hotmomcircle.transport_game.ui;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.Random;
+
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -34,22 +40,19 @@ public class EducationalPopup {
     public void showUI () {
         if (uiShow == false){
             uiShow = true;
-            // takes Routes as argument from togglePlanning
-            // creates new table with screen options
+            String outString = getMessage();
+
             uiTable = new Table();
             uiTable.setFillParent(true);
-            uiTable.defaults().width(this.game.SCREEN_WIDTH / 6).expandX().fillX();
-            uiTable.setWidth(game.SCREEN_WIDTH /3);
+            uiTable.defaults().width(this.game.SCREEN_WIDTH).expandX().fillX();
+            uiTable.setWidth(game.SCREEN_WIDTH);
             uiTable.row().pad(10, 0, 10, 0);
             uiTable.bottom();
 
-            Label zoomLabel = new Label("Zoom: +/-", skin);
-            Label panLabel = new Label("Pan: WASD", skin);
-            Label closeMapLabel = new Label("Close Map: M", skin);
+            Label panLabel = new Label(outString, skin);
+            panLabel.setWrap(true);
 
-            uiTable.add(zoomLabel);
             uiTable.add(panLabel);
-            uiTable.add(closeMapLabel);
 
 
             stage.addActor(uiTable);
@@ -64,15 +67,77 @@ public class EducationalPopup {
                     }
                 })
             ));
+            System.out.println(player.currTransport().name);
 	}}
 
 
-    // public String getMessage(String inputType){
-    //     String message;
+    public String getMessage(){
+        String path = "";
+        int line = -1;
+        ArrayList<String> lines = new ArrayList<>();
+        Random random = new Random();
+
+        switch(player.currTransport().name) {
+            case "Foot":
+                path = "assets/environmentFacts/generic.txt";
+                if (!walking){
+                    line = 1;
+                    walking = true;
+                } else {
+                    return "Remember to be careful of your Freshness!";
+                }
+                break;
+            case "Bicycle": 
+                path = "assets/environmentFacts/bike.txt";
+                if (!bike){
+                    line = 0;
+                    bike = true;
+                } else {
+                    line = random.nextInt(20);
+                }
+                break;
+            case "Car":
+                path = "assets/environmentFacts/car.txt";
+                if (!car){
+                    line = 0;
+                    car = true;
+                } else {
+                    line = random.nextInt(20);
+                }
+                break;
+            case "Luas":
+                path = "assets/environmentFacts/luas.txt"; 
+                if (!luas){
+                    line = 0;
+                    luas = true;
+                } else {
+                    line = random.nextInt(20);
+                }
+                break;
+            case "Bus":
+                path = "assets/environmentFacts/bus.txt";
+                if (!bus){
+                    line = 0;
+                    bus = true;
+                } else {
+                    line = random.nextInt(20);
+                }
+                break;
+            }
+
+            try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
+                String lineString;
+                while ((lineString = reader.readLine()) != null) {
+                    lines.add(lineString); 
+                }
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+            
+            return lines.get(line);
 
 
-    //     return message;
-    // }
+    }
     
 
 

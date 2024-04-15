@@ -109,10 +109,10 @@ public class Player extends Entity {
 			 
 			switch(currTransport().name) {
 			case "Foot":
-				interact();				
+				interact();
 				break;
 			case "Bicycle":
-				game.addBike(Math.round(this.x), Math.round(this.y));
+				game.addBike(Math.round(this.x), Math.round(this.y));				
 				getOnFoot();
 				break;
 			case "Car":
@@ -237,6 +237,7 @@ public class Player extends Entity {
 	public void getOnFoot() {
 		hasInteracted = true;
 		transIdx = 0;
+		game.showPopup = true;
 	}
 	
 //	Changes player transport
