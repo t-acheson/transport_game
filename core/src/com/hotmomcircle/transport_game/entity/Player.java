@@ -25,7 +25,10 @@ public class Player extends Entity {
 	public int CAR = 2;
 	private int stamina;
 	public Rectangle playerRectangle;
-	
+
+	public float prevx = 0;
+	public float prevy = 0;
+
 	private String direction = "down";
 	private boolean hasInteracted = false;
 	
@@ -51,7 +54,7 @@ public class Player extends Entity {
 			playerTextures[i] = game.assetManager.get(paths[i], Texture.class);
 		}
 
-		transport[0] = new Transport(game, "Foot", 200, playerTextures, "0", "-5");
+		transport[0] = new Transport(game, this, "Foot", 200, playerTextures, "0", "-5");
 		
 		
 		
@@ -75,7 +78,7 @@ public class Player extends Entity {
 		
 		
 		// footprint for the bike? we gotta nerf it somehow, could just crank up the stamina cost?
-		transport[1] = new Transport(game, "Bicycle", 300, bikeTextures, "2", "-10"); 
+		transport[1] = new Transport(game, this, "Bicycle", 300, bikeTextures, "2", "-10"); 
 		
 		Texture[] carTextures = new Texture[8];
 		
@@ -94,14 +97,11 @@ public class Player extends Entity {
 			carTextures[i] = game.assetManager.get(carPaths[i], Texture.class);
 		}
 		
-		transport[2] = new Transport(game, "Car", 400, carTextures, "10", "0"); 
-
+		transport[2] = new Transport(game, this, "Car", 400, carTextures, "10", "0"); 
 	}
 	
 	@Override
 	public void render(SpriteBatch batch) throws Exception {
-		
-		
 		if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !hasInteracted) {
 			interact();
 			
@@ -133,71 +133,8 @@ public class Player extends Entity {
 //		Can press 'B' to get on bike
 		if(Gdx.input.isKeyPressed(Input.Keys.F)) {
 			getOnFoot();
-		}
-		
-		
-//		Move the player 
-		// define speed at render time
-		float speed = getSpeed() * Gdx.graphics.getDeltaTime();
+		}		
 
-		// determine movement direction
-		// TODO find a way to reintroduce the moonwalk bug, i mean FEATURE
-		float dx = 0;
-		float dy = 0;
-
-		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-			direction = "up";
-			dy += speed;
-		}
-		if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-			direction = "down";
-			dy -= speed;
-		}
-		if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-			direction = "left";
-			dx -= speed;
-		}
-		if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-			direction = "right";
-			dx += speed;
-		}
-
-		if (Gdx.input.isKeyJustPressed(Input.Keys.X)) {
-			System.out.println(NodeFinder.findNode(this.game.pathfindingGraph.graph, x, y));
-			NodeFinder.findNeighbours(this.game.pathfindingGraph.graph, x, y);
-		}
-
-		if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
-			System.out.println(getX() + " " + getY());
-		}
-
-		if (Gdx.input.isKeyJustPressed(Input.Keys.Z)) {
-			Node source = NodeFinder.findNode(this.game.pathfindingGraph.graph, x, y);
-			Node dest = NodeFinder.findNode(this.game.pathfindingGraph.graph, 6288, 4608);
-			AStar.findPath(this.game.pathfindingGraph.graph, source, dest);
-		}
-
-		// the diagonal vector is the same as the 
-		// square root of the sum of the squared
-		// vertical and horizontal vectors
-
-		float movementMagnitude = (float) Math.sqrt(dx * dx + dy * dy);
-		if (movementMagnitude > speed) {
-			// if it exceeds it, we normalise the speed
-			// by the magnitude
-			dx = dx / movementMagnitude * speed;	
-			dy = dy / movementMagnitude * speed;
-		}
-
-		// finally apply the movement
-		x += dx;
-		y += dy;
-
-		this.rectangle.x = this.getX();
-		this.rectangle.y = this.getY();
-		
-		
-		// Player interaction
 		
 		currTransport().render(batch, dx, dy);
 //		batch.draw(transport[transIdx].image, x, y, 0, 0, transport[transIdx].image.getWidth(), transport[transIdx].image.getHeight(), game.scale, game.scale, 0, 0, 0, transport[transIdx].image.getWidth(), transport[transIdx].image.getHeight(), false, false);
@@ -209,10 +146,6 @@ public class Player extends Entity {
 		return transport[transIdx].speed;
 	}
 	
-	public String getDirection() {
-		return direction;
-	}
-	
 	
 //	Returns the current transport method
 	public Transport currTransport() {
@@ -222,20 +155,9 @@ public class Player extends Entity {
 	public Rectangle getPlayerRectangle() {
 		return this.rectangle;
 	}
-	
-	public boolean isMoving(float dx, float dy) {
-		boolean up = dy > 0 ? true : false;
-		boolean down = dy < 0 ? true : false;
-		boolean left = dx < 0 ? true : false;
-		boolean right = dx > 0 ? true : false;
 
-		if (up || down || left || right) {
-			String staminaCost = transport[transIdx].getStaminaCost();
-			String footprint = transport[transIdx].getFootprint();
-			this.game.freshness.setText(staminaCost);
-			this.game.carbon.setText(footprint);
-		}
-		return up || down || left || right;
+	public void Collision(){
+		this.rectangle = new Rectangle(prevx, prevy, this.rectangle.getWidth(), this.rectangle.getHeight());
 	}
 	
 //  Go on foot
