@@ -99,8 +99,6 @@ public class Player extends Entity {
 	
 	@Override
 	public void render(SpriteBatch batch) throws Exception {
-
-
 		if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !hasInteracted) {
 			interact();
 			
@@ -226,7 +224,7 @@ public class Player extends Entity {
 	}
 
 	public void Collision(Rectangle playersPreviousPosition){
-		
+
 		this.rectangle = new Rectangle(
 			playersPreviousPosition.x, 
 			playersPreviousPosition.y, 
