@@ -63,5 +63,13 @@ public class Entity {
 	public void setY(float y) {
 		this.y = y;
 	}
+
+	public void incX (float dx) {
+		this.x += dx;
+	}
+
+	public void incY (float dy) {
+		this.y += dy;
+	}
 	
 }

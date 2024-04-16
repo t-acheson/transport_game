@@ -1,10 +1,13 @@
 package com.hotmomcircle.transport_game.transport;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.hotmomcircle.transport_game.GameScreen;
+import com.hotmomcircle.transport_game.entity.Player;
 
 // Transport superclass.
 // Foot, bike and car will all be instances of this class
@@ -15,10 +18,12 @@ public class Transport {
 	private GameScreen game;
 	public String name;
 	public int speed;
+	public Player player;
 	// passing these as strings because that's the argument
 	// Points.setText method takes (because extends Label)
 	private String footprint;
 	private String staminaCost;
+	private String direction = "down";
 	
 	private long imgDuration = 500000000; //How long each image should be displayed
 	private long imgChangeTime = 0; //Time since the image was last changed
@@ -31,12 +36,13 @@ public class Transport {
 	public Texture[] left;
 	public Texture[] right;
 
-	public Transport(GameScreen game, String name, int speed, Texture[] images, String footprint, String staminaCost) {
+	public Transport(GameScreen game, Player player, String name, int speed, Texture[] images, String footprint, String staminaCost) {
 		this.game = game;
 		this.name = name;
 		this.speed = speed;
 		this.footprint = footprint;
 		this.staminaCost = staminaCost;
+		this.player = player;
 		
 		up = new Texture[2];
 		down = new Texture[2];
@@ -56,7 +62,7 @@ public class Transport {
 	}
 	
 	public void render(SpriteBatch batch) throws Exception{
-		Texture currImg = getCurrentImage();
+		Texture currImg = update();
 //		System.out.println(currImg.getWidth());
 //		System.out.println(currImg.getHeight());
 //		System.out.println(game.getTileSize());
@@ -64,14 +70,14 @@ public class Transport {
 		batch.draw(currImg, game.player.getX(), game.player.getY(), 0, 0, game.getTileSize(), game.getTileSize(), 1, 1, 0, 0, 0, currImg.getWidth(), currImg.getHeight(), false, false);
 	}
 	
-	public Texture getCurrentImage() throws Exception {
+	public Texture getCurrentImage(float dx, float dy) {
 		
-		if(TimeUtils.nanoTime() - imgChangeTime > imgDuration && game.player.isMoving()) {
+		if(TimeUtils.nanoTime() - imgChangeTime > imgDuration && isMoving(dx, dy)) {
 			imgChangeTime = TimeUtils.nanoTime();
 			imgIdx = (imgIdx + 1) % 2;
 		}
 		
-		switch(game.player.getDirection()) {
+		switch(getDirection()) {
 		case "up":
 			return up[imgIdx];
 		case "down":
@@ -81,7 +87,7 @@ public class Transport {
 		case "right":
 			return right[imgIdx];
 		default:
-			throw new Exception("Error: incorrect direction string");
+		return down[0];
 		}
 	}
 
@@ -91,6 +97,79 @@ public class Transport {
 
 	public String getStaminaCost() {
 		return staminaCost;
+	}
+
+	public Texture update() {
+		//		Move the player 
+		// define speed at render time
+		float speed = getSpeed() * Gdx.graphics.getDeltaTime();
+
+		// determine movement direction
+		// TODO find a way to reintroduce the moonwalk bug, i mean FEATURE
+		float dx = 0;
+		float dy = 0;
+
+		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+			direction = "up";
+			dy += speed;
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+			direction = "down";
+			dy -= speed;
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+			direction = "left";
+			dx -= speed;
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+			direction = "right";
+			dx += speed;
+		}
+
+		// the diagonal vector is the same as the 
+		// square root of the sum of the squared
+		// vertical and horizontal vectors
+
+		float movementMagnitude = (float) Math.sqrt(dx * dx + dy * dy);
+		if (movementMagnitude > speed) {
+			// if it exceeds it, we normalise the speed
+			// by the magnitude
+			dx = dx / movementMagnitude * speed;	
+			dy = dy / movementMagnitude * speed;
+		}
+
+		// finally apply the movement
+		this.player.incX(dx);
+		this.player.incY(dy);
+
+		this.player.rectangle.x = this.player.getX();
+		this.player.rectangle.y = this.player.getY();
+
+		return getCurrentImage(dx, dy);
+	}
+
+	private float getSpeed() {
+		// TODO Auto-generated method stub
+		return this.speed;
+	}
+
+	public boolean isMoving(float dx, float dy) {
+		boolean up = dy > 0 ? true : false;
+		boolean down = dy < 0 ? true : false;
+		boolean left = dx < 0 ? true : false;
+		boolean right = dx > 0 ? true : false;
+
+		if (up || down || left || right) {
+			String staminaCost = getStaminaCost();
+			String footprint = getFootprint();
+			this.game.freshness.setText(staminaCost);
+			this.game.carbon.setText(footprint);
+		}
+		return up || down || left || right;
+	}
+
+	public String getDirection() {
+		return direction;
 	}
 	
 }
