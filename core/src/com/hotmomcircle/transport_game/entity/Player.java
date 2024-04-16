@@ -226,7 +226,12 @@ public class Player extends Entity {
 	}
 
 	public void Collision(Rectangle playersPreviousPosition){
-		this.rectangle = new Rectangle(playersPreviousPosition.x, playersPreviousPosition.y, playersPreviousPosition.getWidth(), playersPreviousPosition.getHeight());
+		
+		this.rectangle = new Rectangle(
+			playersPreviousPosition.x, 
+			playersPreviousPosition.y, 
+			playersPreviousPosition.getWidth(),
+			 playersPreviousPosition.getHeight());
 	}
 	
 //  Go on foot

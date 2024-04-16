@@ -20,15 +20,9 @@ public class Bicycle_OBJ extends Transport_OBJ {
 		interactionRadius = new Rectangle(x, y, game.getTileSize()*2, game.getTileSize()*2);
 
 		popUp = "Press space to ride bike";
-		
 	}
 	
 	public void interact() {
 		game.player.getOnBike();
 	}
-
-	public String PopUp(){
-		return "This is a bike";
-	}
-	
 }
