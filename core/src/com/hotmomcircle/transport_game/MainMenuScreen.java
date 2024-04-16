@@ -319,8 +319,11 @@ public class MainMenuScreen implements Screen {
         okButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.newGame(textField.getText());
-                dispose();
+				if (!textField.getText().trim().isEmpty()) {
+					game.newGame(textField.getText());
+					dispose();
+				}
+
             }
         });
         
@@ -342,6 +345,9 @@ public class MainMenuScreen implements Screen {
         // Show dialog
         table.remove();
         stage.addActor(newGameTable);
+
+		// auto focus on text input
+		textField.getStage().setKeyboardFocus(textField);
 	}
 	
 	@Override
