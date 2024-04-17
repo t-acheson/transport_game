@@ -148,7 +148,7 @@ public class Transport {
 		return getCurrentImage(dx, dy);
 	}
 
-	private float getSpeed() {
+	public float getSpeed() {
 		// TODO Auto-generated method stub
 		return this.speed;
 	}

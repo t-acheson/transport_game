@@ -122,7 +122,7 @@ public class GameScreen implements Screen, Json.Serializable {
 		
 		int pX = levelData.get("player").getInt("x");
 		int pY = levelData.get("player").getInt("y");
-		player = new Player(this, pX, pY, 32, 32, "./foot/player_down1.png");
+		player = new Player(this, 6300, 4500, 32, 32, "./foot/player_down1.png");
 		
 //		Load gems from levels file
 		for (JsonValue gemLoc = levelData.get("gems").child; gemLoc != null; gemLoc = gemLoc.next) {

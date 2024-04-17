@@ -35,4 +35,12 @@ public class Node {
     public int hashCode() {
         return Objects.hash(region.x, region.y);
     }
+
+    public float getX() {
+        return this.region.x;
+    }
+
+    public float getY() {
+        return this.region.y;
+    }
 }

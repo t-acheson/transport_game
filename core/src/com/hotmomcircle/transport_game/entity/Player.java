@@ -135,8 +135,23 @@ public class Player extends Entity {
 			getOnFoot();
 		}		
 
+		if (Gdx.input.isKeyJustPressed(Input.Keys.X)) {
+			System.out.println(NodeFinder.findNode(this.game.pathfindingGraph.graph, x, y));
+			NodeFinder.findNeighbours(this.game.pathfindingGraph.graph, x, y);
+		}
+
+		if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
+			System.out.println(getX() + " " + getY());
+		}
+
+		if (Gdx.input.isKeyJustPressed(Input.Keys.Z)) {
+			Node source = NodeFinder.findNode(this.game.pathfindingGraph.graph, x, y);
+			Node dest = NodeFinder.findNode(this.game.pathfindingGraph.graph, 6288, 4608);
+			AStar.findPath(this.game.pathfindingGraph.graph, source, dest);
+		}
+
 		
-		currTransport().render(batch, dx, dy);
+		currTransport().render(batch);
 //		batch.draw(transport[transIdx].image, x, y, 0, 0, transport[transIdx].image.getWidth(), transport[transIdx].image.getHeight(), game.scale, game.scale, 0, 0, 0, transport[transIdx].image.getWidth(), transport[transIdx].image.getHeight(), false, false);
 	
 		hasInteracted = false;
