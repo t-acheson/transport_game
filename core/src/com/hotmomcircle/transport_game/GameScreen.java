@@ -6,17 +6,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
@@ -100,6 +96,8 @@ public class GameScreen implements Screen, Json.Serializable {
 
 	//gemArrow instance 
 	private gemArrow gemArrowUI;
+
+	public LevelEndScreen levelEndScreen;
 
 // New level
 	public GameScreen(TransportGame game, ParentGame parentGame) {
@@ -285,6 +283,10 @@ public class GameScreen implements Screen, Json.Serializable {
 		Gdx.input.setInputProcessor(pauseStage);
 
 		pauseUI = new Pause(game, this, pauseStage, skin);
+
+
+		levelEndScreen = new LevelEndScreen(game);
+
 	}
 
 	@Override
@@ -295,6 +297,8 @@ public class GameScreen implements Screen, Json.Serializable {
 
 	@Override
 	public void render(float delta) {
+
+		game.setScreen(levelEndScreen);
 
 		// pauses the game if it isnt already paused - prevents multiple inputs
 		if(Gdx.input.isKeyPressed(Input.Keys.P) && GAME_STATE != GAME_PAUSED) {
