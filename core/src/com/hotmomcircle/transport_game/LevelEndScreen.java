@@ -46,7 +46,6 @@ public class LevelEndScreen implements Screen {
     public void makeLevelEndTable(boolean levelSuccessful, String score) {
         table = new Table();
         table.setFillParent(true);
-        table.setDebug(true); // Turn on all debug lines (table, cell, and widget)
 
        
         if (levelSuccessful){
