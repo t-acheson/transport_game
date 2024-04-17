@@ -37,6 +37,8 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 //
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.Timer.Task;
 
 // Screen of the level the player is currently playing
 // Separation of game and level to allow 
@@ -100,6 +102,11 @@ public class GameScreen implements Screen, Json.Serializable {
 	public LevelEndScreen levelEndScreen;
 	public boolean levelEnd = false;
 	public boolean levelCompleted;
+
+	private float timeLeft;
+
+
+
 
 // New level
 	public GameScreen(TransportGame game, ParentGame parentGame) {
@@ -286,9 +293,8 @@ public class GameScreen implements Screen, Json.Serializable {
 
 		pauseUI = new Pause(game, this, pauseStage, skin);
 
-
 		levelEndScreen = new LevelEndScreen(game);
-
+		timeLeft = 5f;
 	}
 
 	@Override
@@ -299,6 +305,13 @@ public class GameScreen implements Screen, Json.Serializable {
 
 	@Override
 	public void render(float delta) {
+		timeLeft -= delta;
+		if (timeLeft <= 0){
+			levelEnd = true;
+			levelCompleted = false;
+		}
+
+
 		// public boolean levelEnd = false;
 		// public boolean levelCompleted;
 		if (gems.isEmpty()){
