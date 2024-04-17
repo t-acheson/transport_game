@@ -7,8 +7,8 @@ import com.hotmomcircle.transport_game.entity.Player;
 public class GuidedTransport extends Transport {
     public Player player;
 
-    public GuidedTransport(GameScreen game, String name, int speed, Texture[] images, String footprint, String staminaCost) {
-        super(game, name, speed, images, footprint, staminaCost);
+    public GuidedTransport(GameScreen game, Player player, String name, int speed, Texture[] images, String footprint, String staminaCost) {
+        super(game, player, name, speed, images, footprint, staminaCost);
 
     }
 
