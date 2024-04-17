@@ -301,18 +301,24 @@ public class GameScreen implements Screen, Json.Serializable {
 	public void render(float delta) {
 		// public boolean levelEnd = false;
 		// public boolean levelCompleted;
+		if (gems.isEmpty()){
+			levelEnd = true;
+			levelCompleted = true;
+		}
 
-		String score = "3000";
+
 		if (levelEnd){
 			if (levelCompleted){
-				levelEndScreen.updateLevelEndScreen(true, score);
+				levelEndScreen.updateLevelEndScreen(true, points.getText().toString());
+				game.setScreen(levelEndScreen);
 			} else {
-				levelEndScreen.gameOverScreen(score);
+				levelEndScreen.gameOverScreen(points.getText().toString());
+				game.setScreen(levelEndScreen);
 			}
 		}
-		levelEndScreen.updateLevelEndScreen(true, score);
+		// levelEndScreen.updateLevelEndScreen(true, score);
 
-		game.setScreen(levelEndScreen);
+		// game.setScreen(levelEndScreen);
 
 		// pauses the game if it isnt already paused - prevents multiple inputs
 		if(Gdx.input.isKeyPressed(Input.Keys.P) && GAME_STATE != GAME_PAUSED) {

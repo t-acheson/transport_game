@@ -52,14 +52,12 @@ public class LevelEndScreen implements Screen {
         if (levelSuccessful){
             completed = "Completed";
             scoreText = "Current";
-
+            
             continueButton = new TextButton("Continue", skin);
-            continueButton.addListener(new ChangeListener(){
-                @Override
-                public void changed(ChangeEvent event, Actor actor) {
-                    Gdx.app.exit();
-                }
-            });
+            // continueButton.addListener(new ChangeListener(){
+
+            //     //TODO add continue functionality
+            // });
         } else {
             System.out.println("Level Failed");
 
@@ -78,7 +76,7 @@ public class LevelEndScreen implements Screen {
         levelCompletedLabel = new Label("Level "+completed, skin);
         levelCompletedLabel.setAlignment(Align.center);
 
-        scoreLabel = new Label(scoreText +" Score: "+ score, skin);
+        scoreLabel = new Label(scoreText +" Points: "+ score, skin);
         scoreLabel.setAlignment(Align.center);
 
         quitButton = new TextButton("Quit", skin);
@@ -89,10 +87,6 @@ public class LevelEndScreen implements Screen {
         table.row(); // Move to next row
         table.add(continueButton).width(200).padRight(5);
         table.add(quitButton).width(200).padLeft(5);
-
-        // Add listeners to buttons as needed
-        // e.g., continueButton.addListener(new ChangeListener() { ... });
-       
 
         quitButton.addListener(new ChangeListener() {
             @Override
