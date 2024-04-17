@@ -28,6 +28,10 @@ public class LevelEndScreen implements Screen {
     Label scoreLabel;
     TextButton continueButton;
     TextButton quitButton;
+    Screen screen;
+
+    String completed;
+    String scoreText;
 
     public LevelEndScreen(final TransportGame game) {
         this.game = game;
@@ -37,23 +41,46 @@ public class LevelEndScreen implements Screen {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
-        makeLevelEndTable();
-
-        stage.addActor(table);
     }
     
-    public void makeLevelEndTable() {
+    public void makeLevelEndTable(boolean levelSuccessful, String score) {
         table = new Table();
         table.setFillParent(true);
-        // table.setDebug(true); // Turn on all debug lines (table, cell, and widget)
+        table.setDebug(true); // Turn on all debug lines (table, cell, and widget)
 
-        levelCompletedLabel = new Label("Level Completed", skin);
+       
+        if (levelSuccessful){
+            completed = "Completed";
+            scoreText = "Current";
+
+            continueButton = new TextButton("Continue", skin);
+            continueButton.addListener(new ChangeListener(){
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    Gdx.app.exit();
+                }
+            });
+        } else {
+            System.out.println("Level Failed");
+
+            completed = "Failed";
+            scoreText = "Final";
+
+            continueButton = new TextButton("New Game", skin);
+            continueButton.addListener(new ChangeListener(){
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    game.newGame();
+                }
+            });
+
+        }
+        levelCompletedLabel = new Label("Level "+completed, skin);
         levelCompletedLabel.setAlignment(Align.center);
 
-        scoreLabel = new Label("Current Score: 5000", skin);
+        scoreLabel = new Label(scoreText +" Score: "+ score, skin);
         scoreLabel.setAlignment(Align.center);
 
-        continueButton = new TextButton("Continue", skin);
         quitButton = new TextButton("Quit", skin);
 
         table.add(levelCompletedLabel).colspan(2).padBottom(10);
@@ -65,12 +92,7 @@ public class LevelEndScreen implements Screen {
 
         // Add listeners to buttons as needed
         // e.g., continueButton.addListener(new ChangeListener() { ... });
-        continueButton.addListener(new ChangeListener(){
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                Gdx.app.exit();
-            }
-        });
+       
 
         quitButton.addListener(new ChangeListener() {
             @Override
@@ -80,12 +102,25 @@ public class LevelEndScreen implements Screen {
         });
     }
 
+    public void updateLevelEndScreen(boolean levelCompleted, String score){
+
+        makeLevelEndTable(levelCompleted, score);
+
+        stage.addActor(table);
+    }
+
+    public void gameOverScreen(String score){
+        updateLevelEndScreen(false, score);
+    }
+
     @Override
     public void render(float delta) {
         ScreenUtils.clear(0, 0, 0.2f, 1);
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
     }
+
+
 
     @Override
     public void show() {

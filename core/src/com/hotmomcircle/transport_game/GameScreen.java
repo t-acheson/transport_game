@@ -98,6 +98,8 @@ public class GameScreen implements Screen, Json.Serializable {
 	private gemArrow gemArrowUI;
 
 	public LevelEndScreen levelEndScreen;
+	public boolean levelEnd = false;
+	public boolean levelCompleted;
 
 // New level
 	public GameScreen(TransportGame game, ParentGame parentGame) {
@@ -297,6 +299,18 @@ public class GameScreen implements Screen, Json.Serializable {
 
 	@Override
 	public void render(float delta) {
+		// public boolean levelEnd = false;
+		// public boolean levelCompleted;
+
+		String score = "3000";
+		if (levelEnd){
+			if (levelCompleted){
+				levelEndScreen.updateLevelEndScreen(true, score);
+			} else {
+				levelEndScreen.gameOverScreen(score);
+			}
+		}
+		levelEndScreen.updateLevelEndScreen(true, score);
 
 		game.setScreen(levelEndScreen);
 
