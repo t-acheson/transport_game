@@ -105,14 +105,14 @@ public class Player extends Entity {
 		Texture[] busTextures = new Texture[8];
 		
 		String[] busPaths = {
-			    "./car/car_up.png",
-			    "./car/car_up.png",
-			    "./car/car_down.png",
-			    "./car/car_down.png",
-			    "./car/car_left.png",
-			    "./car/car_left.png",
-			    "./car/car_right.png",
-			    "./car/car_right.png"
+			    "./bus/bus_up.png",
+			    "./bus/bus_up.png",
+			    "./bus/bus_down.png",
+			    "./bus/bus_down.png",
+			    "./bus/bus_left.png",
+			    "./bus/bus_left.png",
+			    "./bus/bus_right.png",
+			    "./bus/bus_right.png"
 			};
 		
 		for(int i = 0; i<busPaths.length; i++) {
