@@ -15,20 +15,18 @@ public class AStar {
         // A* search loop
         while (!openSet.isEmpty()) {
             Node current = openSet.poll();
-            System.out.println(current);
 
             // Goal check
             if (current.equals(goal)) {
                 // Reconstruct and print path
                 ArrayList<Node> path = reconstructPath(cameFrom, current);
                 for (Node node : path) {
-                    System.out.println(node.toString());
+                    continue;
                 }
                 return path;
             }
 
             closedSet.add(current);
-            System.out.println(graph.get(current));
 
             // Expand current node
             for (Node neighbor : graph.get(current)) {

@@ -207,6 +207,16 @@ public class GameScreen implements Screen, Json.Serializable {
 		}
 		
 		assetManager.finishLoading();
+
+		try {
+			map = assetManager.get("bigMap.tmx", TiledMap.class);
+			System.out.println("Map loaded successfully.");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		// graph representing the 'roads' layer
+		pathfindingGraph = new PathfindingGraph(map, originalTileSize);
 	}
 	
 //	Initializes the game. Put into separate function to allow multiple constructors to call it
@@ -218,16 +228,6 @@ public class GameScreen implements Screen, Json.Serializable {
 		
 		// for the pause / play feature
 		GAME_STATE = GAME_RUNNING;
-		
-		try {
-			map = assetManager.get("bigMap.tmx", TiledMap.class);
-			System.out.println("Map loaded successfully.");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		// graph representing the 'roads' layer
-		pathfindingGraph = new PathfindingGraph(map, originalTileSize);
 
 		// routes for hub testing
 		routes = new Array<Route>();

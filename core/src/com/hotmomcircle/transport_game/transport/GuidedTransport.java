@@ -31,44 +31,55 @@ public class GuidedTransport extends Transport {
         float speed = getSpeed() * Gdx.graphics.getDeltaTime();
         float dx = 0;
         float dy = 0;
-
-        if (NodeFinder.findNode(this.graph, player.getX(), player.getY()) == current) {
+    
+        Node playerNode = NodeFinder.findNode(this.graph, player.getX(), player.getY());
+    
+        if (playerNode == this.current) {
             if (!path.isEmpty()) {
-                current = path.remove(0);
+                this.current = path.remove(0);
             } else {
                 player.getOnFoot();
                 return getCurrentImage(dx, dy);
             }
-        } 
-        else {
-            if (player.getX() > current.getX()) {
-                // player must move left
-                dx -= speed;
-            }
+        } else {
+            // Calculate the distance to the current node
+            float deltaX = current.getX() - player.getX();
+            float deltaY = current.getY() - player.getY();
+            float distance = (float) Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+    
+            // If the distance is less than a threshold, consider the player has reached the node
+            if (distance <= 5) {
+                // Move the player directly to the node
+                this.player.setX(current.getX());
+                this.player.setY(current.getY());
+                if (!path.isEmpty()) {
+                    this.current = path.remove(0);
+                }else {
+                    player.getOnFoot();
+                    return getCurrentImage(dx, dy);
+                }
 
-            if (player.getX() < current.getX()) {
-                // player must move right
-                dx += speed;
-            }
-
-            if (player.getY() < current.getY()) {
-                // player must move up
-                dy += speed;
-            }
-
-            if (player.getY() > current.getY()) {
-                // player must move down
-                dy -= speed;
+            } else {
+                // Calculate the normalized movement vector
+                float length = (float) Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+                if (length > 0) {
+                    deltaX /= length;
+                    deltaY /= length;
+                }
+                
+                // Scale the vector by the speed
+                dx = deltaX * speed;
+                dy = deltaY * speed;
             }
         }
-
+    
         // finally apply the movement
-		this.player.incX(dx);
-		this.player.incY(dy);
-
-		this.player.rectangle.x = this.player.getX();
-		this.player.rectangle.y = this.player.getY();
-
+        this.player.incX(dx);
+        this.player.incY(dy);
+    
+        this.player.rectangle.x = this.player.getX();
+        this.player.rectangle.y = this.player.getY();
+    
         return getCurrentImage(dx, dy);
     }
     

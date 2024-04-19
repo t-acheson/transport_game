@@ -77,7 +77,7 @@ public class Transport {
 			imgIdx = (imgIdx + 1) % 2;
 		}
 		
-		switch(getDirection()) {
+		switch(getDirection(dx, dy)) {
 		case "up":
 			return up[imgIdx];
 		case "down":
@@ -110,19 +110,19 @@ public class Transport {
 		float dy = 0;
 
 		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-			direction = "up";
+			// direction = "up";
 			dy += speed;
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-			direction = "down";
+			// direction = "down";
 			dy -= speed;
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-			direction = "left";
+			// direction = "left";
 			dx -= speed;
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-			direction = "right";
+			// direction = "right";
 			dx += speed;
 		}
 
@@ -165,11 +165,19 @@ public class Transport {
 			this.game.freshness.setText(staminaCost);
 			this.game.carbon.setText(footprint);
 		}
+
 		return up || down || left || right;
 	}
 
-	public String getDirection() {
-		return direction;
+	public String getDirection(float dx, float dy) {
+		if (dx != 0) {
+			return dx > 0 ? "right" : "left";
+		}
+
+		if (dy != 0) {
+			return dy > 0 ? "up" : "down";
+		}
+		return "down";
 	}
 	
 }
