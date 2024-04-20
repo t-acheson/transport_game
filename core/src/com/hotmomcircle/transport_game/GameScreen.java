@@ -242,20 +242,30 @@ public class GameScreen implements Screen, Json.Serializable {
 		
 
 		for (MapLayer layer : map.getLayers()) {
-            // Check if the layer contains objects
-			// AND create Node(s) for the object layer
-            if (layer.getObjects() != null && layer.getName().equals("rec_layer")) {
+            // Check if the layer contains objects and is of guided transport
+            if (layer.getObjects() != null && layer.getName().contains("bus")) {
                 // Retrieve objects from the layer
                 for (MapObject object : layer.getObjects()) {
 					// get X and Y for each object
                     float locX = object.getProperties().get("x", Float.class);
                     float locY = object.getProperties().get("y", Float.class);
 					// pass to Node constructor
-					hubs.add(new Hub(this, locX, locY, 16, 16, "gem.png", routes));
-                }
+					Hub hub = new Hub(this, locX, locY, 16, 16, "gem.png");
+					hubs.add(hub);
+
+					for (MapObject hubObj : layer.getObjects()) {
+						float newHubX = hubObj.getProperties().get("x", Float.class);
+						float newHubY = hubObj.getProperties().get("y", Float.class); 
+						Hub newHub = new Hub(this, newHubX, newHubY, 32, 32, "gem.png");
+							if (newHub.getX() != hub.getX() && newHub.getY() != hub.getY()) {
+								hub.addHub(newHub);
+							}
+					}
+
+				}
+
             }
 		}
-
 
 		renderer = new OrthogonalTiledMapRenderer(map,3);
 		//

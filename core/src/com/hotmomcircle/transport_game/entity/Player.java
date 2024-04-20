@@ -247,7 +247,7 @@ public class Player extends Entity {
 				// call togglePlanning
 				// pass Routes of overlapped Node
 				System.out.println(hub);
-				this.game.planningUI.activatePlanning(hub.getRoutes());
+				// this.game.planningUI.activatePlanning(hub.getRoutes());
 				this.game.camera.zoomOut();
 				break;
 			}

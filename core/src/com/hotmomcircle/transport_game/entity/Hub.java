@@ -1,5 +1,7 @@
 package com.hotmomcircle.transport_game.entity;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -12,20 +14,23 @@ import com.hotmomcircle.transport_game.GameScreen;
 // to choose with WASD, arrow keys, or mouse 
 public class Hub extends Entity{
     private Texture image;
-    private Array<Route> routes;
+    private ArrayList<Hub> connectedHubs;
 
-    public Hub(GameScreen game, float locX, float locY, int width, int height, String imagePath, Array<Route> routes) { 
+    public Hub(GameScreen game, float locX, float locY, int width, int height, String imagePath) { 
         super(game, locX, locY, width, height, imagePath);
-        this.routes = routes;
         image = new Texture(Gdx.files.internal("gem.png"));
-    }
-
-    public Array<Route> getRoutes() {
-        return routes;
     }
     
     public void render(SpriteBatch batch) {
         batch.draw(image, this.getX(), this.getY());
+    }
+
+    public void addHub(Hub newHub) {
+        connectedHubs.add(newHub);
+    }
+
+    public ArrayList<Hub> getConnected() {
+        return connectedHubs;
     }
 
     @Override
