@@ -33,6 +33,7 @@ import com.hotmomcircle.transport_game.ui.Planning;
 import com.hotmomcircle.transport_game.ui.Points;
 import com.hotmomcircle.transport_game.ui.WorldMapUI;
 import com.hotmomcircle.transport_game.ui.gemArrow;
+import com.hotmomcircle.transport_game.ui.LevelStart;
 import com.hotmomcircle.transport_game.ui.Pause;
 import com.hotmomcircle.transport_game.ui.gemCounter;
 //map imports below 
@@ -241,7 +242,9 @@ public class GameScreen implements Screen, Json.Serializable {
 		this.batch = game.batch;
 		
 		// for the pause / play feature
-		GAME_STATE = GAME_RUNNING;
+		GAME_STATE = GAME_PAUSED;
+		
+
 
 		// routes for hub testing
 		routes = new Array<Route>();
@@ -289,7 +292,8 @@ public class GameScreen implements Screen, Json.Serializable {
 		assetManager.load("uiskin.json", Skin.class);
 
 	
-
+		LevelStart levelStart = new LevelStart(game, this, stage, skin);
+		
 		// table to hold UI elements
 		table = new Table();
 		table.setFillParent(true);
@@ -349,7 +353,10 @@ public class GameScreen implements Screen, Json.Serializable {
 
 	@Override
 	public void render(float delta) {
-		timeLeft -= delta;
+		if(GAME_STATE == GAME_RUNNING) {
+			timeLeft -= delta;
+			
+		}
 		if (timeLeft <= 0){
 			levelEnd = true;
 			levelCompleted = false;
@@ -383,7 +390,7 @@ public class GameScreen implements Screen, Json.Serializable {
 			pauseUI.showPause();
 		} 
 		// resumes game if it isn't already running
-		if(Gdx.input.isKeyPressed(Input.Keys.R) && GAME_STATE != GAME_RUNNING) {
+		if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE) && GAME_STATE != GAME_RUNNING) {
 			resume();
 		} 
 
