@@ -254,7 +254,7 @@ public class GameScreen implements Screen, Json.Serializable {
 					float width = object.getProperties().get("width", Float.class) * 3;
 					float height = object.getProperties().get("height", Float.class) * 3;
 					// pass to Hub constructor
-					Hub hub = new Hub(this, locX, locY, width, height, "gem.png");
+					Hub hub = new Hub(locX, locY, width, height);
 					hubs.add(hub);
 				}
 
@@ -264,7 +264,7 @@ public class GameScreen implements Screen, Json.Serializable {
 					float width = object.getProperties().get("width", Float.class) * 3;
 					float height = object.getProperties().get("height", Float.class) * 3;
 					// pass to Hub constructor
-					Hub newHub = new Hub(this, locX, locY, width, height, "gem.png");
+					Hub newHub = new Hub(locX, locY, width, height);
 
 					for (Hub hub : hubs) { 
 						if (newHub.getX() != hub.getX() && newHub.getY() != hub.getY()) {
@@ -447,10 +447,6 @@ public class GameScreen implements Screen, Json.Serializable {
 			
 			for (Gem gem : gems) {
 				gem.render(batch);
-			}
-			
-			for (Hub hub: hubs) {
-				hub.render(batch);
 			}
 			
 //			Render the player last so they appear on top of everything

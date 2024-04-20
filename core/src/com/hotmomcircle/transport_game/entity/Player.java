@@ -241,7 +241,7 @@ public class Player extends Entity {
 		
 		// interate through all "interactable objects"
 		for (Hub hub: this.game.hubs) {
-			if (canGetOnTransport(hub.rectangle)) {
+			if (canGetOnTransport(hub.getRect())) {
 				// if overlaps
 				// call togglePlanning
 				// pass Routes of overlapped Node
