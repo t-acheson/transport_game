@@ -83,7 +83,7 @@ public class TransportGame extends Game {
 	public void newGame(String name) {
 //		Add time to fileName to make it unique for every save
         LocalDateTime currentTime = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
         String currentTimeString = currentTime.format(formatter);
         fileName = name + currentTimeString + ".json";
 		new ParentGame(this, name, fileName);
