@@ -189,7 +189,7 @@ public class GameScreen implements Screen, Json.Serializable {
 
 		//loading map 
 		assetManager.setLoader(TiledMap.class,  new TmxMapLoader());
-		assetManager.load("bigMap.tmx", TiledMap.class);
+		assetManager.load("finalDraft.tmx", TiledMap.class);
 		
 //		Load in the player transport
 		String[] transportPaths = {
@@ -229,7 +229,7 @@ public class GameScreen implements Screen, Json.Serializable {
 		assetManager.finishLoading();
 
 		try {
-			map = assetManager.get("bigMap.tmx", TiledMap.class);
+			map = assetManager.get("finalDraft.tmx", TiledMap.class);
 			System.out.println("Map loaded successfully.");
 		} catch (Exception e) {
 			e.printStackTrace();
