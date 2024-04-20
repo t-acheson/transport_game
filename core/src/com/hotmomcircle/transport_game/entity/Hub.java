@@ -31,7 +31,7 @@ public class Hub extends Entity{
 
     @Override
     public String toString() {
-        return "Hub at " + "X: " + this.getX() + " Y: " + this.getY();
+        return "X: " + Math.round(this.getX()) + " Y: " + Math.round(this.getY());
     }
 
     public Rectangle getRect () {

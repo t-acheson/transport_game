@@ -3,18 +3,17 @@ package com.hotmomcircle.transport_game.ui;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.utils.Array;
 import com.hotmomcircle.transport_game.GameScreen;
 import com.hotmomcircle.transport_game.TransportGame;
 import com.hotmomcircle.transport_game.entity.Hub;
 import com.hotmomcircle.transport_game.entity.Player;
-import com.hotmomcircle.transport_game.entity.Route;
 
 public class Planning {
     private TransportGame game;
@@ -40,18 +39,29 @@ public class Planning {
 		// creates new table and populates with routes
 		planningTable = new Table();
 		planningTable.setFillParent(true);
-		planningTable.defaults().width(this.game.SCREEN_WIDTH / 6).expandX().fillX();
-		planningTable.setWidth(game.SCREEN_WIDTH / 6);
-
-		float buttonHeight = game.SCREEN_HEIGHT / hubs.size();
+		// planningTable.defaults().width(this.game.SCREEN_WIDTH / 6).expandX().fillX();
+		// planningTable.setWidth(game.SCREEN_WIDTH / 6);
 
 		for (Hub hub: hubs) {
-			planningTable.row().pad(0, 0, 0, 0);
+			planningTable.row().pad(2, 0, 0, 0);
 			TextButton routeButton = new TextButton(hub.toString(), skin);
-			planningTable.add(routeButton).height(buttonHeight).row();
+			planningTable.add(routeButton).pad(0,0,0,0).row();
             // event listener allows selection
             // right now it just closes the Planning UI
+			routeButton.setColor(1, 1, 1, 0.3f);
 			routeButton.addListener(new InputListener() {
+
+				@Override
+				public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+					// fill on hover
+					routeButton.setColor(1, 1, 1, 1); 
+				}
+				
+				@Override
+				public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+					// back to opaque on exit
+					routeButton.setColor(1, 1, 1, 0.3f);
+				}
 
                 @Override
 				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -66,6 +76,7 @@ public class Planning {
 			
 		}
 		stage.addActor(planningTable);
+		planningTable.left();
 	}
 
 	public void activatePlanning(ArrayList<Hub> hubs) {
