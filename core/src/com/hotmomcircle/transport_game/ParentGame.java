@@ -124,12 +124,12 @@ public class ParentGame implements Json.Serializable{
 		if (currLevel > maxLevel) {
 			maxLevel += 1;
 		}
-		
+
 		startLevel();
 	}
 	
 	public int getCurrLevel() {
-		return currLevel;
+		return currLevel + 1; // + 1 as currLevel is 0 index and we want to display this.
 	}
 	
 //	Save the game

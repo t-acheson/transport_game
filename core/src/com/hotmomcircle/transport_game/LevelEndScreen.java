@@ -60,12 +60,10 @@ public class LevelEndScreen implements Screen {
      			@Override
     			public void changed(ChangeEvent event, Actor actor) {
     				// TODO Add continue game functionality
-    				System.out.println("Here");
+    				parentGame.levelUp();
     				}
              });
         } else {
-            System.out.println("Level " + level + " Failed");
-
             completed = "Failed";
             scoreText = "Final";
 
@@ -103,7 +101,7 @@ public class LevelEndScreen implements Screen {
 
     public void updateLevelEndScreen(boolean levelCompleted, int level, String score){
 
-        makeLevelEndTable(levelCompleted, 1, score);
+        makeLevelEndTable(levelCompleted, level, score);
 
         stage.addActor(table);
     }
