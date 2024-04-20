@@ -18,7 +18,7 @@ public class Timer extends Label {
 	
 	CharSequence makeText()
 	{
-		return "" + Math.floor(this.time/60) + ":" + this.time % 60;
+		return "" + Math.round(Math.floor(this.time/60)) + ":" + Math.round(Math.floor(this.time % 60));
 	}
 	
 	public void updateTimer(float delta) {
