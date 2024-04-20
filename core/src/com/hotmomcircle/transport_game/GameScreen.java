@@ -563,7 +563,7 @@ public class GameScreen implements Screen, Json.Serializable {
 		// TODO Auto-generated method stub
 		int x = jsonData.getInt("playerX");
 		int y = jsonData.getInt("playerY");
-		player = new Player(this, x, y, 32, 32, "./foot/player_down1.png");
+		player = new Player(this, x, y, tileSize, tileSize, "./foot/player_down1.png");
 		
 //		Load gems from levels file
 		for (JsonValue gemLoc = jsonData.get("gems").child; gemLoc != null; gemLoc = gemLoc.next) {
