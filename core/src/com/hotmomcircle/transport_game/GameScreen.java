@@ -328,7 +328,7 @@ public class GameScreen implements Screen, Json.Serializable {
 
 
 		levelEndScreen = new LevelEndScreen(game);
-		timeLeft = 5f;
+		timeLeft = 500f;
 	}
 
 	@Override
