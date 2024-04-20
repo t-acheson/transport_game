@@ -378,7 +378,7 @@ public class GameScreen implements Screen, Json.Serializable {
 		// game.setScreen(levelEndScreen);
 
 		// pauses the game if it isnt already paused - prevents multiple inputs
-		if(Gdx.input.isKeyPressed(Input.Keys.P) && GAME_STATE != GAME_PAUSED) {
+		if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE) && GAME_STATE != GAME_PAUSED) {
 			pause();
 			pauseUI.showPause();
 		} 
