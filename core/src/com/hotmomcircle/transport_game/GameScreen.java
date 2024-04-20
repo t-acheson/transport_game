@@ -67,7 +67,7 @@ public class GameScreen implements Screen, Json.Serializable {
 	   
 	public Camera camera;
 	// for the world map on press of "M"
-	boolean showWorldMap = false;
+	public boolean showWorldMap = false;
 	WorldMap worldMap;
 	WorldMapUI worldMapUI;
 	Stage worldMapStage;
@@ -384,9 +384,10 @@ public class GameScreen implements Screen, Json.Serializable {
 
 		else if (showWorldMap) {
 			worldMap.render(player, gems, camera);
-			worldMapUI.showUI();
-			worldMapStage.draw();
-
+			if (!planningUI.active) {
+				worldMapUI.showUI();
+				worldMapStage.draw();
+			}
 
 		} else {
 
@@ -463,13 +464,14 @@ public class GameScreen implements Screen, Json.Serializable {
 		}
 		batch.end();
 
-		// UI draw
-		stage.act(delta);
-		stage.draw();
+
 
 	}
 		 //Update the gemArrow UI with the current player and gem positions
 		gemArrowUI.update(player, gems);
+		// UI draw
+		stage.act(delta);
+		stage.draw();
 
 		
 		

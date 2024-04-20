@@ -59,7 +59,7 @@ public class Planning {
 					deactivatePlanning();
                     player.setX(hub.getX());
                     player.setY(hub.getY());
-					screen.camera.zoomIn();
+					screen.showWorldMap ^= true;
 					return true;
 				}
 			});
@@ -77,6 +77,7 @@ public class Planning {
 			Gdx.input.setInputProcessor(this.stage);
 			active = true;
 			populatePlanning(hubs);
+			screen.showWorldMap ^= true;
 		}
 	}
 
