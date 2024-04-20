@@ -29,8 +29,8 @@ public class LevelStart {
 	public void showLevelStart() {
 		table = new Table();
 		table.setFillParent(true);
-		table.defaults().width(this.game.SCREEN_WIDTH / 6).expandX().fillX();
-		table.setWidth(game.SCREEN_WIDTH / 6);
+		table.defaults().width(this.game.SCREEN_WIDTH).expandX().fillX();
+		table.setWidth(game.SCREEN_WIDTH);
 		
 		
 		Label title = new Label("Level " + level, skin);

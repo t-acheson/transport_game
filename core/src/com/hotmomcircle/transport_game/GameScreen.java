@@ -358,6 +358,9 @@ public class GameScreen implements Screen, Json.Serializable {
 
 	@Override
 	public void render(float delta) {
+		if(Gdx.input.isKeyJustPressed(Input.Keys.P)) {
+			System.out.println("X: " + player.getX() + ", Y: " + player.getY());
+		}
 		if(GAME_STATE == GAME_RUNNING) {
 			timeLeft -= delta;
 			
@@ -408,10 +411,10 @@ public class GameScreen implements Screen, Json.Serializable {
 		}
 		
 		if (isLevelStart) {
-			renderer.render();
 			renderer.setView(camera);
 			camera.setPosition();
-			// camera.position.set(player.getX(),player.getY(), 0);
+			camera.update();
+			renderer.render();
 
 			startStage.act(delta);
 			startStage.draw();
