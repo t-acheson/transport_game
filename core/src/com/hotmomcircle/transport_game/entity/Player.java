@@ -238,10 +238,13 @@ public class Player extends Entity {
 		
 		if(hasInteracted)
 			return;
+
+		System.out.println("fire");
 		
 		// interate through all "interactable objects"
 		for (Hub hub: this.game.hubs) {
 			// if overlaps
+			System.out.println(hub.getX() + " " + hub.getY() + " " + hub.getRectangle().width + " " + hub.getRectangle().height);
 			if (canGetOnTransport(hub.rectangle)) {
 				// if overlaps
 				// call togglePlanning

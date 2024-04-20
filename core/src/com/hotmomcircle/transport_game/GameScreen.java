@@ -249,18 +249,22 @@ public class GameScreen implements Screen, Json.Serializable {
                 // Retrieve objects from the layer
                 for (MapObject object : layer.getObjects()) {
 					// get X and Y for each object
-                    float locX = object.getProperties().get("x", Float.class);
-                    float locY = object.getProperties().get("y", Float.class);
+                    float locX = object.getProperties().get("x", Float.class) * 3;
+                    float locY = object.getProperties().get("y", Float.class) * 3;
+					float width = object.getProperties().get("width", Float.class) * 3;
+					float height = object.getProperties().get("height", Float.class) * 3;
 					// pass to Hub constructor
-					Hub hub = new Hub(this, locX, locY, 32, 32, "gem.png");
+					Hub hub = new Hub(this, locX, locY, width, height, "gem.png");
 					hubs.add(hub);
 				}
 
 				for (MapObject object : layer.getObjects()) {
-					float locX = object.getProperties().get("x", Float.class);
-                    float locY = object.getProperties().get("y", Float.class);
+					float locX = object.getProperties().get("x", Float.class) * 3;
+                    float locY = object.getProperties().get("y", Float.class) * 3;
+					float width = object.getProperties().get("width", Float.class) * 3;
+					float height = object.getProperties().get("height", Float.class) * 3;
 					// pass to Hub constructor
-					Hub newHub = new Hub(this, locX, locY, 32, 32, "gem.png");
+					Hub newHub = new Hub(this, locX, locY, width, height, "gem.png");
 
 					for (Hub hub : hubs) { 
 						if (newHub.getX() != hub.getX() && newHub.getY() != hub.getY()) {

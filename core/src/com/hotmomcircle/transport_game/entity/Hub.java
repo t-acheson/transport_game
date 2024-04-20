@@ -16,7 +16,7 @@ public class Hub extends Entity{
     private Texture image;
     private ArrayList<Hub> connectedHubs = new ArrayList<Hub>();
 
-    public Hub(GameScreen game, float locX, float locY, int width, int height, String imagePath) { 
+    public Hub(GameScreen game, float locX, float locY, float width, float height, String imagePath) { 
         super(game, locX, locY, width, height, imagePath);
         image = new Texture(Gdx.files.internal("gem.png"));
     }
