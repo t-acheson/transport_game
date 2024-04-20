@@ -14,6 +14,10 @@ import com.hotmomcircle.transport_game.GameScreen;
 import com.hotmomcircle.transport_game.TransportGame;
 import com.hotmomcircle.transport_game.entity.Hub;
 import com.hotmomcircle.transport_game.entity.Player;
+import com.hotmomcircle.transport_game.tools.pathfinding.AStar;
+import com.hotmomcircle.transport_game.tools.pathfinding.Node;
+import com.hotmomcircle.transport_game.tools.pathfinding.NodeFinder;
+import com.hotmomcircle.transport_game.transport.GuidedTransport;
 
 public class Planning {
     private TransportGame game;
@@ -71,8 +75,14 @@ public class Planning {
 				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                     // handling of the Guided Transport is actually here
 					deactivatePlanning();
-                    player.setX(hub.getX());
-                    player.setY(hub.getY());
+					Node source = NodeFinder.findNode(screen.pathfindingGraph.graph, player.getX(), player.getY());
+					Node dest = NodeFinder.findNode(screen.pathfindingGraph.graph, hub.getX(), hub.getY());
+					ArrayList<Node> path = AStar.findPath(screen.pathfindingGraph.graph, source, dest);
+					player.getOnBus();
+					if (player.getTransport()[player.transIdx] instanceof GuidedTransport) {
+						GuidedTransport bus = (GuidedTransport)player.getTransport()[player.transIdx];
+						bus.setPath(path);
+					}	
 					screen.showWorldMap ^= true;
 					return true;
 				}
