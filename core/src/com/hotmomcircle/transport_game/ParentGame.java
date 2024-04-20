@@ -42,8 +42,7 @@ public class ParentGame implements Json.Serializable{
 		loadLevels();
 		currLevel = 0;
 		maxLevel = 0;
-		gameScreen = new GameScreen(game, this, levelData.get(currLevel));
-		game.setScreen(gameScreen);
+		startLevel();
 		
 	}
 	
@@ -112,6 +111,25 @@ public class ParentGame implements Json.Serializable{
  
                 levels.add(level);
         }
+	}
+	
+//	Starts the level given
+	public void startLevel() {
+		gameScreen = new GameScreen(game, this, levelData.get(currLevel));
+		game.setScreen(gameScreen);
+	}
+	
+	public void levelUp() {
+		currLevel += 1;
+		if (currLevel > maxLevel) {
+			maxLevel += 1;
+		}
+		
+		startLevel();
+	}
+	
+	public int getCurrLevel() {
+		return currLevel;
 	}
 	
 //	Save the game

@@ -338,7 +338,7 @@ public class GameScreen implements Screen, Json.Serializable {
 		worldMapUI = new WorldMapUI(game, this, worldMapStage, skin);
 
 
-		levelEndScreen = new LevelEndScreen(game);
+		levelEndScreen = new LevelEndScreen(game, parentGame);
 	}
 
 	@Override
@@ -366,10 +366,10 @@ public class GameScreen implements Screen, Json.Serializable {
 
 		if (levelEnd){
 			if (levelCompleted){
-				levelEndScreen.updateLevelEndScreen(true, points.getText().toString());
+				levelEndScreen.updateLevelEndScreen(true, parentGame.getCurrLevel(), points.getText().toString());
 				game.setScreen(levelEndScreen);
 			} else {
-				levelEndScreen.gameOverScreen(points.getText().toString());
+				levelEndScreen.gameOverScreen(parentGame.getCurrLevel(), points.getText().toString());
 				game.setScreen(levelEndScreen);
 			}
 		}
