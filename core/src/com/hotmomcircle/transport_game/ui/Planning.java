@@ -43,10 +43,12 @@ public class Planning {
 		planningTable.defaults().width(this.game.SCREEN_WIDTH / 6).expandX().fillX();
 		planningTable.setWidth(game.SCREEN_WIDTH / 6);
 
+		float buttonHeight = game.SCREEN_HEIGHT / hubs.size();
+
 		for (Hub hub: hubs) {
-			planningTable.row().pad(10, 0, 10, 0);
+			planningTable.row().pad(0, 0, 0, 0);
 			TextButton routeButton = new TextButton(hub.toString(), skin);
-			planningTable.add(routeButton);
+			planningTable.add(routeButton).height(buttonHeight).row();
             // event listener allows selection
             // right now it just closes the Planning UI
 			routeButton.addListener(new InputListener() {
