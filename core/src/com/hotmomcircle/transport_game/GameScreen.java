@@ -94,6 +94,11 @@ public class GameScreen implements Screen, Json.Serializable {
 	private final int GAME_PAUSED = 1;
 	public Skin skin;
 	public BitmapFont font;
+	
+	public LevelStart levelStart;
+	public Stage startStage;
+	public boolean isLevelStart = true;
+	
 
 	public Pause pauseUI;
 	public Stage pauseStage;
@@ -242,7 +247,7 @@ public class GameScreen implements Screen, Json.Serializable {
 		this.batch = game.batch;
 		
 		// for the pause / play feature
-		GAME_STATE = GAME_PAUSED;
+		GAME_STATE = GAME_RUNNING;
 		
 
 
@@ -291,8 +296,8 @@ public class GameScreen implements Screen, Json.Serializable {
 		// Asset manager instansiation
 		assetManager.load("uiskin.json", Skin.class);
 
-	
-		LevelStart levelStart = new LevelStart(game, this, stage, skin);
+		startStage = new Stage(new ScreenViewport());
+		levelStart = new LevelStart(game, this, startStage, skin);
 		
 		// table to hold UI elements
 		table = new Table();
@@ -403,8 +408,13 @@ public class GameScreen implements Screen, Json.Serializable {
 				System.out.println("hide map");
 			}
 		}
-
-		if (GAME_STATE == GAME_PAUSED){
+		
+		if (isLevelStart) {
+			startStage.act(delta);
+			startStage.draw();
+		}
+		
+		else if (GAME_STATE == GAME_PAUSED){
 			pauseStage.act(delta);
 			pauseStage.draw();
 		}
