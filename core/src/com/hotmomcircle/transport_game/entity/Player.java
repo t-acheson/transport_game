@@ -158,22 +158,6 @@ public class Player extends Entity {
 			getOnFoot();
 		}		
 
-		if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
-			System.out.println(getX() + " " + getY());
-		}
-
-		if (Gdx.input.isKeyJustPressed(Input.Keys.Z)) {
-			Node source = NodeFinder.findNode(this.game.pathfindingGraph.graph, x, y);
-			Node dest = NodeFinder.findNode(this.game.pathfindingGraph.graph, 6288, 4609);
-			ArrayList<Node> path = AStar.findPath(this.game.pathfindingGraph.graph, source, dest);
-			getOnBus();
-			if (getTransport()[transIdx] instanceof GuidedTransport) {
-				GuidedTransport bus = (GuidedTransport)getTransport()[transIdx];
-				bus.setPath(path);
-			}	
-		}
-
-		
 		currTransport().render(batch);
 //		batch.draw(transport[transIdx].image, x, y, 0, 0, transport[transIdx].image.getWidth(), transport[transIdx].image.getHeight(), game.scale, game.scale, 0, 0, 0, transport[transIdx].image.getWidth(), transport[transIdx].image.getHeight(), false, false);
 	
