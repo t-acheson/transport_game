@@ -2,10 +2,12 @@ package com.hotmomcircle.transport_game.ui;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -72,14 +74,14 @@ public class EducationalPopup {
 
 
     public String getMessage(){
-        String path = "";
+        FileHandle path = Gdx.files.internal("");
         int line = -1;
         ArrayList<String> lines = new ArrayList<>();
         Random random = new Random();
 
         switch(player.currTransport().name) {
             case "Foot":
-                path = "assets/environmentFacts/generic.txt";
+                path = Gdx.files.internal("assets/environmentFacts/generic.txt");
                 if (!walking){
                     line = 1;
                     walking = true;
@@ -88,7 +90,7 @@ public class EducationalPopup {
                 }
                 break;
             case "Bicycle": 
-                path = "assets/environmentFacts/bike.txt";
+                path =Gdx.files.internal("assets/environmentFacts/bike.txt");
                 if (!bike){
                     line = 0;
                     bike = true;
@@ -97,7 +99,7 @@ public class EducationalPopup {
                 }
                 break;
             case "Car":
-                path = "assets/environmentFacts/car.txt";
+                path = Gdx.files.internal("assets/environmentFacts/car.txt");
                 if (!car){
                     line = 0;
                     car = true;
@@ -106,7 +108,7 @@ public class EducationalPopup {
                 }
                 break;
             case "Luas":
-                path = "assets/environmentFacts/luas.txt"; 
+                path = Gdx.files.internal("assets/environmentFacts/luas.txt");
                 if (!luas){
                     line = 0;
                     luas = true;
@@ -115,7 +117,7 @@ public class EducationalPopup {
                 }
                 break;
             case "Bus":
-                path = "assets/environmentFacts/bus.txt";
+                path = Gdx.files.internal("assets/environmentFacts/bus.txt");
                 if (!bus){
                     line = 0;
                     bus = true;
@@ -125,7 +127,7 @@ public class EducationalPopup {
                 break;
             }
 
-            try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(path.read()))) {
                 String lineString;
                 while ((lineString = reader.readLine()) != null) {
                     lines.add(lineString); 
