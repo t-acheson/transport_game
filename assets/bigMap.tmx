@@ -1106,12 +1106,12 @@
 </data>
  </layer>
  <objectgroup id="9" name="luasObject1" locked="1">
-  <object id="29" x="4074" y="450" width="54" height="54"/>
-  <object id="30" x="4070" y="829" width="60" height="60"/>
-  <object id="33" x="4131" y="1455" width="52" height="52"/>
-  <object id="34" x="4032" y="1762" width="48" height="48"/>
-  <object id="35" x="4073" y="2499" width="42" height="42"/>
-  <object id="37" x="4068" y="2834" width="40" height="40"/>
+  <object id="29" x="4004.64" y="417.455" width="86.6364" height="66.9091"/>
+  <object id="30" x="4004.91" y="829" width="86.3636" height="60"/>
+  <object id="33" x="4163.82" y="1455" width="24.4545" height="52"/>
+  <object id="34" x="4019.64" y="1727.09" width="24.9091" height="82.9091"/>
+  <object id="35" x="4099.36" y="2499" width="10.0909" height="42"/>
+  <object id="37" x="4099.82" y="2798.69" width="9.68182" height="65.4375"/>
  </objectgroup>
  <layer id="7" name="buildings" width="300" height="180">
   <data encoding="csv">
@@ -1308,7 +1308,7 @@
   <object id="24" x="3475.33" y="1301.09" width="42" height="39.0909"/>
   <object id="26" x="3847.33" y="1300.24" width="42" height="40.1818"/>
   <object id="27" x="4344" y="1300.24" width="40" height="39.6364"/>
-  <object id="28" x="4736.67" y="1301.03" width="44" height="38.7273"/>
+  <object id="28" x="4736.67" y="1299.65" width="44" height="40.1023"/>
  </objectgroup>
  <objectgroup id="10" name="roadsDrive" locked="1">
   <object id="38" x="4013" y="423" width="84" height="918"/>

@@ -89,10 +89,8 @@ public class GameScreen implements Screen, Json.Serializable {
 	
 	public Array<Gem> gems = new Array<Gem>();;
 
-	// list of Hub for interaction
-	public Array<Hub> hubs;
-	// list of Routes for planning UI
-	public Array<Route> routes;
+	public Array<Hub> busHubs;
+	public Array<Hub> luasHubs;
 	   
    // Variables associated with the pause / game state
 	private int GAME_STATE;
@@ -250,14 +248,9 @@ public class GameScreen implements Screen, Json.Serializable {
 		// for the pause / play feature
 		GAME_STATE = GAME_RUNNING;
 
-		// routes for hub testing
-		routes = new Array<Route>();
-		for (int i = 1; i < 4; i++) {
-			routes.add(new Route(this, 0, 0, 32, 32, "gem.png", 900, i * 100 + 100));
-		}
-
 		// initialise Node array
-		hubs = new Array<Hub>();
+		busHubs = new Array<Hub>();
+		luasHubs = new Array<Hub>();
 		
 
 		for (MapLayer layer : map.getLayers()) {
@@ -268,13 +261,33 @@ public class GameScreen implements Screen, Json.Serializable {
                 for (MapObject object : layer.getObjects()) {
 					// get X and Y for each object
                     // pass to Hub constructor
-					hubs.add(hubCreator(object));
+					busHubs.add(hubCreator(object, "Bus", 3));
 				}
 
 				for (MapObject object : layer.getObjects()) {
-					Hub newHub = hubCreator(object);
+					Hub newHub = hubCreator(object, "Bus", 3);
 
-					for (Hub hub : hubs) { 
+					for (Hub hub : busHubs) { 
+						if (newHub.getX() != hub.getX() && newHub.getY() != hub.getY()) {
+							hub.addHub(newHub);
+						}
+					}
+				}
+            }
+
+			if (layer.getObjects() != null && layer.getName().contains("luas")) {
+
+                // Retrieve objects from the layer
+                for (MapObject object : layer.getObjects()) {
+					// get X and Y for each object
+                    // pass to Hub constructor
+					luasHubs.add(hubCreator(object, "Luas", 4));
+				}
+
+				for (MapObject object : layer.getObjects()) {
+					Hub newHub = hubCreator(object, "Luas", 4);
+
+					for (Hub hub : luasHubs) { 
 						if (newHub.getX() != hub.getX() && newHub.getY() != hub.getY()) {
 							hub.addHub(newHub);
 						}
@@ -603,13 +616,13 @@ public class GameScreen implements Screen, Json.Serializable {
 	}
 
 	// utiltiy functions
-	public Hub hubCreator(MapObject object) {
+	public Hub hubCreator(MapObject object, String type, int transIdx) {
 		float locX = object.getProperties().get("x", Float.class) * 3;
 		float locY = object.getProperties().get("y", Float.class) * 3;
 		float width = object.getProperties().get("width", Float.class) * 3;
 		float height = object.getProperties().get("height", Float.class) * 3;
 				
-		return new Hub(locX, locY, width, height);
+		return new Hub(locX, locY, width, height, type, transIdx);
 	}
 	
 }

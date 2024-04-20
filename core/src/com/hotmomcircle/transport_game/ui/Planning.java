@@ -78,10 +78,15 @@ public class Planning {
 					Node source = NodeFinder.findNode(screen.pathfindingGraph.graph, player.getX(), player.getY());
 					Node dest = NodeFinder.findNode(screen.pathfindingGraph.graph, hub.getX(), hub.getY());
 					ArrayList<Node> path = AStar.findPath(screen.pathfindingGraph.graph, source, dest);
-					player.getOnBus();
+					if (hub.getTransIdx() == 3) {
+						player.getOnBus();
+					} else {
+						player.getOnLuas();
+					}
+
 					if (player.getTransport()[player.transIdx] instanceof GuidedTransport) {
-						GuidedTransport bus = (GuidedTransport)player.getTransport()[player.transIdx];
-						bus.setPath(path);
+						GuidedTransport guidedTransport = (GuidedTransport)player.getTransport()[player.transIdx];
+						guidedTransport.setPath(path);
 					}	
 					screen.showWorldMap ^= true;
 					return true;

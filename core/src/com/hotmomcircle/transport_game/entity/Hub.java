@@ -16,9 +16,13 @@ import com.hotmomcircle.transport_game.GameScreen;
 public class Hub extends Entity{
     private Rectangle rect;
     private ArrayList<Hub> connectedHubs = new ArrayList<Hub>();
+    private String type;
+    private int transIdx;
 
-    public Hub(float locX, float locY, float width, float height) { 
+    public Hub(float locX, float locY, float width, float height, String type, int transIdx) { 
         this.rect = new Rectangle(locX, locY, width, height);
+        this.type = type;
+        this.transIdx = transIdx;
     }
 
     public void addHub(Hub newHub) {
@@ -52,5 +56,13 @@ public class Hub extends Entity{
 
     public float getHeight() {
         return this.rect.height;
+    }
+
+    public String getType() {
+        return this.type;
+    }
+
+    public int getTransIdx() {
+        return this.transIdx;
     }
 }

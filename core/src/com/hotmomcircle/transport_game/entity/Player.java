@@ -21,11 +21,13 @@ import com.hotmomcircle.transport_game.tools.pathfinding.NodeFinder;
 public class Player extends Entity {
 	
 	GameScreen game;
-	private Transport[] transport = new Transport[4]; // [foot, bike, car]
+	private Transport[] transport = new Transport[5]; // [foot, bike, car]
 	public int transIdx = 0; //Index corresponding to which transport the player is currently on
 	public int FOOT = 0;
 	public int BIKE = 1;
 	public int CAR = 2;
+	public int BUS = 3;
+	public int LUAS = 4;
 	private int stamina;
 	public Rectangle playerRectangle;
 
@@ -120,6 +122,25 @@ public class Player extends Entity {
 		}
 		
 		transport[3] = new GuidedTransport(game, this, "Bus", 400, busTextures, "5", "0"); 
+		
+		Texture[] luasTextures = new Texture[8];
+		
+		String[] luasPaths = {
+			    "./bus/bus_up.png",
+			    "./bus/bus_up.png",
+			    "./bus/bus_down.png",
+			    "./bus/bus_down.png",
+			    "./bus/bus_left.png",
+			    "./bus/bus_left.png",
+			    "./bus/bus_right.png",
+			    "./bus/bus_right.png"
+			};
+		
+		for(int i = 0; i<luasPaths.length; i++) {
+			luasTextures[i] = game.assetManager.get(luasPaths[i], Texture.class);
+		}
+		
+		transport[4] = new GuidedTransport(game, this, "Luas", 400, luasTextures, "5", "0"); 
 	
 	}
 	
@@ -221,6 +242,14 @@ public class Player extends Entity {
 		}
 
 	}
+
+	public void getOnLuas() {
+		hasInteracted = true;
+	//		Can only get on Luas if on foot
+			if(transIdx == 0) {
+				transIdx = 4;
+			}
+	}
 	
 	// naive method to handle Player interaction
 
@@ -230,7 +259,17 @@ public class Player extends Entity {
 			return;
 		
 		// interate through all "interactable objects"
-		for (Hub hub: this.game.hubs) {
+		for (Hub hub: this.game.busHubs) {
+			if (canGetOnTransport(hub.getRect())) {
+				// if overlaps
+				// call togglePlanning
+				// pass Routes of overlapped Node
+				this.game.planningUI.activatePlanning(hub.getConnected());
+				break;
+			}
+		}
+
+		for (Hub hub: this.game.luasHubs) {
 			if (canGetOnTransport(hub.getRect())) {
 				// if overlaps
 				// call togglePlanning
