@@ -81,7 +81,7 @@ public class EducationalPopup {
 
         switch(player.currTransport().name) {
             case "Foot":
-                path = Gdx.files.internal("assets/environmentFacts/generic.txt");
+                path = Gdx.files.internal("environmentFacts/generic.txt");
                 if (!walking){
                     line = 1;
                     walking = true;
@@ -90,7 +90,7 @@ public class EducationalPopup {
                 }
                 break;
             case "Bicycle": 
-                path =Gdx.files.internal("assets/environmentFacts/bike.txt");
+                path =Gdx.files.internal("environmentFacts/bike.txt");
                 if (!bike){
                     line = 0;
                     bike = true;
@@ -99,7 +99,7 @@ public class EducationalPopup {
                 }
                 break;
             case "Car":
-                path = Gdx.files.internal("assets/environmentFacts/car.txt");
+                path = Gdx.files.internal("environmentFacts/car.txt");
                 if (!car){
                     line = 0;
                     car = true;
@@ -108,7 +108,7 @@ public class EducationalPopup {
                 }
                 break;
             case "Luas":
-                path = Gdx.files.internal("assets/environmentFacts/luas.txt");
+                path = Gdx.files.internal("environmentFacts/luas.txt");
                 if (!luas){
                     line = 0;
                     luas = true;
@@ -117,7 +117,7 @@ public class EducationalPopup {
                 }
                 break;
             case "Bus":
-                path = Gdx.files.internal("assets/environmentFacts/bus.txt");
+                path = Gdx.files.internal("environmentFacts/bus.txt");
                 if (!bus){
                     line = 0;
                     bus = true;
