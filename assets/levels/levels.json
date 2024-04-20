@@ -2,11 +2,11 @@
   "num_levels": 4,
   "levels": [
     {
-      "time": 5,
+      "time": 500,
       "carbon": 3000,
       "gems": [{ "x": 600, "y": 500 }],
       "gemCount": 3,
-      "player": { "x": 700, "y": 300 },
+      "player": { "x": 3364, "y": 3180 },
       "gemWin": true,
       "map": "bigMap.tmx",
       "cars": [
