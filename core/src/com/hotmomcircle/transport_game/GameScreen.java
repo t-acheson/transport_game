@@ -267,22 +267,12 @@ public class GameScreen implements Screen, Json.Serializable {
                 // Retrieve objects from the layer
                 for (MapObject object : layer.getObjects()) {
 					// get X and Y for each object
-                    float locX = object.getProperties().get("x", Float.class) * 3;
-                    float locY = object.getProperties().get("y", Float.class) * 3;
-					float width = object.getProperties().get("width", Float.class) * 3;
-					float height = object.getProperties().get("height", Float.class) * 3;
-					// pass to Hub constructor
-					Hub hub = new Hub(locX, locY, width, height);
-					hubs.add(hub);
+                    // pass to Hub constructor
+					hubs.add(hubCreator(object));
 				}
 
 				for (MapObject object : layer.getObjects()) {
-					float locX = object.getProperties().get("x", Float.class) * 3;
-                    float locY = object.getProperties().get("y", Float.class) * 3;
-					float width = object.getProperties().get("width", Float.class) * 3;
-					float height = object.getProperties().get("height", Float.class) * 3;
-					// pass to Hub constructor
-					Hub newHub = new Hub(locX, locY, width, height);
+					Hub newHub = hubCreator(object);
 
 					for (Hub hub : hubs) { 
 						if (newHub.getX() != hub.getX() && newHub.getY() != hub.getY()) {
@@ -610,6 +600,16 @@ public class GameScreen implements Screen, Json.Serializable {
 			bike_OBJs.add(new Bicycle_OBJ(this, bikeLoc.getInt("x"), bikeLoc.getInt("y"), true));
 		}
 		
+	}
+
+	// utiltiy functions
+	public Hub hubCreator(MapObject object) {
+		float locX = object.getProperties().get("x", Float.class) * 3;
+		float locY = object.getProperties().get("y", Float.class) * 3;
+		float width = object.getProperties().get("width", Float.class) * 3;
+		float height = object.getProperties().get("height", Float.class) * 3;
+				
+		return new Hub(locX, locY, width, height);
 	}
 	
 }
