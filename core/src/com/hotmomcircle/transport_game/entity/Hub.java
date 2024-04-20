@@ -14,7 +14,7 @@ import com.hotmomcircle.transport_game.GameScreen;
 // to choose with WASD, arrow keys, or mouse 
 public class Hub extends Entity{
     private Texture image;
-    private ArrayList<Hub> connectedHubs;
+    private ArrayList<Hub> connectedHubs = new ArrayList<Hub>();
 
     public Hub(GameScreen game, float locX, float locY, int width, int height, String imagePath) { 
         super(game, locX, locY, width, height, imagePath);
@@ -35,6 +35,6 @@ public class Hub extends Entity{
 
     @Override
     public String toString() {
-        return "Node at " + "X: " + this.getX() + " Y: " + this.getY();
+        return "Hub at " + "X: " + this.getX() + " Y: " + this.getY();
     }
 }
