@@ -33,6 +33,7 @@ import com.hotmomcircle.transport_game.ui.Planning;
 import com.hotmomcircle.transport_game.ui.Points;
 import com.hotmomcircle.transport_game.ui.WorldMapUI;
 import com.hotmomcircle.transport_game.ui.gemArrow;
+import com.hotmomcircle.transport_game.ui.EducationalPopup;
 import com.hotmomcircle.transport_game.ui.Pause;
 import com.hotmomcircle.transport_game.ui.gemCounter;
 //map imports below 
@@ -42,6 +43,10 @@ import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+//
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.Timer.Task;
+
 
 // Screen of the level the player is currently playing
 // Separation of game and level to allow 
@@ -72,6 +77,10 @@ public class GameScreen implements Screen, Json.Serializable {
 	WorldMapUI worldMapUI;
 	Stage worldMapStage;
 
+
+	// for the educationalPopups
+	public EducationalPopup educationalPopup;
+	public boolean showPopup = false;
 	// Pathfinding resources
 	public PathfindingGraph pathfindingGraph;
 	public AStar astar; // algorithm for finding the path
@@ -114,6 +123,15 @@ public class GameScreen implements Screen, Json.Serializable {
 	//gemArrow instance 
 	private gemArrow gemArrowUI;
 	private gemCounter gemCounter;
+	public LevelEndScreen levelEndScreen;
+	public boolean levelEnd = false;
+	public boolean levelCompleted;
+
+	private float timeLeft;
+
+
+
+
 // New level
 	public GameScreen(TransportGame game, ParentGame parentGame, JsonValue levelData) {
 		this.game = game;
@@ -343,9 +361,12 @@ public class GameScreen implements Screen, Json.Serializable {
 
 		worldMapUI = new WorldMapUI(game, this, worldMapStage, skin);
 
+
+		educationalPopup = new EducationalPopup(game, this, stage, skin, player);
 		
 
-		
+		levelEndScreen = new LevelEndScreen(game);
+		timeLeft = 500f;
 	}
 
 	@Override
@@ -356,6 +377,33 @@ public class GameScreen implements Screen, Json.Serializable {
 
 	@Override
 	public void render(float delta) {
+		timeLeft -= delta;
+		if (timeLeft <= 0){
+			levelEnd = true;
+			levelCompleted = false;
+		}
+
+
+		// public boolean levelEnd = false;
+		// public boolean levelCompleted;
+		if (gems.isEmpty()){
+			levelEnd = true;
+			levelCompleted = true;
+		}
+
+
+		if (levelEnd){
+			if (levelCompleted){
+				levelEndScreen.updateLevelEndScreen(true, points.getText().toString());
+				game.setScreen(levelEndScreen);
+			} else {
+				levelEndScreen.gameOverScreen(points.getText().toString());
+				game.setScreen(levelEndScreen);
+			}
+		}
+		// levelEndScreen.updateLevelEndScreen(true, score);
+
+		// game.setScreen(levelEndScreen);
 
 		// pauses the game if it isnt already paused - prevents multiple inputs
 		if(Gdx.input.isKeyPressed(Input.Keys.P) && GAME_STATE != GAME_PAUSED) {
@@ -464,7 +512,10 @@ public class GameScreen implements Screen, Json.Serializable {
 		}
 		batch.end();
 
-
+		if (showPopup){
+			showPopup = false;
+			educationalPopup.showUI();
+		}
 
 	}
 		 //Update the gemArrow UI with the current player and gem positions
