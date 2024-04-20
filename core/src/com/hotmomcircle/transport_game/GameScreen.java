@@ -33,6 +33,7 @@ import com.hotmomcircle.transport_game.ui.Planning;
 import com.hotmomcircle.transport_game.ui.Points;
 import com.hotmomcircle.transport_game.ui.WorldMapUI;
 import com.hotmomcircle.transport_game.ui.gemArrow;
+import com.hotmomcircle.transport_game.ui.EducationalPopup;
 import com.hotmomcircle.transport_game.ui.Pause;
 import com.hotmomcircle.transport_game.ui.gemCounter;
 //map imports below 
@@ -44,6 +45,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 //
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
+
 
 // Screen of the level the player is currently playing
 // Separation of game and level to allow 
@@ -74,6 +76,10 @@ public class GameScreen implements Screen, Json.Serializable {
 	WorldMapUI worldMapUI;
 	Stage worldMapStage;
 
+
+	// for the educationalPopups
+	public EducationalPopup educationalPopup;
+	public boolean showPopup = false;
 	// Pathfinding resources
 	public PathfindingGraph pathfindingGraph;
 	public AStar astar; // algorithm for finding the path
@@ -338,6 +344,9 @@ public class GameScreen implements Screen, Json.Serializable {
 		worldMapUI = new WorldMapUI(game, this, worldMapStage, skin);
 
 
+		educationalPopup = new EducationalPopup(game, this, stage, skin, player);
+		
+
 		levelEndScreen = new LevelEndScreen(game);
 		timeLeft = 500f;
 	}
@@ -488,6 +497,10 @@ public class GameScreen implements Screen, Json.Serializable {
 		}
 		batch.end();
 
+		if (showPopup){
+			showPopup = false;
+			educationalPopup.showUI();
+		}
 		// UI draw
 		stage.act(delta);
 		stage.draw();
