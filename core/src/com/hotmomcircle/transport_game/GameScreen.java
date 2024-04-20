@@ -68,7 +68,7 @@ public class GameScreen implements Screen, Json.Serializable {
 	public Camera camera;
 	// for the world map on press of "M"
 	public boolean showWorldMap = false;
-	WorldMap worldMap;
+	public WorldMap worldMap;
 	WorldMapUI worldMapUI;
 	Stage worldMapStage;
 
@@ -338,7 +338,7 @@ public class GameScreen implements Screen, Json.Serializable {
 
 		pauseUI = new Pause(game, this, pauseStage, skin);
 
-		worldMap = new WorldMap(renderer, map, batch);
+		worldMap = new WorldMap(renderer, map, batch, camera);
 		worldMapStage = new Stage(new ScreenViewport());
 
 		worldMapUI = new WorldMapUI(game, this, worldMapStage, skin);
@@ -383,7 +383,7 @@ public class GameScreen implements Screen, Json.Serializable {
 		}
 
 		else if (showWorldMap) {
-			worldMap.render(player, gems, camera);
+			worldMap.render(player, gems);
 			if (!planningUI.active) {
 				worldMapUI.showUI();
 				worldMapStage.draw();

@@ -55,12 +55,16 @@ public class Planning {
 				public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
 					// fill on hover
 					routeButton.setColor(1, 1, 1, 1); 
+					screen.worldMap.setLocationPointer(hub.getX(), hub.getY());
+					screen.worldMap.toggleLocationPointer();
+
 				}
 				
 				@Override
 				public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
 					// back to opaque on exit
 					routeButton.setColor(1, 1, 1, 0.3f);
+					screen.worldMap.toggleLocationPointer();
 				}
 
                 @Override

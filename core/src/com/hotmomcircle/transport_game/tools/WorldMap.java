@@ -18,6 +18,10 @@ public class WorldMap {
     
 
     ShapeRenderer shape;
+	ShapeRenderer locationPointer;
+	public boolean isDrawLocationPointer;
+	private float locPointX;
+	private float locPointY;
     double panSpeed = 10000;
     int mapWidthInPixels;
     int mapHeightInPixels;
@@ -25,12 +29,14 @@ public class WorldMap {
     TiledMap map;
     OrthogonalTiledMapRenderer renderer;
     SpriteBatch batch;
+	private Camera camera;
 
 
-    public WorldMap(OrthogonalTiledMapRenderer rend, TiledMap map, SpriteBatch bat){
+    public WorldMap(OrthogonalTiledMapRenderer rend, TiledMap map, SpriteBatch bat, Camera camera){
 
         batch = bat;
         renderer = rend;
+		this.camera = camera;
     
         // for world map
         TiledMapTileLayer worldMapLayer = (TiledMapTileLayer) map.getLayers().get(1);
@@ -46,12 +52,13 @@ public class WorldMap {
         worldMap = new OrthographicCamera();
         worldMap.setToOrtho(false, mapWidthInPixels, mapHeightInPixels);
     	shape = new ShapeRenderer();
-
-
+		
+		isDrawLocationPointer = false;
+		locationPointer = new ShapeRenderer();
 
     }
 
-    public void render(Player player, Array<Gem> gems, Camera camera){
+    public void render(Player player, Array<Gem> gems){
         
 			worldMap.zoom = MathUtils.clamp(worldMap.zoom, 0.1f, 1f);
 			if (Gdx.input.isKeyPressed(Input.Keys.EQUALS)) {
@@ -112,5 +119,29 @@ public class WorldMap {
         	shape.setColor(Color.RED);
 			shape.rect((player.getX()-(camera.viewportWidth/2)), (player.getY()-(camera.viewportHeight/2)), camera.viewportWidth, camera.viewportHeight);
 			shape.end();
+
+			if (isDrawLocationPointer) {
+				drawLocationPointer(locPointX, locPointY);
+			}
     }
+
+	public void setLocationPointer(float x, float y) {
+		locPointX = x * camera.viewportWidth / mapWidthInPixels;
+		locPointY = y * camera.viewportHeight / mapHeightInPixels;
+	}
+
+	public void toggleLocationPointer() {
+		if (isDrawLocationPointer) {
+			isDrawLocationPointer = false;
+		} else {
+			isDrawLocationPointer = true;
+		}
+	}
+
+	private void drawLocationPointer(float x, float y) {
+		locationPointer.begin(ShapeRenderer.ShapeType.Filled);
+		locationPointer.setColor(Color.YELLOW);
+		locationPointer.circle(x, y, 10); // Adjust radius as needed
+		locationPointer.end();
+	}
 }
