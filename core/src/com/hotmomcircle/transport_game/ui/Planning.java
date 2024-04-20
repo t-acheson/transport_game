@@ -1,5 +1,8 @@
 package com.hotmomcircle.transport_game.ui;
 
+import java.util.ArrayList;
+
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -9,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Array;
 import com.hotmomcircle.transport_game.GameScreen;
 import com.hotmomcircle.transport_game.TransportGame;
+import com.hotmomcircle.transport_game.entity.Hub;
 import com.hotmomcircle.transport_game.entity.Player;
 import com.hotmomcircle.transport_game.entity.Route;
 
@@ -31,7 +35,7 @@ public class Planning {
 		this.screen = screen;
     }
     
-    public void populatePlanning (Array<Route> routes) {
+    public void populatePlanning (ArrayList<Hub> hubs) {
 		// takes Routes as argument from togglePlanning
 		// creates new table and populates with routes
 		planningTable = new Table();
@@ -39,9 +43,9 @@ public class Planning {
 		planningTable.defaults().width(this.game.SCREEN_WIDTH / 6).expandX().fillX();
 		planningTable.setWidth(game.SCREEN_WIDTH / 6);
 
-		for (Route route: routes) {
+		for (Hub hub: hubs) {
 			planningTable.row().pad(10, 0, 10, 0);
-			TextButton routeButton = new TextButton(route.toString(), skin);
+			TextButton routeButton = new TextButton(hub.toString(), skin);
 			planningTable.add(routeButton);
             // event listener allows selection
             // right now it just closes the Planning UI
@@ -51,8 +55,8 @@ public class Planning {
 				public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                     // handling of the Guided Transport is actually here
 					deactivatePlanning();
-                    player.setX(route.getDestX());
-                    player.setY(route.getDestY());
+                    player.setX(hub.getX());
+                    player.setY(hub.getY());
 					screen.camera.zoomIn();
 					return true;
 				}
@@ -62,14 +66,15 @@ public class Planning {
 		stage.addActor(planningTable);
 	}
 
-	public void activatePlanning(Array<Route> routes) {
+	public void activatePlanning(ArrayList<Hub> hubs) {
 		// planning mode "active" or not
 		// for conditional planning UI render
 		// calls populatePlanning on False -> True toggle
 		// passing routes from Node to populate options
 		if (active != true) {
+			Gdx.input.setInputProcessor(this.stage);
 			active = true;
-			populatePlanning(routes);
+			populatePlanning(hubs);
 		}
 	}
 

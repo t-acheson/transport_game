@@ -29,6 +29,7 @@ public class Pause {
     public void showPause () {
 		// takes Routes as argument from togglePlanning
 		// creates new table with screen options
+        Gdx.input.setInputProcessor(stage);
 		pauseTable = new Table();
 		pauseTable.setFillParent(true);
 		pauseTable.defaults().width(this.game.SCREEN_WIDTH / 6).expandX().fillX();

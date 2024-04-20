@@ -238,19 +238,14 @@ public class Player extends Entity {
 		
 		if(hasInteracted)
 			return;
-
-		System.out.println("fire");
 		
 		// interate through all "interactable objects"
 		for (Hub hub: this.game.hubs) {
-			// if overlaps
-			System.out.println(hub.getX() + " " + hub.getY() + " " + hub.getRectangle().width + " " + hub.getRectangle().height);
 			if (canGetOnTransport(hub.rectangle)) {
 				// if overlaps
 				// call togglePlanning
 				// pass Routes of overlapped Node
-				System.out.println(hub);
-				// this.game.planningUI.activatePlanning(hub.getRoutes());
+				this.game.planningUI.activatePlanning(hub.getConnected());
 				this.game.camera.zoomOut();
 				break;
 			}
