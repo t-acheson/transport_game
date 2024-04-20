@@ -13,14 +13,16 @@ public class LevelStart {
 	private GameScreen screen;
 	private Stage stage;
 	private Skin skin;
+	private int level;
 	
 	Table table;
 	
-	public LevelStart(TransportGame game, GameScreen screen, Stage stage, Skin skin) {
+	public LevelStart(TransportGame game, GameScreen screen, Stage stage, Skin skin, int level) {
 		this.game = game;
 		this.screen = screen;
 		this.stage = stage;
 		this.skin = skin;
+		this.level = level;
 		showLevelStart();
 	}
 	
@@ -31,10 +33,16 @@ public class LevelStart {
 		table.setWidth(game.SCREEN_WIDTH / 6);
 		
 		
-		TextButton text = new TextButton("PLS", skin);
+		Label title = new Label("Level " + level, skin);
+		Label instructions = new Label("Collect all the gems before your time (and carbon) runs out!", skin);
+		Label cont = new Label("Press SPACE to continue", skin);
 		
-		table.row();
-		table.add(text).fillX().uniformX();
+		table.row().pad(5, 0, 15, 0);
+		table.add(title).fillX().uniformX();
+		table.row().pad(5,0,5,0);
+		table.add(instructions).fillX().uniformX();
+		table.row().pad(5, 0, 15, 0);
+		table.add(cont).fillX().uniformX();
 
 		stage.addActor(table);
 		System.out.println("here");

@@ -247,7 +247,7 @@ public class GameScreen implements Screen, Json.Serializable {
 		this.batch = game.batch;
 		
 		// for the pause / play feature
-		GAME_STATE = GAME_RUNNING;
+		GAME_STATE = GAME_PAUSED;
 		
 
 
@@ -297,7 +297,7 @@ public class GameScreen implements Screen, Json.Serializable {
 		assetManager.load("uiskin.json", Skin.class);
 
 		startStage = new Stage(new ScreenViewport());
-		levelStart = new LevelStart(game, this, startStage, skin);
+		levelStart = new LevelStart(game, this, startStage, skin, parentGame.getCurrLevel());
 		
 		// table to hold UI elements
 		table = new Table();
@@ -390,12 +390,10 @@ public class GameScreen implements Screen, Json.Serializable {
 		// game.setScreen(levelEndScreen);
 
 		// pauses the game if it isnt already paused - prevents multiple inputs
-		if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE) && GAME_STATE != GAME_PAUSED) {
+		if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) && GAME_STATE != GAME_PAUSED) {
 			pause();
 			pauseUI.showPause();
-		} 
-		// resumes game if it isn't already running
-		if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE) && GAME_STATE != GAME_RUNNING) {
+		} else if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) && GAME_STATE != GAME_RUNNING ) {
 			resume();
 		} 
 
@@ -410,8 +408,18 @@ public class GameScreen implements Screen, Json.Serializable {
 		}
 		
 		if (isLevelStart) {
+			renderer.render();
+			renderer.setView(camera);
+			camera.setPosition();
+			// camera.position.set(player.getX(),player.getY(), 0);
+
 			startStage.act(delta);
 			startStage.draw();
+			
+			if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+				isLevelStart = false;
+				GAME_STATE = GAME_RUNNING;
+			}
 		}
 		
 		else if (GAME_STATE == GAME_PAUSED){
@@ -512,7 +520,7 @@ public class GameScreen implements Screen, Json.Serializable {
 		 //Update the gemArrow UI with the current player and gem positions
 		gemArrowUI.update(player, gems);
 
-		
+
 		
 	}
 
