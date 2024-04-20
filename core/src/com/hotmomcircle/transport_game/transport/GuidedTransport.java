@@ -1,34 +1,86 @@
 package com.hotmomcircle.transport_game.transport;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.hotmomcircle.transport_game.GameScreen;
 import com.hotmomcircle.transport_game.entity.Player;
+import com.hotmomcircle.transport_game.tools.pathfinding.Node;
+import com.hotmomcircle.transport_game.tools.pathfinding.NodeFinder;
 
 public class GuidedTransport extends Transport {
-    public Player player;
+    public ArrayList<Node> path;
+    public Node current;
+    private HashMap<Node, ArrayList<Node>> graph;
 
-    public GuidedTransport(GameScreen game, String name, int speed, Texture[] images, String footprint, String staminaCost) {
-        super(game, name, speed, images, footprint, staminaCost);
+    public GuidedTransport(GameScreen game, Player player, String name, int speed, Texture[] images, String footprint, String staminaCost) {
+        super(game, player, name, speed, images, footprint, staminaCost);
+        this.graph = game.pathfindingGraph.graph;
 
     }
 
-    // method that moves the player from
-    // one fixed point to another;
-    // player movement (keyboard interrupts)
-    // are disabled while they are moving 
-    public void move(Player player, int steps[]) {
-        
-        // take player X, Y (probably the Node X, Y to keep it clean)
-        // translate the player X, Y to each step on the route (SMOOTHLY TM)
+    public void setPath(ArrayList<Node> path) {
+        this.path = path;
+        this.current = path.remove(0);
+    }
 
-            // mimic player key-press interrupts?
-            // means we could have bus and luas as transport options in player class
-            // but the player can't access them directly
-            // it would handle the carbon and freshness increments
+    @Override
+    public Texture update() {
+        float speed = getSpeed() * Gdx.graphics.getDeltaTime();
+        float dx = 0;
+        float dy = 0;
+    
+        Node playerNode = NodeFinder.findNode(this.graph, player.getX(), player.getY());
+    
+        if (playerNode == this.current) {
+            if (!path.isEmpty()) {
+                this.current = path.remove(0);
+            } else {
+                player.getOnFoot();
+                return getCurrentImage(dx, dy);
+            }
+        } else {
+            // Calculate the distance to the current node
+            float deltaX = current.getX() - player.getX();
+            float deltaY = current.getY() - player.getY();
+            float distance = (float) Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+    
+            // If the distance is less than a threshold, consider the player has reached the node
+            if (distance <= 5) {
+                // Move the player directly to the node
+                this.player.setX(current.getX());
+                this.player.setY(current.getY());
+                if (!path.isEmpty()) {
+                    this.current = path.remove(0);
+                }else {
+                    player.getOnFoot();
+                    return getCurrentImage(dx, dy);
+                }
 
-        // e.g. routeSteps = [[20, 0], [20, 0], [0, 20], [20, 0], [0, -20]....]
-        // finish
-        // player regains movement control
+            } else {
+                // Calculate the normalized movement vector
+                float length = (float) Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+                if (length > 0) {
+                    deltaX /= length;
+                    deltaY /= length;
+                }
+                
+                // Scale the vector by the speed
+                dx = deltaX * speed;
+                dy = deltaY * speed;
+            }
+        }
+    
+        // finally apply the movement
+        this.player.incX(dx);
+        this.player.incY(dy);
+    
+        this.player.rectangle.x = this.player.getX();
+        this.player.rectangle.y = this.player.getY();
+    
+        return getCurrentImage(dx, dy);
     }
     
 }
