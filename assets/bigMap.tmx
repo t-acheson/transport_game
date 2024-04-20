@@ -1298,17 +1298,17 @@
 </data>
  </layer>
  <objectgroup id="8" name="busObject1" locked="1">
-  <object id="12" x="1499.33" y="2104.67" width="36" height="36"/>
-  <object id="15" x="1495.33" y="1640" width="39.3333" height="39.3333"/>
-  <object id="17" x="1494.67" y="1351.33" width="40.6667" height="40.6667"/>
-  <object id="19" x="1888.67" y="1333.33" width="45.3333" height="45.3333"/>
-  <object id="20" x="2316.67" y="1336.67" width="47.3333" height="47.3333"/>
-  <object id="21" x="2819.33" y="1340" width="41.3333" height="41.3333"/>
-  <object id="22" x="3123.33" y="1335.33" width="46.6667" height="46.6667"/>
-  <object id="24" x="3475.33" y="1332" width="42" height="42"/>
-  <object id="26" x="3847.33" y="1331.33" width="42" height="42"/>
-  <object id="27" x="4344" y="1335.33" width="40" height="40"/>
-  <object id="28" x="4736.67" y="1334.67" width="44" height="44"/>
+  <object id="12" x="1475.88" y="2061.94" width="23.6364" height="68.1818"/>
+  <object id="15" x="1476.06" y="1598.55" width="23.8788" height="80.7878"/>
+  <object id="17" x="1494.67" y="1299.69" width="40.6667" height="39.7576"/>
+  <object id="19" x="1888.67" y="1300.42" width="45.3333" height="39.5151"/>
+  <object id="20" x="2316.67" y="1299.94" width="47.3333" height="40.2424"/>
+  <object id="21" x="2819.33" y="1299.64" width="41.3333" height="40.2424"/>
+  <object id="22" x="3123.33" y="1300.42" width="46.6667" height="39.5758"/>
+  <object id="24" x="3475.33" y="1301.09" width="42" height="39.0909"/>
+  <object id="26" x="3847.33" y="1300.24" width="42" height="40.1818"/>
+  <object id="27" x="4344" y="1300.24" width="40" height="39.6364"/>
+  <object id="28" x="4736.67" y="1301.03" width="44" height="38.7273"/>
  </objectgroup>
  <objectgroup id="10" name="roadsDrive" locked="1">
   <object id="38" x="4013" y="423" width="84" height="918"/>
