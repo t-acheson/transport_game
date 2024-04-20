@@ -1,12 +1,18 @@
 package com.hotmomcircle.transport_game.entity;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.hotmomcircle.transport_game.GameScreen;
+import com.hotmomcircle.transport_game.transport.GuidedTransport;
 import com.hotmomcircle.transport_game.transport.Transport;
+import com.hotmomcircle.transport_game.tools.pathfinding.AStar;
+import com.hotmomcircle.transport_game.tools.pathfinding.Node;
+import com.hotmomcircle.transport_game.tools.pathfinding.NodeFinder;
 
 //This will hold the player class. 
 //Player should be able to move, be drawn, and will own the transport methods
@@ -15,7 +21,7 @@ import com.hotmomcircle.transport_game.transport.Transport;
 public class Player extends Entity {
 	
 	GameScreen game;
-	private Transport[] transport = new Transport[3]; // [foot, bike, car]
+	private Transport[] transport = new Transport[4]; // [foot, bike, car]
 	public int transIdx = 0; //Index corresponding to which transport the player is currently on
 	public int FOOT = 0;
 	public int BIKE = 1;
@@ -95,6 +101,26 @@ public class Player extends Entity {
 		}
 		
 		transport[2] = new Transport(game, this, "Car", 400, carTextures, "10", "0"); 
+
+		Texture[] busTextures = new Texture[8];
+		
+		String[] busPaths = {
+			    "./bus/bus_up.png",
+			    "./bus/bus_up.png",
+			    "./bus/bus_down.png",
+			    "./bus/bus_down.png",
+			    "./bus/bus_left.png",
+			    "./bus/bus_left.png",
+			    "./bus/bus_right.png",
+			    "./bus/bus_right.png"
+			};
+		
+		for(int i = 0; i<busPaths.length; i++) {
+			busTextures[i] = game.assetManager.get(busPaths[i], Texture.class);
+		}
+		
+		transport[3] = new GuidedTransport(game, this, "Bus", 400, busTextures, "5", "0"); 
+	
 	}
 	
 	@Override
@@ -131,6 +157,21 @@ public class Player extends Entity {
 		if(Gdx.input.isKeyPressed(Input.Keys.F)) {
 			getOnFoot();
 		}		
+
+		if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
+			System.out.println(getX() + " " + getY());
+		}
+
+		if (Gdx.input.isKeyJustPressed(Input.Keys.Z)) {
+			Node source = NodeFinder.findNode(this.game.pathfindingGraph.graph, x, y);
+			Node dest = NodeFinder.findNode(this.game.pathfindingGraph.graph, 6288, 4609);
+			ArrayList<Node> path = AStar.findPath(this.game.pathfindingGraph.graph, source, dest);
+			getOnBus();
+			if (getTransport()[transIdx] instanceof GuidedTransport) {
+				GuidedTransport bus = (GuidedTransport)getTransport()[transIdx];
+				bus.setPath(path);
+			}	
+		}
 
 		
 		currTransport().render(batch);
@@ -180,6 +221,16 @@ public class Player extends Entity {
 			transIdx = 2;
 		}
 	}
+
+	//	 Changes player transport
+	public void getOnBus() {
+		hasInteracted = true;
+//		Can only get on bus if on foot
+		if(transIdx == 0) {
+			transIdx = 3;
+		}
+
+	}
 	
 	// naive method to handle Player interaction
 
@@ -189,14 +240,14 @@ public class Player extends Entity {
 			return;
 		
 		// interate through all "interactable objects"
-		for (Node node: this.game.nodes) {
+		for (Hub hub: this.game.hubs) {
 			// if overlaps
-			if (canGetOnTransport(node.rectangle)) {
+			if (canGetOnTransport(hub.rectangle)) {
 				// if overlaps
 				// call togglePlanning
 				// pass Routes of overlapped Node
-				System.out.println(node);
-				this.game.planningUI.activatePlanning(node.getRoutes());
+				System.out.println(hub);
+				this.game.planningUI.activatePlanning(hub.getRoutes());
 				this.game.camera.zoomOut();
 				break;
 			}

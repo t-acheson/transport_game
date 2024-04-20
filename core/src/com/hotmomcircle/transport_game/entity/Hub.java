@@ -10,11 +10,11 @@ import com.hotmomcircle.transport_game.GameScreen;
 // holds Route[] from which player interacts
 // will need its own UI elements to all player
 // to choose with WASD, arrow keys, or mouse 
-public class Node extends Entity{
+public class Hub extends Entity{
     private Texture image;
     private Array<Route> routes;
 
-    public Node(GameScreen game, float locX, float locY, int width, int height, String imagePath, Array<Route> routes) { 
+    public Hub(GameScreen game, float locX, float locY, int width, int height, String imagePath, Array<Route> routes) { 
         super(game, locX, locY, width, height, imagePath);
         this.routes = routes;
         image = new Texture(Gdx.files.internal("gem.png"));

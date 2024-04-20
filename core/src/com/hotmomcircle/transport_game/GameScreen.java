@@ -26,7 +26,9 @@ import com.hotmomcircle.transport_game.object.Transport_OBJ;
 import com.hotmomcircle.transport_game.entity.Route;
 import com.hotmomcircle.transport_game.tools.Camera;
 import com.hotmomcircle.transport_game.tools.WorldMap;
-import com.hotmomcircle.transport_game.entity.Node;
+import com.hotmomcircle.transport_game.tools.pathfinding.AStar;
+import com.hotmomcircle.transport_game.tools.pathfinding.PathfindingGraph;
+import com.hotmomcircle.transport_game.entity.Hub;
 import com.hotmomcircle.transport_game.ui.Planning;
 import com.hotmomcircle.transport_game.ui.Points;
 import com.hotmomcircle.transport_game.ui.WorldMapUI;
@@ -71,13 +73,17 @@ public class GameScreen implements Screen, Json.Serializable {
 	WorldMap worldMap;
 	WorldMapUI worldMapUI;
 	Stage worldMapStage;
+
+	// Pathfinding resources
+	public PathfindingGraph pathfindingGraph;
+	public AStar astar; // algorithm for finding the path
 	
 	// Texture playerMap = new Texture("assets/phoneScreen.png");
 	
 	public Array<Gem> gems = new Array<Gem>();;
 
-	// list of Nodes for interaction
-	public Array<Node> nodes;
+	// list of Hub for interaction
+	public Array<Hub> hubs;
 	// list of Routes for planning UI
 	public Array<Route> routes;
 	   
@@ -128,7 +134,7 @@ public class GameScreen implements Screen, Json.Serializable {
 		
 		int pX = levelData.get("player").getInt("x");
 		int pY = levelData.get("player").getInt("y");
-		player = new Player(this, pX, pY, 32, 32, "./foot/player_down1.png");
+		player = new Player(this, 6300, 4500, 32, 32, "./foot/player_down1.png");
 		
 //		Load gems from levels file
 		for (JsonValue gemLoc = levelData.get("gems").child; gemLoc != null; gemLoc = gemLoc.next) {
@@ -192,7 +198,9 @@ public class GameScreen implements Screen, Json.Serializable {
 			    "./car/car_up.png", "./car/car_up.png",
 			    "./car/car_down.png", "./car/car_down.png",
 			    "./car/car_left.png", "./car/car_left.png",
-			    "./car/car_right.png", "./car/car_right.png"
+			    "./car/car_right.png", "./car/car_right.png",
+				"./bus/bus_left.png", "./bus/bus_right.png",
+				"./bus/bus_up.png", "./bus/bus_down.png",
 			};
 		
 		for(String path: transportPaths) {
@@ -213,6 +221,16 @@ public class GameScreen implements Screen, Json.Serializable {
 		}
 		
 		assetManager.finishLoading();
+
+		try {
+			map = assetManager.get("bigMap.tmx", TiledMap.class);
+			System.out.println("Map loaded successfully.");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		// graph representing the 'roads' layer
+		pathfindingGraph = new PathfindingGraph(map, originalTileSize);
 	}
 	
 //	Initializes the game. Put into separate function to allow multiple constructors to call it
@@ -224,22 +242,15 @@ public class GameScreen implements Screen, Json.Serializable {
 		
 		// for the pause / play feature
 		GAME_STATE = GAME_RUNNING;
-		
-		try {
-			map = assetManager.get("bigMap.tmx", TiledMap.class);
-			System.out.println("Map loaded successfully.");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 
-		// routes for node testing
+		// routes for hub testing
 		routes = new Array<Route>();
 		for (int i = 1; i < 4; i++) {
 			routes.add(new Route(this, 0, 0, 32, 32, "gem.png", 900, i * 100 + 100));
 		}
 
 		// initialise Node array
-		nodes = new Array<Node>();
+		hubs = new Array<Hub>();
 		
 
 		for (MapLayer layer : map.getLayers()) {
@@ -252,7 +263,7 @@ public class GameScreen implements Screen, Json.Serializable {
                     float locX = object.getProperties().get("x", Float.class);
                     float locY = object.getProperties().get("y", Float.class);
 					// pass to Node constructor
-					nodes.add(new Node(this, locX, locY, 16, 16, "gem.png", routes));
+					hubs.add(new Hub(this, locX, locY, 16, 16, "gem.png", routes));
                 }
             }
 		}
@@ -459,8 +470,8 @@ public class GameScreen implements Screen, Json.Serializable {
 				gem.render(batch);
 			}
 			
-			for (Node node: nodes) {
-				node.render(batch);
+			for (Hub hub: hubs) {
+				hub.render(batch);
 			}
 			
 //			Render the player last so they appear on top of everything
