@@ -3,10 +3,10 @@ package com.hotmomcircle.transport_game.ui;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
-public class Timer extends Label {
+public class TimerUI extends Label {
 	private float time;
 
-	public Timer(CharSequence time, Skin skin) {
+	public TimerUI(CharSequence time, Skin skin) {
 		super("", skin);
 		this.time = Integer.parseInt(time.toString());
 		CharSequence text = makeText();
