@@ -38,6 +38,7 @@ import com.hotmomcircle.transport_game.ui.Pause;
 import com.hotmomcircle.transport_game.ui.gemCounter;
 //map imports below 
 import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -71,8 +72,8 @@ public class GameScreen implements Screen, Json.Serializable {
 	   
 	public Camera camera;
 	// for the world map on press of "M"
-	boolean showWorldMap = false;
-	WorldMap worldMap;
+	public boolean showWorldMap = false;
+	public WorldMap worldMap;
 	WorldMapUI worldMapUI;
 	Stage worldMapStage;
 
@@ -88,10 +89,8 @@ public class GameScreen implements Screen, Json.Serializable {
 	
 	public Array<Gem> gems = new Array<Gem>();;
 
-	// list of Hub for interaction
-	public Array<Hub> hubs;
-	// list of Routes for planning UI
-	public Array<Route> routes;
+	public Array<Hub> busHubs;
+	public Array<Hub> luasHubs;
 	   
    // Variables associated with the pause / game state
 	private int GAME_STATE;
@@ -140,7 +139,7 @@ public class GameScreen implements Screen, Json.Serializable {
 		
 		int pX = levelData.get("player").getInt("x");
 		int pY = levelData.get("player").getInt("y");
-		player = new Player(this, 6300, 4500, 32, 32, "./foot/player_down1.png");
+		player = new Player(this, pX, pY, 32, 32, "./foot/player_down1.png");
 		
 //		Load gems from levels file
 		for (JsonValue gemLoc = levelData.get("gems").child; gemLoc != null; gemLoc = gemLoc.next) {
@@ -249,31 +248,53 @@ public class GameScreen implements Screen, Json.Serializable {
 		// for the pause / play feature
 		GAME_STATE = GAME_RUNNING;
 
-		// routes for hub testing
-		routes = new Array<Route>();
-		for (int i = 1; i < 4; i++) {
-			routes.add(new Route(this, 0, 0, 32, 32, "gem.png", 900, i * 100 + 100));
-		}
-
 		// initialise Node array
-		hubs = new Array<Hub>();
+		busHubs = new Array<Hub>();
+		luasHubs = new Array<Hub>();
 		
 
 		for (MapLayer layer : map.getLayers()) {
-            // Check if the layer contains objects
-			// AND create Node(s) for the object layer
-            if (layer.getObjects() != null && layer.getName().equals("rec_layer")) {
+            // Check if the layer contains objects and is of guided transport
+            if (layer.getObjects() != null && layer.getName().contains("bus")) {
+
                 // Retrieve objects from the layer
                 for (MapObject object : layer.getObjects()) {
 					// get X and Y for each object
-                    float locX = object.getProperties().get("x", Float.class);
-                    float locY = object.getProperties().get("y", Float.class);
-					// pass to Node constructor
-					hubs.add(new Hub(this, locX, locY, 16, 16, "gem.png", routes));
-                }
+                    // pass to Hub constructor
+					busHubs.add(hubCreator(object, "Bus", 3));
+				}
+
+				for (MapObject object : layer.getObjects()) {
+					Hub newHub = hubCreator(object, "Bus", 3);
+
+					for (Hub hub : busHubs) { 
+						if (newHub.getX() != hub.getX() && newHub.getY() != hub.getY()) {
+							hub.addHub(newHub);
+						}
+					}
+				}
+            }
+
+			if (layer.getObjects() != null && layer.getName().contains("luas")) {
+
+                // Retrieve objects from the layer
+                for (MapObject object : layer.getObjects()) {
+					// get X and Y for each object
+                    // pass to Hub constructor
+					luasHubs.add(hubCreator(object, "Luas", 4));
+				}
+
+				for (MapObject object : layer.getObjects()) {
+					Hub newHub = hubCreator(object, "Luas", 4);
+
+					for (Hub hub : luasHubs) { 
+						if (newHub.getX() != hub.getX() && newHub.getY() != hub.getY()) {
+							hub.addHub(newHub);
+						}
+					}
+				}
             }
 		}
-
 
 		renderer = new OrthogonalTiledMapRenderer(map,3);
 		//
@@ -338,7 +359,7 @@ public class GameScreen implements Screen, Json.Serializable {
 
 		pauseUI = new Pause(game, this, pauseStage, skin);
 
-		worldMap = new WorldMap(renderer, map, batch);
+		worldMap = new WorldMap(renderer, map, batch, camera);
 		worldMapStage = new Stage(new ScreenViewport());
 
 		worldMapUI = new WorldMapUI(game, this, worldMapStage, skin);
@@ -413,10 +434,11 @@ public class GameScreen implements Screen, Json.Serializable {
 		}
 
 		else if (showWorldMap) {
-			worldMap.render(player, gems, camera);
-			worldMapUI.showUI();
-			worldMapStage.draw();
-
+			worldMap.render(player, gems);
+			if (!planningUI.active) {
+				worldMapUI.showUI();
+				worldMapStage.draw();
+			}
 
 		} else {
 
@@ -479,10 +501,6 @@ public class GameScreen implements Screen, Json.Serializable {
 				gem.render(batch);
 			}
 			
-			for (Hub hub: hubs) {
-				hub.render(batch);
-			}
-			
 //			Render the player last so they appear on top of everything
 			
 			if (!planningUI.active) {
@@ -501,13 +519,13 @@ public class GameScreen implements Screen, Json.Serializable {
 			showPopup = false;
 			educationalPopup.showUI();
 		}
-		// UI draw
-		stage.act(delta);
-		stage.draw();
 
 	}
 		 //Update the gemArrow UI with the current player and gem positions
 		gemArrowUI.update(player, gems);
+		// UI draw
+		stage.act(delta);
+		stage.draw();
 
 		
 		
@@ -595,6 +613,16 @@ public class GameScreen implements Screen, Json.Serializable {
 			bike_OBJs.add(new Bicycle_OBJ(this, bikeLoc.getInt("x"), bikeLoc.getInt("y"), true));
 		}
 		
+	}
+
+	// utiltiy functions
+	public Hub hubCreator(MapObject object, String type, int transIdx) {
+		float locX = object.getProperties().get("x", Float.class) * 3;
+		float locY = object.getProperties().get("y", Float.class) * 3;
+		float width = object.getProperties().get("width", Float.class) * 3;
+		float height = object.getProperties().get("height", Float.class) * 3;
+				
+		return new Hub(locX, locY, width, height, type, transIdx);
 	}
 	
 }
