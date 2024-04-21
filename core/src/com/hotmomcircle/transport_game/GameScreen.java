@@ -275,6 +275,9 @@ public class GameScreen implements Screen, Json.Serializable {
 		// initialise Node array
 		busHubs = new Array<Hub>();
 		luasHubs = new Array<Hub>();
+		obstacles = new ArrayList<Obstacle>();
+		roads = new ArrayList<Obstacle>(); 
+		paths = new ArrayList<Obstacle>(); 
 		
 
 		for (MapLayer layer : map.getLayers()) {
@@ -327,6 +330,28 @@ public class GameScreen implements Screen, Json.Serializable {
                     float height = obstacle.getProperties().get("height", Float.class) * 3;
 					Obstacle newObstacle = new Obstacle(x, y, width, height);
 					obstacles.add(newObstacle);
+				}
+			}
+
+			if (layer.getName().equals("roadsDrive")) {
+				for (MapObject obstacle: layer.getObjects()) {
+					float x = obstacle.getProperties().get("x", Float.class) * 3;
+                    float y = obstacle.getProperties().get("y", Float.class) * 3;
+					float width = obstacle.getProperties().get("width", Float.class) * 3;
+                    float height = obstacle.getProperties().get("height", Float.class) * 3;
+					Obstacle newRoad = new Obstacle(x, y, width, height);
+					roads.add(newRoad);
+				}
+			}
+
+			if (layer.getName().equals("roadsWalk")) {
+				for (MapObject obstacle: layer.getObjects()) {
+					float x = obstacle.getProperties().get("x", Float.class) * 3;
+                    float y = obstacle.getProperties().get("y", Float.class) * 3;
+					float width = obstacle.getProperties().get("width", Float.class) * 3;
+                    float height = obstacle.getProperties().get("height", Float.class) * 3;
+					Obstacle newPath = new Obstacle(x, y, width, height);
+					paths.add(newPath);
 				}
 			}
 		}
