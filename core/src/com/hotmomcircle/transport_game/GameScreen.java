@@ -45,7 +45,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 //
 import com.badlogic.gdx.utils.Timer;
-import com.badlogic.gdx.utils.Timer.Task;
+import com.badlogic.gdx.utils.Timer.Task; 
 
 
 // Screen of the level the player is currently playing
@@ -188,7 +188,7 @@ public class GameScreen implements Screen, Json.Serializable {
 
 		//loading map 
 		assetManager.setLoader(TiledMap.class,  new TmxMapLoader());
-		assetManager.load("bigMap.tmx", TiledMap.class);
+		assetManager.load("finalDraft.tmx", TiledMap.class);
 		
 //		Load in the player transport
 		String[] transportPaths = {
@@ -228,7 +228,7 @@ public class GameScreen implements Screen, Json.Serializable {
 		assetManager.finishLoading();
 
 		try {
-			map = assetManager.get("bigMap.tmx", TiledMap.class);
+			map = assetManager.get("finalDraft.tmx", TiledMap.class);
 			System.out.println("Map loaded successfully.");
 		} catch (Exception e) {
 			e.printStackTrace();

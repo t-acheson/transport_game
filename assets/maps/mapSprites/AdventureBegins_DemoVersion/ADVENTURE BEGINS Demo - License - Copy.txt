@@ -1,0 +1,43 @@
+ADVENTURE BEGINS DEMO VERSION is a selection of tiles meant as a free sample from
+ADVENTURE BEGINS (2024), a collection of 16x16pixel graphic assets made by Zaebucca - Alessandro Bucca.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of these asseets and associated documentation files, to deal without restriction,
+including without limitation the rights to use, copy, modify, merge, publish,
+and to permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THESE ASSETS ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+
+Further examples and explanations:
+
+✔️ By acquiring ADVENTURE BEGINS DEMO you can :
+
+1. Use all or part of these assets included for personal AND commercial projects for your game, cover art, image.
+2. Freely adapt and modify these assets, their palette and their layout to suit your project, vision and needs.
+3. Release, publish and/or sell the product you made by using these assets to the public.
+
+❌ You can not :
+
+1. Claim these assets as yours.
+2. Distribute or sell these assets as they are provided.
+3. Distribute or sell these assets when modified in layout, color or under slight changes.
+	*I.e. Graphic assets are meant as a part of a broader project subject to the buyer's vision and work, not
+	as a resellable product that has been edited and repurposed.
+4. Use the assets for a NFT, metaverse and AI project(s).
+
+🎞️ Credits (important):
+Crediting the author (Zaebucca) is needed with the free ADVENTURE BEGINS - DEMO VERSION sample.
+
+Thank you so much for acquiring Adventure Begins - Demo Version
+For any further doubt regarding licenses, help and support, you can reach out at my google form: https://forms.gle/Vgrgzzdj24Hfmxbg9
