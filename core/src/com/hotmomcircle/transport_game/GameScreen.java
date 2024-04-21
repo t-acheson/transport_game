@@ -324,34 +324,19 @@ public class GameScreen implements Screen, Json.Serializable {
 
 			if (layer.getName().equals("collidable")) {
 				for (MapObject obstacle: layer.getObjects()) {
-					float x = obstacle.getProperties().get("x", Float.class) * 3;
-                    float y = obstacle.getProperties().get("y", Float.class) * 3;
-					float width = obstacle.getProperties().get("width", Float.class) * 3;
-                    float height = obstacle.getProperties().get("height", Float.class) * 3;
-					Obstacle newObstacle = new Obstacle(x, y, width, height);
-					obstacles.add(newObstacle);
+					obstacles.add(obstacleCreator(obstacle));
 				}
 			}
 
 			if (layer.getName().equals("roadsDrive")) {
 				for (MapObject obstacle: layer.getObjects()) {
-					float x = obstacle.getProperties().get("x", Float.class) * 3;
-                    float y = obstacle.getProperties().get("y", Float.class) * 3;
-					float width = obstacle.getProperties().get("width", Float.class) * 3;
-                    float height = obstacle.getProperties().get("height", Float.class) * 3;
-					Obstacle newRoad = new Obstacle(x, y, width, height);
-					roads.add(newRoad);
+					roads.add(obstacleCreator(obstacle));
 				}
 			}
 
 			if (layer.getName().equals("roadsWalk")) {
 				for (MapObject obstacle: layer.getObjects()) {
-					float x = obstacle.getProperties().get("x", Float.class) * 3;
-                    float y = obstacle.getProperties().get("y", Float.class) * 3;
-					float width = obstacle.getProperties().get("width", Float.class) * 3;
-                    float height = obstacle.getProperties().get("height", Float.class) * 3;
-					Obstacle newPath = new Obstacle(x, y, width, height);
-					paths.add(newPath);
+					paths.add(obstacleCreator(obstacle));
 				}
 			}
 		}
@@ -702,6 +687,14 @@ public class GameScreen implements Screen, Json.Serializable {
 		float height = object.getProperties().get("height", Float.class) * 3;
 				
 		return new Hub(locX, locY, width, height, type, transIdx);
+	}
+
+	public Obstacle obstacleCreator(MapObject object) {
+		float x = object.getProperties().get("x", Float.class) * 3;
+		float y = object.getProperties().get("y", Float.class) * 3;
+		float width = object.getProperties().get("width", Float.class) * 3;
+		float height = object.getProperties().get("height", Float.class) * 3;
+		return new Obstacle(x, y, width, height);
 	}
 	
 }
