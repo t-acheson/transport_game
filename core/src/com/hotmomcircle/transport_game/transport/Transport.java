@@ -38,6 +38,8 @@ public class Transport {
 	public Texture[] down;
 	public Texture[] left;
 	public Texture[] right;
+	private ArrayList<Obstacle> boundaryRoads;
+	private ArrayList<Obstacle> boundaryRoadsAndPaths;
 
 	public Transport(GameScreen game, Player player, String name, int speed, Texture[] images, String footprint, String staminaCost) {
 		this.game = game;
@@ -139,6 +141,63 @@ public class Transport {
 			// by the magnitude
 			dx = dx / movementMagnitude * speed;	
 			dy = dy / movementMagnitude * speed;
+		}
+
+		for (Obstacle obstacle: this.game.obstacles) {
+			int collision = handleCollision(obstacle.rectangle);
+
+			switch (collision) {
+				case 1:
+					dx = -dx;
+					break;
+
+				case 2:
+					dy = -dy;
+					break;
+			
+				default:
+					break;
+			}
+		}
+
+		if (player.transIdx == player.CAR) {
+			boundaryRoads = new ArrayList<Obstacle>();
+
+			for (Obstacle road: this.game.roads) {
+				if (player.rectangle.overlaps(road.rectangle)) {
+					boundaryRoads.add(road);
+				}
+			}
+
+			boolean internalCollision = handleInteralCollision(boundaryRoads, dx, dy);
+
+			if (internalCollision) {
+				dx = 0;
+				dy = 0;
+			}
+		}
+
+		if (player.transIdx == player.BIKE) {
+			boundaryRoadsAndPaths = new ArrayList<Obstacle>();
+
+			for (Obstacle road: this.game.roads) {
+				if (player.rectangle.overlaps(road.rectangle)) {
+					boundaryRoadsAndPaths.add(road);
+				}
+			}
+
+			for (Obstacle path: this.game.paths) {
+				if (player.rectangle.overlaps(path.rectangle)) {
+					boundaryRoadsAndPaths.add(path);
+				}
+			}
+
+			boolean internalCollision = handleInteralCollision(boundaryRoadsAndPaths, dx, dy);
+
+			if (internalCollision) {
+				dx = 0;
+				dy = 0;
+			}
 		}
 
 		// finally apply the movement
