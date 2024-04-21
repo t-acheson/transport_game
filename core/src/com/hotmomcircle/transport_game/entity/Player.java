@@ -193,33 +193,6 @@ public class Player extends Entity {
 	
 		hasInteracted = false;
 	}
-
-	private int handleCollision(Rectangle obstacle) {
-		if (this.rectangle.overlaps(obstacle)) {
-			// Calculate the overlap between player and obstacle
-			float overlapX = Math.max(0, Math.min(x + this.rectangle.getWidth(), obstacle.x + obstacle.width) - Math.max(x, obstacle.x));
-			float overlapY = Math.max(0, Math.min(y + this.rectangle.getHeight(), obstacle.y + obstacle.height) - Math.max(y, obstacle.y));
-	
-			// Adjust player position based on overlap and movement direction
-			if (overlapX < overlapY) {
-				return 1;
-			} else {
-				return 2;
-			}
-		}
-		return 0;
-	}
-
-	private boolean handleInteralCollision(ArrayList<Obstacle> boundaryRoads, float dx, float dy) {
-		boolean ob = true;
-		for (Obstacle road: boundaryRoads) {
-			if (road.rectangle.contains(x + dx, y + dy)) {
-				ob = false;
-				break;
-			}
-		}
-		return ob;
-	}
 	
 	public int getSpeed() {
 		return transport[transIdx].speed;

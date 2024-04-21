@@ -1,5 +1,7 @@
 package com.hotmomcircle.transport_game.transport;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
@@ -7,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.hotmomcircle.transport_game.GameScreen;
+import com.hotmomcircle.transport_game.entity.Obstacle;
 import com.hotmomcircle.transport_game.entity.Player;
 
 // Transport superclass.
@@ -178,6 +181,33 @@ public class Transport {
 			return dy > 0 ? "up" : "down";
 		}
 		return "down";
+	}
+
+	private int handleCollision(Rectangle obstacle) {
+		if (player.rectangle.overlaps(obstacle)) {
+			// Calculate the overlap between player and obstacle
+			float overlapX = Math.max(0, Math.min(player.getX() + player.rectangle.getWidth(), obstacle.x + obstacle.width) - Math.max(player.getX(), obstacle.x));
+			float overlapY = Math.max(0, Math.min(player.getY() + player.rectangle.getHeight(), obstacle.y + obstacle.height) - Math.max(player.getY(), obstacle.y));
+	
+			// Adjust player position based on overlap and movement direction
+			if (overlapX < overlapY) {
+				return 1;
+			} else {
+				return 2;
+			}
+		}
+		return 0;
+	}
+
+	private boolean handleInteralCollision(ArrayList<Obstacle> boundaryRoads, float dx, float dy) {
+		boolean ob = true;
+		for (Obstacle road: boundaryRoads) {
+			if (road.rectangle.contains(player.getX() + dx, player.getY() + dy)) {
+				ob = false;
+				break;
+			}
+		}
+		return ob;
 	}
 	
 }
