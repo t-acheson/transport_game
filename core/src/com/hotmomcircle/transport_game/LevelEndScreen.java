@@ -11,12 +11,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class LevelEndScreen implements Screen {
     final TransportGame game;
+    final ParentGame parentGame;
     
     OrthographicCamera camera;
     Skin skin;
@@ -33,17 +35,18 @@ public class LevelEndScreen implements Screen {
     String completed;
     String scoreText;
 
-    public LevelEndScreen(final TransportGame game) {
+    public LevelEndScreen(final TransportGame game, ParentGame parentGame) {
         this.game = game;
         this.skin = game.skin;
         this.font = game.font;
-
+        this.parentGame = parentGame;
+        
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
     }
     
-    public void makeLevelEndTable(boolean levelSuccessful, String score) {
+    public void makeLevelEndTable(boolean levelSuccessful, int level, String score) {
         table = new Table();
         table.setFillParent(true);
 
@@ -53,26 +56,27 @@ public class LevelEndScreen implements Screen {
             scoreText = "Current";
             
             continueButton = new TextButton("Continue", skin);
-            // continueButton.addListener(new ChangeListener(){
-
-            //     //TODO add continue functionality
-            // });
+             continueButton.addListener(new ChangeListener(){
+     			@Override
+    			public void changed(ChangeEvent event, Actor actor) {
+    				// TODO Add continue game functionality
+    				parentGame.levelUp();
+    				}
+             });
         } else {
-            System.out.println("Level Failed");
-
             completed = "Failed";
             scoreText = "Final";
 
-            continueButton = new TextButton("New Game", skin);
+            continueButton = new TextButton("Restart", skin);
             continueButton.addListener(new ChangeListener(){
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    game.newGame(game.fileName);
+                    parentGame.startLevel();
                 }
             });
 
         }
-        levelCompletedLabel = new Label("Level "+completed, skin);
+        levelCompletedLabel = new Label("Level "+ level + " " + completed, skin);
         levelCompletedLabel.setAlignment(Align.center);
 
         scoreLabel = new Label(scoreText +" Points: "+ score, skin);
@@ -95,15 +99,15 @@ public class LevelEndScreen implements Screen {
         });
     }
 
-    public void updateLevelEndScreen(boolean levelCompleted, String score){
+    public void updateLevelEndScreen(boolean levelCompleted, int level, String score){
 
-        makeLevelEndTable(levelCompleted, score);
+        makeLevelEndTable(levelCompleted, level, score);
 
         stage.addActor(table);
     }
 
-    public void gameOverScreen(String score){
-        updateLevelEndScreen(false, score);
+    public void gameOverScreen(int level, String score){
+        updateLevelEndScreen(false, level, score);
     }
 
     @Override
