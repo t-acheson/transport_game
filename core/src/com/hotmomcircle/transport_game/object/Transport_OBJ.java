@@ -28,7 +28,7 @@ public abstract class Transport_OBJ extends Object {
 	public void render(SpriteBatch batch) throws Exception{
 		batch.draw(objImg, x, y, 0, 0, game.getTileSize(), game.getTileSize(), game.scale, game.scale, 0, 0, 0, objImg.getWidth(), objImg.getHeight(), false, false);
 
-		object_rect = new Rectangle(x, y, objImg.getWidth(), objImg.getHeight());
+		object_rect = new Rectangle(x + 25, y + 25, objImg.getWidth(), objImg.getHeight());
 		player_rect = game.player.getPlayerRectangle();
 		
 
@@ -36,7 +36,7 @@ public abstract class Transport_OBJ extends Object {
 			System.out.println("Collision");
 			game.player.Collision(game.player.getRectangle());
 
-			font.draw(batch, popUp, this.object_rect.x, this.object_rect.y + 100);
+			font.draw(batch, popUp, this.object_rect.x - 100, this.object_rect.y + 100);
 		}
 	}
 	
