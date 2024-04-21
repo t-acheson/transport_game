@@ -10,4 +10,9 @@ public class Obstacle extends Entity{
 
         this.rectangle = new Rectangle(x, y, w, h);
     }
+
+    @Override
+    public String toString() {
+        return this.getX() + " " + this.getY() + " " + this.rectangle.getWidth() + " " + this.rectangle.getHeight();
+    }
 }
