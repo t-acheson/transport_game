@@ -29,6 +29,7 @@ import com.hotmomcircle.transport_game.tools.WorldMap;
 import com.hotmomcircle.transport_game.tools.pathfinding.AStar;
 import com.hotmomcircle.transport_game.tools.pathfinding.PathfindingGraph;
 import com.hotmomcircle.transport_game.entity.Hub;
+import com.hotmomcircle.transport_game.entity.Obstacle;
 import com.hotmomcircle.transport_game.ui.Planning;
 import com.hotmomcircle.transport_game.ui.Points;
 import com.hotmomcircle.transport_game.ui.TimerUI;
@@ -58,7 +59,7 @@ import com.badlogic.gdx.utils.Timer.Task;
 public class GameScreen implements Screen, Json.Serializable {
 
 	TransportGame game;
-	ParentGame parentGame;
+	public ParentGame parentGame;
 
 	SpriteBatch batch;
 
@@ -141,6 +142,11 @@ public class GameScreen implements Screen, Json.Serializable {
 
 
 
+
+	// Obstacles
+	public ArrayList<Obstacle> obstacles; 
+	public ArrayList<Obstacle> roads; 
+	public ArrayList<Obstacle> paths; 
 // New level
 	public GameScreen(TransportGame game, ParentGame parentGame, JsonValue levelData) {
 		this.game = game;
@@ -312,6 +318,17 @@ public class GameScreen implements Screen, Json.Serializable {
 					}
 				}
             }
+
+			if (layer.getName().equals("collidable")) {
+				for (MapObject obstacle: layer.getObjects()) {
+					float x = obstacle.getProperties().get("x", Float.class) * 3;
+                    float y = obstacle.getProperties().get("y", Float.class) * 3;
+					float width = obstacle.getProperties().get("width", Float.class) * 3;
+                    float height = obstacle.getProperties().get("height", Float.class) * 3;
+					Obstacle newObstacle = new Obstacle(x, y, width, height);
+					obstacles.add(newObstacle);
+				}
+			}
 		}
 
 		renderer = new OrthogonalTiledMapRenderer(map,3);
