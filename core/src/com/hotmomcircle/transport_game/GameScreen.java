@@ -33,6 +33,7 @@ import com.hotmomcircle.transport_game.ui.Planning;
 import com.hotmomcircle.transport_game.ui.Points;
 import com.hotmomcircle.transport_game.ui.WorldMapUI;
 import com.hotmomcircle.transport_game.ui.gemArrow;
+import com.hotmomcircle.transport_game.ui.LevelStart;
 import com.hotmomcircle.transport_game.ui.EducationalPopup;
 import com.hotmomcircle.transport_game.ui.Pause;
 import com.hotmomcircle.transport_game.ui.gemCounter;
@@ -98,6 +99,11 @@ public class GameScreen implements Screen, Json.Serializable {
 	private final int GAME_PAUSED = 1;
 	public Skin skin;
 	public BitmapFont font;
+	
+	public LevelStart levelStart;
+	public Stage startStage;
+	public boolean isLevelStart = true;
+	
 
 	public Pause pauseUI;
 	public Stage pauseStage;
@@ -140,7 +146,7 @@ public class GameScreen implements Screen, Json.Serializable {
 		int pX = levelData.get("player").getInt("x");
 		int pY = levelData.get("player").getInt("y");
 		player = new Player(this, pX, pY, 32, 32, "./foot/player_down1.png");
-		
+		timeLeft = levelData.getInt("time");
 //		Load gems from levels file
 		for (JsonValue gemLoc = levelData.get("gems").child; gemLoc != null; gemLoc = gemLoc.next) {
 			gems.add(new Gem(this, gemLoc.getInt("x"), gemLoc.getInt("y"), 16, 16));
@@ -246,7 +252,9 @@ public class GameScreen implements Screen, Json.Serializable {
 		this.batch = game.batch;
 		
 		// for the pause / play feature
-		GAME_STATE = GAME_RUNNING;
+		GAME_STATE = GAME_PAUSED;
+		
+
 
 		// initialise Node array
 		busHubs = new Array<Hub>();
@@ -315,8 +323,9 @@ public class GameScreen implements Screen, Json.Serializable {
 		// Asset manager instansiation
 		assetManager.load("uiskin.json", Skin.class);
 
-	
-
+		startStage = new Stage(new ScreenViewport());
+		levelStart = new LevelStart(game, this, startStage, skin, parentGame.getCurrLevel());
+		
 		// table to hold UI elements
 		table = new Table();
 		table.setFillParent(true);
@@ -364,12 +373,9 @@ public class GameScreen implements Screen, Json.Serializable {
 
 		worldMapUI = new WorldMapUI(game, this, worldMapStage, skin);
 
-
 		educationalPopup = new EducationalPopup(game, this, stage, skin, player);
-		
 
-		levelEndScreen = new LevelEndScreen(game);
-		timeLeft = 500f;
+    levelEndScreen = new LevelEndScreen(game, parentGame);
 	}
 
 	@Override
@@ -380,7 +386,13 @@ public class GameScreen implements Screen, Json.Serializable {
 
 	@Override
 	public void render(float delta) {
-		timeLeft -= delta;
+		if(Gdx.input.isKeyJustPressed(Input.Keys.P)) {
+			System.out.println("X: " + player.getX() + ", Y: " + player.getY());
+		}
+		if(GAME_STATE == GAME_RUNNING) {
+			timeLeft -= delta;
+			
+		}
 		if (timeLeft <= 0){
 			levelEnd = true;
 			levelCompleted = false;
@@ -397,10 +409,10 @@ public class GameScreen implements Screen, Json.Serializable {
 
 		if (levelEnd){
 			if (levelCompleted){
-				levelEndScreen.updateLevelEndScreen(true, points.getText().toString());
+				levelEndScreen.updateLevelEndScreen(true, parentGame.getCurrLevel(), points.getText().toString());
 				game.setScreen(levelEndScreen);
 			} else {
-				levelEndScreen.gameOverScreen(points.getText().toString());
+				levelEndScreen.gameOverScreen(parentGame.getCurrLevel(), points.getText().toString());
 				game.setScreen(levelEndScreen);
 			}
 		}
@@ -409,12 +421,10 @@ public class GameScreen implements Screen, Json.Serializable {
 		// game.setScreen(levelEndScreen);
 
 		// pauses the game if it isnt already paused - prevents multiple inputs
-		if(Gdx.input.isKeyPressed(Input.Keys.P) && GAME_STATE != GAME_PAUSED) {
+		if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) && GAME_STATE != GAME_PAUSED) {
 			pause();
 			pauseUI.showPause();
-		} 
-		// resumes game if it isn't already running
-		if(Gdx.input.isKeyPressed(Input.Keys.R) && GAME_STATE != GAME_RUNNING) {
+		} else if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) && GAME_STATE != GAME_RUNNING ) {
 			resume();
 		} 
 
@@ -427,8 +437,23 @@ public class GameScreen implements Screen, Json.Serializable {
 				System.out.println("hide map");
 			}
 		}
+		
+		if (isLevelStart) {
+			renderer.setView(camera);
+			camera.setPosition();
+			camera.update();
+			renderer.render();
 
-		if (GAME_STATE == GAME_PAUSED){
+			startStage.act(delta);
+			startStage.draw();
+			
+			if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+				isLevelStart = false;
+				GAME_STATE = GAME_RUNNING;
+			}
+		}
+		
+		else if (GAME_STATE == GAME_PAUSED){
 			pauseStage.act(delta);
 			pauseStage.draw();
 		}
@@ -527,7 +552,7 @@ public class GameScreen implements Screen, Json.Serializable {
 		stage.act(delta);
 		stage.draw();
 
-		
+
 		
 	}
 
@@ -595,7 +620,7 @@ public class GameScreen implements Screen, Json.Serializable {
 		// TODO Auto-generated method stub
 		int x = jsonData.getInt("playerX");
 		int y = jsonData.getInt("playerY");
-		player = new Player(this, x, y, 32, 32, "./foot/player_down1.png");
+		player = new Player(this, x, y, tileSize, tileSize, "./foot/player_down1.png");
 		
 //		Load gems from levels file
 		for (JsonValue gemLoc = jsonData.get("gems").child; gemLoc != null; gemLoc = gemLoc.next) {
