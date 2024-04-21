@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFont
 
 // Interactable transport objects (car, bike etc.)
 public abstract class Transport_OBJ extends Object {
-	
 	GameScreen game;
 	Rectangle object_rect;
 	Rectangle player_rect;
@@ -41,13 +40,7 @@ public abstract class Transport_OBJ extends Object {
 	}
 	
 //	This might be better to bring up to the object class
-	public void update(int i) {
-		
-		if(game.player.canGetOnTransport(getObjectRectangle()) && Gdx.input.isKeyJustPressed(Keys.SPACE)) {
-			interact();
-			game.transport_OBJs.remove(i);
-		}
-	}
+	public abstract void update(int i);
 	
 //	Holds the logic for interaction with transport class, will be different for each object.
 	public abstract void interact();
@@ -59,5 +52,7 @@ public abstract class Transport_OBJ extends Object {
 	public Rectangle getObjectRectangle() {
 		return interactionRadius;
 	}
+	
+
 	
 }

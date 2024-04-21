@@ -2,8 +2,6 @@ package com.hotmomcircle.transport_game;
 
 import java.util.ArrayList;
 
-import javax.security.sasl.SaslException;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -12,7 +10,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -29,19 +26,31 @@ import com.hotmomcircle.transport_game.object.Transport_OBJ;
 import com.hotmomcircle.transport_game.entity.Route;
 import com.hotmomcircle.transport_game.tools.Camera;
 import com.hotmomcircle.transport_game.tools.WorldMap;
-import com.hotmomcircle.transport_game.entity.Node;
+import com.hotmomcircle.transport_game.tools.pathfinding.AStar;
+import com.hotmomcircle.transport_game.tools.pathfinding.PathfindingGraph;
+import com.hotmomcircle.transport_game.entity.Hub;
 import com.hotmomcircle.transport_game.ui.Planning;
 import com.hotmomcircle.transport_game.ui.Points;
+import com.hotmomcircle.transport_game.ui.Timer;
 import com.hotmomcircle.transport_game.ui.WorldMapUI;
 import com.hotmomcircle.transport_game.ui.gemArrow;
+import com.hotmomcircle.transport_game.ui.LevelStart;
+import com.hotmomcircle.transport_game.ui.EducationalPopup;
+import com.hotmomcircle.transport_game.ui.LevelStart;
 import com.hotmomcircle.transport_game.ui.Pause;
 import com.hotmomcircle.transport_game.ui.gemCounter;
 //map imports below 
 import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+//
+
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.Timer.Task; 
+
 
 
 // Screen of the level the player is currently playing
@@ -63,23 +72,30 @@ public class GameScreen implements Screen, Json.Serializable {
 
 	Texture img;
 	public Player player;
-	public ArrayList<Transport_OBJ> transport_OBJs = new ArrayList<Transport_OBJ>();
+	public ArrayList<Transport_OBJ> bike_OBJs = new ArrayList<Transport_OBJ>();
+	public ArrayList<Transport_OBJ> car_OBJs = new ArrayList<Transport_OBJ>();
 	   
 	public Camera camera;
 	// for the world map on press of "M"
-	boolean showWorldMap = false;
-	WorldMap worldMap;
+	public boolean showWorldMap = false;
+	public WorldMap worldMap;
 	WorldMapUI worldMapUI;
 	Stage worldMapStage;
+
+
+	// for the educationalPopups
+	public EducationalPopup educationalPopup;
+	public boolean showPopup = false;
+	// Pathfinding resources
+	public PathfindingGraph pathfindingGraph;
+	public AStar astar; // algorithm for finding the path
 	
 	// Texture playerMap = new Texture("assets/phoneScreen.png");
 	
-	public Array<Gem> gems;
+	public Array<Gem> gems = new Array<Gem>();;
 
-	// list of Nodes for interaction
-	public Array<Node> nodes;
-	// list of Routes for planning UI
-	public Array<Route> routes;
+	public Array<Hub> busHubs;
+	public Array<Hub> luasHubs;
 	   
    // Variables associated with the pause / game state
 	private int GAME_STATE;
@@ -87,6 +103,11 @@ public class GameScreen implements Screen, Json.Serializable {
 	private final int GAME_PAUSED = 1;
 	public Skin skin;
 	public BitmapFont font;
+	
+	public LevelStart levelStart;
+	public Stage startStage;
+	public boolean isLevelStart = true;
+	
 
 	public Pause pauseUI;
 	public Stage pauseStage;
@@ -110,24 +131,54 @@ public class GameScreen implements Screen, Json.Serializable {
 	//gemArrow instance 
 	private gemArrow gemArrowUI;
 	private gemCounter gemCounter;
+	public LevelEndScreen levelEndScreen;
+	public boolean levelEnd = false;
+	public boolean levelCompleted;
+
+	private float timeLeft;
+	private Timer timer;
+
+
+
+
 // New level
-	public GameScreen(TransportGame game, ParentGame parentGame) {
+	public GameScreen(TransportGame game, ParentGame parentGame, JsonValue levelData) {
 		this.game = game;
 		this.parentGame = parentGame;
 		
 		loadAssets();
-		player = new Player(this, 700, 300, 32, 32, "./foot/player_down1.png");
 		
-		gems = new Array<Gem>();
-		gems.add(new Gem(this, 400, 400, 16, 16));
-		gems.add(new Gem(this, 200, 200, 16, 16));
-		gems.add(new Gem(this, 300, 300, 16, 16));
+		int pX = levelData.get("player").getInt("x");
+		int pY = levelData.get("player").getInt("y");
+		player = new Player(this, pX, pY, 32, 32, "./foot/player_down1.png");
+
+		timer = new Timer(String.valueOf(levelData.getInt("time")), skin);
+
+//		Load gems from levels file
+		for (JsonValue gemLoc = levelData.get("gems").child; gemLoc != null; gemLoc = gemLoc.next) {
+			gems.add(new Gem(this, gemLoc.getInt("x"), gemLoc.getInt("y"), 16, 16));
+		}
+		
+//		Load cars from levels file
+		for (JsonValue carLoc = levelData.get("cars").child; carLoc != null; carLoc = carLoc.next) {
+			car_OBJs.add(new Car_OBJ(this, carLoc.getInt("x"), carLoc.getInt("y"), true));
+		}
+		
+		
+//		Load bikes from levels file
+		for (JsonValue bikeLoc = levelData.get("bikes").child; bikeLoc != null; bikeLoc = bikeLoc.next) {
+			bike_OBJs.add(new Bicycle_OBJ(this, bikeLoc.getInt("x"), bikeLoc.getInt("y"), true));
+		}
+		
+
+		
+		
 
 		initializeGame();
 	}
 	
 //	Load level from json
-	public GameScreen(TransportGame game, ParentGame parentGame, JsonValue jsonMap) {
+	public GameScreen(TransportGame game, ParentGame parentGame, JsonValue levelData, JsonValue jsonMap) {
 		this.game = game;
 		this.font = game.font;
 		this.parentGame = parentGame;
@@ -137,11 +188,7 @@ public class GameScreen implements Screen, Json.Serializable {
 //		Read in the serializable data
 		read(null, jsonMap);
 		
-//		For now write the gems in manually, these will be serialized too
-		gems = new Array<Gem>();
-		gems.add(new Gem(this, 400, 400, 16, 16));
-		gems.add(new Gem(this, 200, 200, 16, 16));
-		gems.add(new Gem(this, 300, 300, 16, 16));
+
 		initializeGame();
 		
 		
@@ -154,7 +201,7 @@ public class GameScreen implements Screen, Json.Serializable {
 
 		//loading map 
 		assetManager.setLoader(TiledMap.class,  new TmxMapLoader());
-		assetManager.load("bigMap.tmx", TiledMap.class);
+		assetManager.load("finalDraft.tmx", TiledMap.class);
 		
 //		Load in the player transport
 		String[] transportPaths = {
@@ -169,7 +216,9 @@ public class GameScreen implements Screen, Json.Serializable {
 			    "./car/car_up.png", "./car/car_up.png",
 			    "./car/car_down.png", "./car/car_down.png",
 			    "./car/car_left.png", "./car/car_left.png",
-			    "./car/car_right.png", "./car/car_right.png"
+			    "./car/car_right.png", "./car/car_right.png",
+				"./bus/bus_left.png", "./bus/bus_right.png",
+				"./bus/bus_up.png", "./bus/bus_down.png",
 			};
 		
 		for(String path: transportPaths) {
@@ -190,61 +239,87 @@ public class GameScreen implements Screen, Json.Serializable {
 		}
 		
 		assetManager.finishLoading();
-	}
-	
-//	Initializes the game. Put into separate function to allow multiple constructors to call it
-	public void initializeGame() {
-		this.font = game.font;
-		this.skin = game.skin;
 
-		this.batch = game.batch;
-		
-		// for the pause / play feature
-		GAME_STATE = GAME_RUNNING;
-		
 		try {
-			map = assetManager.get("bigMap.tmx", TiledMap.class);
+			map = assetManager.get("finalDraft.tmx", TiledMap.class);
 			System.out.println("Map loaded successfully.");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		// routes for node testing
-		routes = new Array<Route>();
-		for (int i = 1; i < 4; i++) {
-			routes.add(new Route(this, 0, 0, 32, 32, "gem.png", 900, i * 100 + 100));
-		}
+		// graph representing the 'roads' layer
+		pathfindingGraph = new PathfindingGraph(map, originalTileSize);
+		
+		this.font = game.font;
+		this.skin = game.skin;
+
+		this.batch = game.batch;
+	}
+	
+//	Initializes the game. Put into separate function to allow multiple constructors to call it
+	public void initializeGame() {
+
+		
+		// for the pause / play feature
+		GAME_STATE = GAME_PAUSED;
+		
+
+
 
 		// initialise Node array
-		nodes = new Array<Node>();
+		busHubs = new Array<Hub>();
+		luasHubs = new Array<Hub>();
 		
 
 		for (MapLayer layer : map.getLayers()) {
-            // Check if the layer contains objects
-			// AND create Node(s) for the object layer
-            if (layer.getObjects() != null && layer.getName().equals("rec_layer")) {
+            // Check if the layer contains objects and is of guided transport
+            if (layer.getObjects() != null && layer.getName().contains("bus")) {
+
                 // Retrieve objects from the layer
                 for (MapObject object : layer.getObjects()) {
 					// get X and Y for each object
-                    float locX = object.getProperties().get("x", Float.class);
-                    float locY = object.getProperties().get("y", Float.class);
-					// pass to Node constructor
-					nodes.add(new Node(this, locX, locY, 16, 16, "gem.png", routes));
-                }
+                    // pass to Hub constructor
+					busHubs.add(hubCreator(object, "Bus", 3));
+				}
+
+				for (MapObject object : layer.getObjects()) {
+					Hub newHub = hubCreator(object, "Bus", 3);
+
+					for (Hub hub : busHubs) { 
+						if (newHub.getX() != hub.getX() && newHub.getY() != hub.getY()) {
+							hub.addHub(newHub);
+						}
+					}
+				}
+            }
+
+			if (layer.getObjects() != null && layer.getName().contains("luas")) {
+
+                // Retrieve objects from the layer
+                for (MapObject object : layer.getObjects()) {
+					// get X and Y for each object
+                    // pass to Hub constructor
+					luasHubs.add(hubCreator(object, "Luas", 4));
+				}
+
+				for (MapObject object : layer.getObjects()) {
+					Hub newHub = hubCreator(object, "Luas", 4);
+
+					for (Hub hub : luasHubs) { 
+						if (newHub.getX() != hub.getX() && newHub.getY() != hub.getY()) {
+							hub.addHub(newHub);
+						}
+					}
+				}
             }
 		}
-
 
 		renderer = new OrthogonalTiledMapRenderer(map,3);
 		//
 
 		
 		
-		transport_OBJs.add(new Bicycle_OBJ(this, 300, 100, true));
-		transport_OBJs.add(new Bicycle_OBJ(this, 400, 100, true));
-		transport_OBJs.add(new Bicycle_OBJ(this, 500, 100, true));
-		
-		transport_OBJs.add(new Car_OBJ(this, 400, 150, true));
+
 		
 		// create the camera and the SpriteBatch
 		camera = new Camera(game, player);
@@ -258,8 +333,9 @@ public class GameScreen implements Screen, Json.Serializable {
 		// Asset manager instansiation
 		assetManager.load("uiskin.json", Skin.class);
 
-	
-
+		startStage = new Stage(new ScreenViewport());
+		levelStart = new LevelStart(game, this, startStage, skin, parentGame.getCurrLevel());
+		
 		// table to hold UI elements
 		table = new Table();
 		table.setFillParent(true);
@@ -278,8 +354,8 @@ public class GameScreen implements Screen, Json.Serializable {
 		// fill table with UI scores
 		table.add(new Label("Gems: ", skin));
 		table.add(gemCounter).fillX().uniformX();
-		table.add(new Label("Points: ", skin));
-		table.add(points).fillX().uniformX();
+		table.add(new Label("Time: ", skin));
+		table.add(timer).fillX().uniformX();
 		table.add(new Label("Carbon: ", skin));
 		table.add(carbon).fillX().uniformX();
 		table.add(new Label("Fresh: ", skin));
@@ -302,14 +378,15 @@ public class GameScreen implements Screen, Json.Serializable {
 
 		pauseUI = new Pause(game, this, pauseStage, skin);
 
-		worldMap = new WorldMap(renderer, map, batch);
+		worldMap = new WorldMap(renderer, map, batch, camera);
 		worldMapStage = new Stage(new ScreenViewport());
 
 		worldMapUI = new WorldMapUI(game, this, worldMapStage, skin);
 
-		
+		educationalPopup = new EducationalPopup(game, this, stage, skin, player);
 
-		
+		levelEndScreen = new LevelEndScreen(game, parentGame);
+
 	}
 
 	@Override
@@ -320,14 +397,46 @@ public class GameScreen implements Screen, Json.Serializable {
 
 	@Override
 	public void render(float delta) {
+		if(Gdx.input.isKeyJustPressed(Input.Keys.P)) {
+			System.out.println("X: " + player.getX() + ", Y: " + player.getY());
+		}
+		if(GAME_STATE == GAME_RUNNING) {
+			timer.updateTimer(delta);
+			
+		}
+		if (timer.getTime() <= 0){
+
+			levelEnd = true;
+			levelCompleted = false;
+		}
+
+
+		// public boolean levelEnd = false;
+		// public boolean levelCompleted;
+		if (gems.isEmpty()){
+			levelEnd = true;
+			levelCompleted = true;
+		}
+
+
+		if (levelEnd){
+			if (levelCompleted){
+				levelEndScreen.updateLevelEndScreen(true, parentGame.getCurrLevel(), points.getText().toString());
+				game.setScreen(levelEndScreen);
+			} else {
+				levelEndScreen.gameOverScreen(parentGame.getCurrLevel(), points.getText().toString());
+				game.setScreen(levelEndScreen);
+			}
+		}
+		// levelEndScreen.updateLevelEndScreen(true, score);
+
+		// game.setScreen(levelEndScreen);
 
 		// pauses the game if it isnt already paused - prevents multiple inputs
-		if(Gdx.input.isKeyPressed(Input.Keys.P) && GAME_STATE != GAME_PAUSED) {
+		if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) && GAME_STATE != GAME_PAUSED) {
 			pause();
 			pauseUI.showPause();
-		} 
-		// resumes game if it isn't already running
-		if(Gdx.input.isKeyPressed(Input.Keys.R) && GAME_STATE != GAME_RUNNING) {
+		} else if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) && GAME_STATE != GAME_RUNNING ) {
 			resume();
 		} 
 
@@ -340,17 +449,33 @@ public class GameScreen implements Screen, Json.Serializable {
 				System.out.println("hide map");
 			}
 		}
+		
+		if (isLevelStart) {
+			renderer.setView(camera);
+			camera.setPosition();
+			camera.update();
+			renderer.render();
 
-		if (GAME_STATE == GAME_PAUSED){
+			startStage.act(delta);
+			startStage.draw();
+			
+			if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+				isLevelStart = false;
+				GAME_STATE = GAME_RUNNING;
+			}
+		}
+		
+		else if (GAME_STATE == GAME_PAUSED){
 			pauseStage.act(delta);
 			pauseStage.draw();
 		}
 
 		else if (showWorldMap) {
-			worldMap.render(player, gems, camera);
-			worldMapUI.showUI();
-			worldMapStage.draw();
-
+			worldMap.render(player, gems);
+			if (!planningUI.active) {
+				worldMapUI.showUI();
+				worldMapStage.draw();
+			}
 
 		} else {
 
@@ -376,10 +501,13 @@ public class GameScreen implements Screen, Json.Serializable {
 			}
 
 		
+		for(int i = 0; i < car_OBJs.size(); i++) {
+			car_OBJs.get(i).update(i);
+	}
 		
-		for(int i = 0; i < transport_OBJs.size(); i++) {
-				transport_OBJs.get(i).update(i);
-		}
+		for(int i = 0; i < bike_OBJs.size(); i++) {
+			bike_OBJs.get(i).update(i);
+	}
 
 		// tell the camera to update its matrices.
 		camera.update();
@@ -392,18 +520,22 @@ public class GameScreen implements Screen, Json.Serializable {
 
 		batch.begin();
 		try {
-			for (Transport_OBJ transport: transport_OBJs) {
+			for (Transport_OBJ transport: car_OBJs) {
 				if (transport != null) {					
 					transport.render(batch);
 				}
 			}
 			
-			for (Gem gem : gems) {
-				gem.render(batch);
+			for (Transport_OBJ transport: bike_OBJs) {
+				if (transport != null) {		
+					transport.render(batch);
+				}
 			}
 			
-			for (Node node: nodes) {
-				node.render(batch);
+			
+			
+			for (Gem gem : gems) {
+				gem.render(batch);
 			}
 			
 //			Render the player last so they appear on top of everything
@@ -420,15 +552,19 @@ public class GameScreen implements Screen, Json.Serializable {
 		}
 		batch.end();
 
-		// UI draw
-		stage.act(delta);
-		stage.draw();
+		if (showPopup){
+			showPopup = false;
+			educationalPopup.showUI();
+		}
 
 	}
 		 //Update the gemArrow UI with the current player and gem positions
 		gemArrowUI.update(player, gems);
+		// UI draw
+		stage.act(delta);
+		stage.draw();
 
-		
+
 		
 	}
 
@@ -441,6 +577,7 @@ public class GameScreen implements Screen, Json.Serializable {
 	@Override
 	public void pause() {
 		System.out.println("Game Paused");
+		parentGame.saveGame();
 		GAME_STATE = GAME_PAUSED;
 		
 	}
@@ -474,18 +611,20 @@ public class GameScreen implements Screen, Json.Serializable {
 	}
 	
 	public void addBike(int x, int y) {
-		transport_OBJs.add(new Bicycle_OBJ(this, x, y, true));
+		bike_OBJs.add(new Bicycle_OBJ(this, x, y, true));
 	}
 	
 	public void addCar(int x, int y) {
-		transport_OBJs.add(new Car_OBJ(this, x, y, true));
+		car_OBJs.add(new Car_OBJ(this, x, y, true));
 	}
 
 	@Override
 	public void write(Json json) {
 		json.writeValue("playerX", player.getX());
 		json.writeValue("playerY", player.getY());
-		
+		json.writeValue("cars", car_OBJs);
+		json.writeValue("bikes", bike_OBJs);
+		json.writeValue("gems", gems);
 	}
 
 	@Override
@@ -493,9 +632,34 @@ public class GameScreen implements Screen, Json.Serializable {
 		// TODO Auto-generated method stub
 		int x = jsonData.getInt("playerX");
 		int y = jsonData.getInt("playerY");
-		player = new Player(this, x, y, 32, 32, "./foot/player_down1.png");
+		player = new Player(this, x, y, tileSize, tileSize, "./foot/player_down1.png");
+		
+//		Load gems from levels file
+		for (JsonValue gemLoc = jsonData.get("gems").child; gemLoc != null; gemLoc = gemLoc.next) {
+			gems.add(new Gem(this, gemLoc.getInt("x"), gemLoc.getInt("y"), 16, 16));
+		}
+		
+//		Load cars from levels file
+		for (JsonValue carLoc = jsonData.get("cars").child; carLoc != null; carLoc = carLoc.next) {
+			car_OBJs.add(new Car_OBJ(this, carLoc.getInt("x"), carLoc.getInt("y"), true));
+		}
+		
+		
+//		Load bikes from levels file
+		for (JsonValue bikeLoc = jsonData.get("bikes").child; bikeLoc != null; bikeLoc = bikeLoc.next) {
+			bike_OBJs.add(new Bicycle_OBJ(this, bikeLoc.getInt("x"), bikeLoc.getInt("y"), true));
+		}
 		
 	}
 
+	// utiltiy functions
+	public Hub hubCreator(MapObject object, String type, int transIdx) {
+		float locX = object.getProperties().get("x", Float.class) * 3;
+		float locY = object.getProperties().get("y", Float.class) * 3;
+		float width = object.getProperties().get("width", Float.class) * 3;
+		float height = object.getProperties().get("height", Float.class) * 3;
+				
+		return new Hub(locX, locY, width, height, type, transIdx);
+	}
 	
 }
