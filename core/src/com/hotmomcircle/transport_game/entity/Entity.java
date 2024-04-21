@@ -23,7 +23,7 @@ public class Entity {
 		return y;
 	}
 
-	Entity(GameScreen game, float locX, float locY, int width, int height, String imagePath){
+	Entity(GameScreen game, float locX, float locY, float width, float height, String imagePath){
 		this.x = locX;
 		this.y = locY;
 

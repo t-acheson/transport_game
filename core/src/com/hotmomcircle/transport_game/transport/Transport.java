@@ -15,7 +15,7 @@ import com.hotmomcircle.transport_game.entity.Player;
 //It will also own speed, but not position as this will be handled by the player class
 
 public class Transport {
-	private GameScreen game;
+	public GameScreen game;
 	public String name;
 	public int speed;
 	public Player player;

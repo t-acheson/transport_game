@@ -1,8 +1,11 @@
 package com.hotmomcircle.transport_game.entity;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.hotmomcircle.transport_game.GameScreen;
 
@@ -11,25 +14,55 @@ import com.hotmomcircle.transport_game.GameScreen;
 // will need its own UI elements to all player
 // to choose with WASD, arrow keys, or mouse 
 public class Hub extends Entity{
-    private Texture image;
-    private Array<Route> routes;
+    private Rectangle rect;
+    private ArrayList<Hub> connectedHubs = new ArrayList<Hub>();
+    private String type;
+    private int transIdx;
 
-    public Hub(GameScreen game, float locX, float locY, int width, int height, String imagePath, Array<Route> routes) { 
-        super(game, locX, locY, width, height, imagePath);
-        this.routes = routes;
-        image = new Texture(Gdx.files.internal("gem.png"));
+    public Hub(float locX, float locY, float width, float height, String type, int transIdx) { 
+        this.rect = new Rectangle(locX, locY, width, height);
+        this.type = type;
+        this.transIdx = transIdx;
     }
 
-    public Array<Route> getRoutes() {
-        return routes;
+    public void addHub(Hub newHub) {
+        connectedHubs.add(newHub);
     }
-    
-    public void render(SpriteBatch batch) {
-        batch.draw(image, this.getX(), this.getY());
+
+    public ArrayList<Hub> getConnected() {
+        return connectedHubs;
     }
 
     @Override
     public String toString() {
-        return "Node at " + "X: " + this.getX() + " Y: " + this.getY();
+        return "X: " + Math.round(this.getX()) + " Y: " + Math.round(this.getY());
+    }
+
+    public Rectangle getRect () {
+        return this.rect;
+    }
+
+    public float getX() {
+        return this.rect.x;
+    }
+
+    public float getY() {
+        return this.rect.y;
+    }
+
+    public float getWidth() {
+        return this.rect.width;
+    }
+
+    public float getHeight() {
+        return this.rect.height;
+    }
+
+    public String getType() {
+        return this.type;
+    }
+
+    public int getTransIdx() {
+        return this.transIdx;
     }
 }

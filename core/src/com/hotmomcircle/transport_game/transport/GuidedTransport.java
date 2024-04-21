@@ -37,6 +37,7 @@ public class GuidedTransport extends Transport {
         if (playerNode == this.current) {
             if (!path.isEmpty()) {
                 this.current = path.remove(0);
+                game.showPopup = true;
             } else {
                 player.getOnFoot();
                 return getCurrentImage(dx, dy);
