@@ -31,10 +31,12 @@ import com.hotmomcircle.transport_game.tools.pathfinding.PathfindingGraph;
 import com.hotmomcircle.transport_game.entity.Hub;
 import com.hotmomcircle.transport_game.ui.Planning;
 import com.hotmomcircle.transport_game.ui.Points;
+import com.hotmomcircle.transport_game.ui.Timer;
 import com.hotmomcircle.transport_game.ui.WorldMapUI;
 import com.hotmomcircle.transport_game.ui.gemArrow;
 import com.hotmomcircle.transport_game.ui.LevelStart;
 import com.hotmomcircle.transport_game.ui.EducationalPopup;
+import com.hotmomcircle.transport_game.ui.LevelStart;
 import com.hotmomcircle.transport_game.ui.Pause;
 import com.hotmomcircle.transport_game.ui.gemCounter;
 //map imports below 
@@ -45,8 +47,10 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 //
+
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task; 
+
 
 
 // Screen of the level the player is currently playing
@@ -132,6 +136,7 @@ public class GameScreen implements Screen, Json.Serializable {
 	public boolean levelCompleted;
 
 	private float timeLeft;
+	private Timer timer;
 
 
 
@@ -146,7 +151,9 @@ public class GameScreen implements Screen, Json.Serializable {
 		int pX = levelData.get("player").getInt("x");
 		int pY = levelData.get("player").getInt("y");
 		player = new Player(this, pX, pY, 32, 32, "./foot/player_down1.png");
-		timeLeft = levelData.getInt("time");
+
+		timer = new Timer(String.valueOf(levelData.getInt("time")), skin);
+
 //		Load gems from levels file
 		for (JsonValue gemLoc = levelData.get("gems").child; gemLoc != null; gemLoc = gemLoc.next) {
 			gems.add(new Gem(this, gemLoc.getInt("x"), gemLoc.getInt("y"), 16, 16));
@@ -242,18 +249,21 @@ public class GameScreen implements Screen, Json.Serializable {
 
 		// graph representing the 'roads' layer
 		pathfindingGraph = new PathfindingGraph(map, originalTileSize);
-	}
-	
-//	Initializes the game. Put into separate function to allow multiple constructors to call it
-	public void initializeGame() {
+		
 		this.font = game.font;
 		this.skin = game.skin;
 
 		this.batch = game.batch;
+	}
+	
+//	Initializes the game. Put into separate function to allow multiple constructors to call it
+	public void initializeGame() {
+
 		
 		// for the pause / play feature
 		GAME_STATE = GAME_PAUSED;
 		
+
 
 
 		// initialise Node array
@@ -344,8 +354,8 @@ public class GameScreen implements Screen, Json.Serializable {
 		// fill table with UI scores
 		table.add(new Label("Gems: ", skin));
 		table.add(gemCounter).fillX().uniformX();
-		table.add(new Label("Points: ", skin));
-		table.add(points).fillX().uniformX();
+		table.add(new Label("Time: ", skin));
+		table.add(timer).fillX().uniformX();
 		table.add(new Label("Carbon: ", skin));
 		table.add(carbon).fillX().uniformX();
 		table.add(new Label("Fresh: ", skin));
@@ -375,7 +385,8 @@ public class GameScreen implements Screen, Json.Serializable {
 
 		educationalPopup = new EducationalPopup(game, this, stage, skin, player);
 
-    levelEndScreen = new LevelEndScreen(game, parentGame);
+		levelEndScreen = new LevelEndScreen(game, parentGame);
+
 	}
 
 	@Override
@@ -390,10 +401,11 @@ public class GameScreen implements Screen, Json.Serializable {
 			System.out.println("X: " + player.getX() + ", Y: " + player.getY());
 		}
 		if(GAME_STATE == GAME_RUNNING) {
-			timeLeft -= delta;
+			timer.updateTimer(delta);
 			
 		}
-		if (timeLeft <= 0){
+		if (timer.getTime() <= 0){
+
 			levelEnd = true;
 			levelCompleted = false;
 		}
