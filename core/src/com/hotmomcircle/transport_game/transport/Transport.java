@@ -171,13 +171,13 @@ public class Transport {
 
 	public String getDirection(float dx, float dy) {
 		if (dx != 0) {
-			return dx > 0 ? "right" : "left";
+			direction = dx > 0 ? "right" : "left";
 		}
 
-		if (dy != 0) {
-			return dy > 0 ? "up" : "down";
+		else if (dy != 0) {
+			direction = dy > 0 ? "up" : "down";
 		}
-		return "down";
+		return direction;
 	}
 	
 }
