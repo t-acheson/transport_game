@@ -31,7 +31,7 @@ import com.hotmomcircle.transport_game.tools.pathfinding.PathfindingGraph;
 import com.hotmomcircle.transport_game.entity.Hub;
 import com.hotmomcircle.transport_game.ui.Planning;
 import com.hotmomcircle.transport_game.ui.Points;
-import com.hotmomcircle.transport_game.ui.Timer;
+import com.hotmomcircle.transport_game.ui.TimerUI;
 import com.hotmomcircle.transport_game.ui.WorldMapUI;
 import com.hotmomcircle.transport_game.ui.gemArrow;
 import com.hotmomcircle.transport_game.ui.LevelStart;
@@ -136,7 +136,7 @@ public class GameScreen implements Screen, Json.Serializable {
 	public boolean levelCompleted;
 
 	private float timeLeft;
-	private Timer timer;
+	private TimerUI timer;
 
 
 
@@ -152,7 +152,7 @@ public class GameScreen implements Screen, Json.Serializable {
 		int pY = levelData.get("player").getInt("y");
 		player = new Player(this, pX, pY, 32, 32, "./foot/player_down1.png");
 
-		timer = new Timer(String.valueOf(levelData.getInt("time")), skin);
+		timer = new TimerUI(String.valueOf(levelData.getInt("time")), skin);
 
 //		Load gems from levels file
 		for (JsonValue gemLoc = levelData.get("gems").child; gemLoc != null; gemLoc = gemLoc.next) {
