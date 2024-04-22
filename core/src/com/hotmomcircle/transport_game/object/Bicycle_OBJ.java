@@ -19,7 +19,6 @@ public class Bicycle_OBJ extends Transport_OBJ {
 //		Interaction rectangle
 		this.interactable = true;
 		interactionRadius = new Rectangle(x, y, game.getTileSize()*2, game.getTileSize()*2);
-		
 	}
 	
 	public void update(int i)  {
