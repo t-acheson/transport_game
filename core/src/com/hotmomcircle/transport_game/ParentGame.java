@@ -1,5 +1,7 @@
 package com.hotmomcircle.transport_game;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.files.FileHandle;
@@ -24,25 +26,32 @@ public class ParentGame implements Json.Serializable{
 	
 	int currLevel;
 	int maxLevel;
+	JsonValue levelData;
+	ArrayList<JsonValue> levels = new ArrayList<>();
 	
-	String name = "test";
+	String name;
+	String fileName;
+
 	
 //	Constructor for new game
-	public ParentGame(TransportGame game) {
+	public ParentGame(TransportGame game, String name, String fileName) {
 		this.game = game;
+		this.name = name;
+		this.fileName = fileName;
 		init();
-		
+		loadLevels();
 		currLevel = 0;
 		maxLevel = 0;
-		gameScreen = new GameScreen(game, this);
-		game.setScreen(gameScreen);
+		startLevel();
 		
 	}
 	
 //	Constructor for loading game
-	public ParentGame(TransportGame game, JsonValue jsonData) {
+	public ParentGame(TransportGame game, JsonValue jsonData, String fileName) {
 		this.game = game;
+		this.fileName = fileName;
 		init();
+		loadLevels();
 		read(null, jsonData);
 		
 	}
@@ -90,6 +99,38 @@ public class ParentGame implements Json.Serializable{
 		}
 		
 	}
+
+//	Loads levels from the levels.json file
+	public void loadLevels() {
+        FileHandle fileHandle = Gdx.files.internal("levels/levels.json"); // w
+        String text = fileHandle.readString();
+        
+        levelData = new JsonReader().parse(text).get("levels");
+        
+        for (JsonValue level = levelData.child; level != null; level = level.next){
+ 
+                levels.add(level);
+        }
+	}
+	
+//	Starts the level given
+	public void startLevel() {
+		gameScreen = new GameScreen(game, this, levelData.get(currLevel));
+		game.setScreen(gameScreen);
+	}
+	
+	public void levelUp() {
+		currLevel += 1;
+		if (currLevel > maxLevel) {
+			maxLevel += 1;
+		}
+
+		startLevel();
+	}
+	
+	public int getCurrLevel() {
+		return currLevel + 1; // + 1 as currLevel is 0 index and we want to display this.
+	}
 	
 //	Save the game
 	public void saveGame() {
@@ -97,11 +138,11 @@ public class ParentGame implements Json.Serializable{
 		Json json = new Json();
 		String text = json.toJson(this);
 		
-        FileHandle fileHandle = Gdx.files.local("saves/output.json"); // Adjust the file path as needed
+        FileHandle fileHandle = Gdx.files.local("saves/" + fileName); // Adjust the file path as needed
         fileHandle.writeString(json.toJson(this), false);
 //        text = fileHandle.readString();
         
-//        JsonValue root = new JsonReader().parse(text);
+//        JsonValue root = new JsonReader().parse(text); 
 		
 	}
 
@@ -121,7 +162,7 @@ public class ParentGame implements Json.Serializable{
 		currLevel = jsonData.getInt("currLevel");
 		maxLevel = jsonData.getInt("maxLevel");
 		
-		gameScreen = new GameScreen(game, this, jsonData.get("currGame"));
+		gameScreen = new GameScreen(game, this, levelData.get(currLevel), jsonData.get("currGame"));
 		game.setScreen(gameScreen);
 	}
 	

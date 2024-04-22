@@ -1,5 +1,8 @@
 package com.hotmomcircle.transport_game;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -23,7 +26,7 @@ public class TransportGame extends Game {
 	
 	public Skin skin; 
 	public BitmapFont font;
-
+	public String fileName; // File name of the current game being playe
    
 
 	@Override
@@ -77,26 +80,39 @@ public class TransportGame extends Game {
 		return SCREEN_HEIGHT;
 	}
 	
-	public void newGame() {
-		new ParentGame(this);
+	public void newGame(String name) {
+//		Add time to fileName to make it unique for every save
+        LocalDateTime currentTime = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
+        String currentTimeString = currentTime.format(formatter);
+        fileName = name + currentTimeString + ".json";
+		new ParentGame(this, name, fileName);
 	}
 	
-	public void resumeGame() {
+//	Returns 1 if successful, 0 if not
+	public int resumeGame() {
+//		If no current game return
+		if (fileName == null) {
+			return 0;
+		}
+		
 //		TODO rename most recent save to something else like current.json
-        FileHandle fileHandle = Gdx.files.local("saves/output.json"); // w
+        FileHandle fileHandle = Gdx.files.local("saves/" + fileName); // w
         String text = fileHandle.readString();
         
         JsonValue json = new JsonReader().parse(text);
-		new ParentGame(this, json);
+		new ParentGame(this, json, fileName);
+		return 1;
 	}
 	
 //	Load the game from a given filename
 	public void loadGame(String fileName) {
-        FileHandle fileHandle = Gdx.files.local(fileName);
+		this.fileName = fileName;
+        FileHandle fileHandle = Gdx.files.local("saves/" + fileName);
         String text = fileHandle.readString();
         
         JsonValue json = new JsonReader().parse(text);
-		new ParentGame(this, json);
+		new ParentGame(this, json, fileName);
 	}
 	
 }

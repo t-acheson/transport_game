@@ -13,7 +13,7 @@ public class Entity {
 	protected float y;
 	public Rectangle rectangle;
 	public String imagePath;
-	private Texture image;
+	public Texture image;
 	
 	public float getX() {
 		return x;
@@ -23,7 +23,7 @@ public class Entity {
 		return y;
 	}
 
-	Entity(GameScreen game, float locX, float locY, int width, int height, String imagePath){
+	Entity(GameScreen game, float locX, float locY, float width, float height, String imagePath){
 		this.x = locX;
 		this.y = locY;
 
@@ -62,6 +62,14 @@ public class Entity {
 
 	public void setY(float y) {
 		this.y = y;
+	}
+
+	public void incX (float dx) {
+		this.x += dx;
+	}
+
+	public void incY (float dy) {
+		this.y += dy;
 	}
 	
 }

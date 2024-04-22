@@ -7,7 +7,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.utils.Array;
 import com.hotmomcircle.transport_game.GameScreen;
 import com.hotmomcircle.transport_game.TransportGame;
 import com.hotmomcircle.transport_game.MainMenuScreen;
@@ -30,6 +29,7 @@ public class Pause {
     public void showPause () {
 		// takes Routes as argument from togglePlanning
 		// creates new table with screen options
+        Gdx.input.setInputProcessor(stage);
 		pauseTable = new Table();
 		pauseTable.setFillParent(true);
 		pauseTable.defaults().width(this.game.SCREEN_WIDTH / 6).expandX().fillX();

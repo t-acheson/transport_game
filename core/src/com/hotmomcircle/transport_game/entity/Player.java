@@ -1,12 +1,18 @@
 package com.hotmomcircle.transport_game.entity;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.hotmomcircle.transport_game.GameScreen;
+import com.hotmomcircle.transport_game.transport.GuidedTransport;
 import com.hotmomcircle.transport_game.transport.Transport;
+import com.hotmomcircle.transport_game.tools.pathfinding.AStar;
+import com.hotmomcircle.transport_game.tools.pathfinding.Node;
+import com.hotmomcircle.transport_game.tools.pathfinding.NodeFinder;
 
 //This will hold the player class. 
 //Player should be able to move, be drawn, and will own the transport methods
@@ -15,14 +21,19 @@ import com.hotmomcircle.transport_game.transport.Transport;
 public class Player extends Entity {
 	
 	GameScreen game;
-	private Transport[] transport = new Transport[3]; // [foot, bike, car]
+	private Transport[] transport = new Transport[5]; // [foot, bike, car]
 	public int transIdx = 0; //Index corresponding to which transport the player is currently on
 	public int FOOT = 0;
 	public int BIKE = 1;
 	public int CAR = 2;
+	public int BUS = 3;
+	public int LUAS = 4;
 	private int stamina;
 	public Rectangle playerRectangle;
-	
+
+	public float prevx = 0;
+	public float prevy = 0;
+
 	private String direction = "down";
 	private boolean hasInteracted = false;
 	
@@ -48,7 +59,7 @@ public class Player extends Entity {
 			playerTextures[i] = game.assetManager.get(paths[i], Texture.class);
 		}
 
-		transport[0] = new Transport(game, "Foot", 200, playerTextures, "0", "-5");
+		transport[0] = new Transport(game, this, "Foot", 200, playerTextures, "0", "-5");
 		
 		
 		
@@ -72,7 +83,7 @@ public class Player extends Entity {
 		
 		
 		// footprint for the bike? we gotta nerf it somehow, could just crank up the stamina cost?
-		transport[1] = new Transport(game, "Bicycle", 300, bikeTextures, "2", "-10"); 
+		transport[1] = new Transport(game, this, "Bicycle", 300, bikeTextures, "2", "-10"); 
 		
 		Texture[] carTextures = new Texture[8];
 		
@@ -91,23 +102,64 @@ public class Player extends Entity {
 			carTextures[i] = game.assetManager.get(carPaths[i], Texture.class);
 		}
 		
-		transport[2] = new Transport(game, "Car", 400, carTextures, "10", "0"); 
+		transport[2] = new Transport(game, this, "Car", 400, carTextures, "10", "0"); 
 
+		Texture[] busTextures = new Texture[8];
+		
+		String[] busPaths = {
+			    "./bus/bus_up.png",
+			    "./bus/bus_up.png",
+			    "./bus/bus_down.png",
+			    "./bus/bus_down.png",
+			    "./bus/bus_left.png",
+			    "./bus/bus_left.png",
+			    "./bus/bus_right.png",
+			    "./bus/bus_right.png"
+			};
+		
+		for(int i = 0; i<busPaths.length; i++) {
+			busTextures[i] = game.assetManager.get(busPaths[i], Texture.class);
+		}
+		
+		transport[3] = new GuidedTransport(game, this, "Bus", 400, busTextures, "5", "0"); 
+		
+		Texture[] luasTextures = new Texture[8];
+		
+		String[] luasPaths = {
+			    "./bus/bus_up.png",
+			    "./bus/bus_up.png",
+			    "./bus/bus_down.png",
+			    "./bus/bus_down.png",
+			    "./bus/bus_left.png",
+			    "./bus/bus_left.png",
+			    "./bus/bus_right.png",
+			    "./bus/bus_right.png"
+			};
+		
+		for(int i = 0; i<luasPaths.length; i++) {
+			luasTextures[i] = game.assetManager.get(luasPaths[i], Texture.class);
+		}
+		
+		transport[4] = new GuidedTransport(game, this, "Luas", 400, luasTextures, "5", "0"); 
+	
 	}
 	
 	@Override
 	public void render(SpriteBatch batch) throws Exception {
+		if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && hasInteracted) {
+			// used to signal to the game that a transport change has occurred and a popup needs to be shown
+			game.showPopup = true;
 		
-		
+		}
 		if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !hasInteracted) {
 			interact();
-			
+			 
 			switch(currTransport().name) {
 			case "Foot":
-				interact();				
+				interact();
 				break;
 			case "Bicycle":
-				game.addBike(Math.round(this.x), Math.round(this.y));
+				game.addBike(Math.round(this.x), Math.round(this.y));				
 				getOnFoot();
 				break;
 			case "Car":
@@ -130,57 +182,8 @@ public class Player extends Entity {
 //		Can press 'B' to get on bike
 		if(Gdx.input.isKeyPressed(Input.Keys.F)) {
 			getOnFoot();
-		}
-		
-		
-//		Move the player 
-		// define speed at render time
-		float speed = getSpeed() * Gdx.graphics.getDeltaTime();
+		}		
 
-		// determine movement direction
-		// TODO find a way to reintroduce the moonwalk bug, i mean FEATURE
-		float dx = 0;
-		float dy = 0;
-
-		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-			direction = "up";
-			dy += speed;
-		}
-		if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-			direction = "down";
-			dy -= speed;
-		}
-		if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-			direction = "left";
-			dx -= speed;
-		}
-		if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-			direction = "right";
-			dx += speed;
-		}
-
-		// the diagonal vector is the same as the 
-		// square root of the sum of the squared
-		// vertical and horizontal vectors
-
-		float movementMagnitude = (float) Math.sqrt(dx * dx + dy * dy);
-		if (movementMagnitude > speed) {
-			// if it exceeds it, we normalise the speed
-			// by the magnitude
-			dx = dx / movementMagnitude * speed;	
-			dy = dy / movementMagnitude * speed;
-		}
-
-		// finally apply the movement
-		x += dx;
-		y += dy;
-
-		this.rectangle.x = this.getX();
-		this.rectangle.y = this.getY();
-		
-		
-		// Player interaction
-		
 		currTransport().render(batch);
 //		batch.draw(transport[transIdx].image, x, y, 0, 0, transport[transIdx].image.getWidth(), transport[transIdx].image.getHeight(), game.scale, game.scale, 0, 0, 0, transport[transIdx].image.getWidth(), transport[transIdx].image.getHeight(), false, false);
 	
@@ -189,10 +192,6 @@ public class Player extends Entity {
 	
 	public int getSpeed() {
 		return transport[transIdx].speed;
-	}
-	
-	public String getDirection() {
-		return direction;
 	}
 	
 	
@@ -204,26 +203,16 @@ public class Player extends Entity {
 	public Rectangle getPlayerRectangle() {
 		return this.rectangle;
 	}
-	
-	public boolean isMoving() {
-		boolean up = Gdx.input.isKeyPressed(Input.Keys.W);
-		boolean down = Gdx.input.isKeyPressed(Input.Keys.S);
-		boolean left = Gdx.input.isKeyPressed(Input.Keys.A);
-		boolean right = Gdx.input.isKeyPressed(Input.Keys.D);
 
-		if (up || down || left || right) {
-			String staminaCost = transport[transIdx].getStaminaCost();
-			String footprint = transport[transIdx].getFootprint();
-			this.game.freshness.setText(staminaCost);
-			this.game.carbon.setText(footprint);
-		}
-		return up || down || left || right;
+	public void Collision(){
+		this.rectangle = new Rectangle(prevx, prevy, this.rectangle.getWidth(), this.rectangle.getHeight());
 	}
 	
 //  Go on foot
 	public void getOnFoot() {
 		hasInteracted = true;
 		transIdx = 0;
+		game.showPopup = true;
 	}
 	
 //	Changes player transport
@@ -243,6 +232,24 @@ public class Player extends Entity {
 			transIdx = 2;
 		}
 	}
+
+	//	 Changes player transport
+	public void getOnBus() {
+		hasInteracted = true;
+//		Can only get on bus if on foot
+		if(transIdx == 0) {
+			transIdx = 3;
+		}
+
+	}
+
+	public void getOnLuas() {
+		hasInteracted = true;
+	//		Can only get on Luas if on foot
+			if(transIdx == 0) {
+				transIdx = 4;
+			}
+	}
 	
 	// naive method to handle Player interaction
 
@@ -252,15 +259,22 @@ public class Player extends Entity {
 			return;
 		
 		// interate through all "interactable objects"
-		for (Node node: this.game.nodes) {
-			// if overlaps
-			if (canGetOnTransport(node.rectangle)) {
+		for (Hub hub: this.game.busHubs) {
+			if (canGetOnTransport(hub.getRect())) {
 				// if overlaps
 				// call togglePlanning
 				// pass Routes of overlapped Node
-				System.out.println(node);
-				this.game.planningUI.activatePlanning(node.getRoutes());
-				this.game.camera.zoomOut();
+				this.game.planningUI.activatePlanning(hub.getConnected());
+				break;
+			}
+		}
+
+		for (Hub hub: this.game.luasHubs) {
+			if (canGetOnTransport(hub.getRect())) {
+				// if overlaps
+				// call togglePlanning
+				// pass Routes of overlapped Node
+				this.game.planningUI.activatePlanning(hub.getConnected());
 				break;
 			}
 		}
@@ -283,4 +297,5 @@ public class Player extends Entity {
 	public boolean canGetOnTransport(Rectangle rect) {
 		return !hasInteracted && getPlayerRectangle().overlaps(rect) && transIdx == FOOT;
 	}
+	
 }
