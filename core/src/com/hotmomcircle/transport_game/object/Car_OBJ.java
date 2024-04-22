@@ -20,6 +20,7 @@ public class Car_OBJ extends Transport_OBJ {
 		this.interactable = true;
 		interactionRadius = new Rectangle(x, y, game.getTileSize()*2, game.getTileSize()*2);
 		
+		popUp = "Press space to drive car";
 	}
 	
 	public void update(int i)  {

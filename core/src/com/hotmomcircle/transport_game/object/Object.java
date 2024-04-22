@@ -10,6 +10,7 @@ public class Object implements Json.Serializable {
 	protected int y;
 	protected Texture objImg;
 	protected Rectangle interactionRadius;
+	protected String popUp;
 	boolean interactable = false;
 	
 	
