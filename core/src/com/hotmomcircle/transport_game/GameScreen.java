@@ -29,9 +29,10 @@ import com.hotmomcircle.transport_game.tools.WorldMap;
 import com.hotmomcircle.transport_game.tools.pathfinding.AStar;
 import com.hotmomcircle.transport_game.tools.pathfinding.PathfindingGraph;
 import com.hotmomcircle.transport_game.entity.Hub;
+import com.hotmomcircle.transport_game.entity.Obstacle;
 import com.hotmomcircle.transport_game.ui.Planning;
 import com.hotmomcircle.transport_game.ui.Points;
-import com.hotmomcircle.transport_game.ui.Timer;
+import com.hotmomcircle.transport_game.ui.TimerUI;
 import com.hotmomcircle.transport_game.ui.WorldMapUI;
 import com.hotmomcircle.transport_game.ui.gemArrow;
 import com.hotmomcircle.transport_game.ui.LevelStart;
@@ -58,7 +59,7 @@ import com.badlogic.gdx.utils.Timer.Task;
 public class GameScreen implements Screen, Json.Serializable {
 
 	TransportGame game;
-	ParentGame parentGame;
+	public ParentGame parentGame;
 
 	SpriteBatch batch;
 
@@ -136,11 +137,16 @@ public class GameScreen implements Screen, Json.Serializable {
 	public boolean levelCompleted;
 
 	private float timeLeft;
-	private Timer timer;
+	private TimerUI timer;
 
 
 
 
+
+	// Obstacles
+	public ArrayList<Obstacle> obstacles; 
+	public ArrayList<Obstacle> roads; 
+	public ArrayList<Obstacle> paths; 
 // New level
 	public GameScreen(TransportGame game, ParentGame parentGame, JsonValue levelData) {
 		this.game = game;
@@ -152,7 +158,7 @@ public class GameScreen implements Screen, Json.Serializable {
 		int pY = levelData.get("player").getInt("y");
 		player = new Player(this, pX, pY, 32, 32, "./foot/player_down1.png");
 
-		timer = new Timer(String.valueOf(levelData.getInt("time")), skin);
+		timer = new TimerUI(String.valueOf(levelData.getInt("time")), skin);
 
 //		Load gems from levels file
 		for (JsonValue gemLoc = levelData.get("gems").child; gemLoc != null; gemLoc = gemLoc.next) {
@@ -269,6 +275,9 @@ public class GameScreen implements Screen, Json.Serializable {
 		// initialise Node array
 		busHubs = new Array<Hub>();
 		luasHubs = new Array<Hub>();
+		obstacles = new ArrayList<Obstacle>();
+		roads = new ArrayList<Obstacle>(); 
+		paths = new ArrayList<Obstacle>(); 
 		
 
 		for (MapLayer layer : map.getLayers()) {
@@ -312,6 +321,24 @@ public class GameScreen implements Screen, Json.Serializable {
 					}
 				}
             }
+
+			if (layer.getName().equals("collidable")) {
+				for (MapObject obstacle: layer.getObjects()) {
+					obstacles.add(obstacleCreator(obstacle));
+				}
+			}
+
+			if (layer.getName().equals("roadsDrive")) {
+				for (MapObject obstacle: layer.getObjects()) {
+					roads.add(obstacleCreator(obstacle));
+				}
+			}
+
+			if (layer.getName().equals("roadsWalk")) {
+				for (MapObject obstacle: layer.getObjects()) {
+					paths.add(obstacleCreator(obstacle));
+				}
+			}
 		}
 
 		renderer = new OrthogonalTiledMapRenderer(map,3);
@@ -660,6 +687,14 @@ public class GameScreen implements Screen, Json.Serializable {
 		float height = object.getProperties().get("height", Float.class) * 3;
 				
 		return new Hub(locX, locY, width, height, type, transIdx);
+	}
+
+	public Obstacle obstacleCreator(MapObject object) {
+		float x = object.getProperties().get("x", Float.class) * 3;
+		float y = object.getProperties().get("y", Float.class) * 3;
+		float width = object.getProperties().get("width", Float.class) * 3;
+		float height = object.getProperties().get("height", Float.class) * 3;
+		return new Obstacle(x, y, width, height);
 	}
 	
 }

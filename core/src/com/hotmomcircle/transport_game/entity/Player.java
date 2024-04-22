@@ -2,6 +2,8 @@ package com.hotmomcircle.transport_game.entity;
 
 import java.util.ArrayList;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
@@ -36,6 +38,8 @@ public class Player extends Entity {
 
 	private String direction = "down";
 	private boolean hasInteracted = false;
+	private ArrayList<Obstacle> boundaryRoads;
+	private ArrayList<Obstacle> boundaryRoadsAndPaths;
 	
 	public Player(GameScreen game, int locX, int locY, int width, int height, String imagePath) {
 		super(game, locX, locY, width, height, imagePath);
@@ -180,8 +184,8 @@ public class Player extends Entity {
 		
 		
 //		Can press 'B' to get on bike
-		if(Gdx.input.isKeyPressed(Input.Keys.F)) {
-			getOnFoot();
+		if(Gdx.input.isKeyPressed(Input.Keys.B)) {
+			getOnBike();
 		}		
 
 		currTransport().render(batch);
