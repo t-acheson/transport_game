@@ -2,6 +2,24 @@
   "num_levels": 4,
   "levels": [
     {
+      "captions": ["Collect gems before the time runs out", "Use WASD to move"],
+      "time": 240,
+      "carbon": 0,
+      "gems": [{ "x": 830, "y": 2540 }],
+      "gemCount": 3,
+      "player": { "x": 12295, "y": 970 },
+      "gemWin": true,
+      "map": "bigMap.tmx",
+      "cars": [
+        { "x": 1512, "y": 1757 },
+        { "x": 12137, "y": 4591 }
+      ],
+      "bikes": [
+        { "x": 11486, "y": 1670 },
+        { "x": 11486, "y": 5186 }
+      ]
+    },
+    {
       "captions": [
         "Collect all the gems before the time runs out",
         "Use WASD to move"
