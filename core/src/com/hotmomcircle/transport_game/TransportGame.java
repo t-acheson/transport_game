@@ -19,8 +19,8 @@ import com.badlogic.gdx.utils.JsonValue;
 public class TransportGame extends Game {
 	
 
-	public int SCREEN_WIDTH = 800;
-	public int SCREEN_HEIGHT = 480;
+	public int SCREEN_WIDTH = 1600;
+	public int SCREEN_HEIGHT = 960;
 	
 	SpriteBatch batch;
 	
