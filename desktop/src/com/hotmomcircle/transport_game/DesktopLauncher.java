@@ -8,7 +8,8 @@ public class DesktopLauncher {
 	public static void main (String[] arg) {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.setForegroundFPS(60);
-		config.setWindowedMode(800, 480);
+		config.setWindowedMode(1600, 960);
+		config.setResizable(false);
 		config.useVsync(true);
 		config.setTitle("Travel City");
 		new Lwjgl3Application(new TransportGame(), config);

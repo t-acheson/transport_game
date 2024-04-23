@@ -1,11 +1,15 @@
 package com.hotmomcircle.transport_game.ui;
 
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.hotmomcircle.transport_game.GameScreen;
 import com.hotmomcircle.transport_game.TransportGame;
+
 
 public class WorldMapUI {
 
@@ -33,10 +37,17 @@ public class WorldMapUI {
         uiTable.row().pad(10, 0, 10, 0);
         uiTable.bottom();
 
+        
+        
         Label zoomLabel = new Label("Zoom: +/-", skin);
         Label panLabel = new Label("Pan: WASD", skin);
         Label closeMapLabel = new Label("Close Map: M", skin);
-
+       
+        Pixmap labelColor = new Pixmap(1, 1, Pixmap.Format.RGB888);
+        labelColor.setColor(0f, 0f, 0f, 0.5f);
+        labelColor.fill();
+        zoomLabel.getStyle().background = new Image(new Texture(labelColor)).getDrawable();
+        
         uiTable.add(zoomLabel);
         uiTable.add(panLabel);
         uiTable.add(closeMapLabel);
