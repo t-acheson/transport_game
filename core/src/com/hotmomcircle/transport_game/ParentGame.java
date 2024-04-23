@@ -53,7 +53,7 @@ public class ParentGame implements Json.Serializable{
 		init();
 		loadLevels();
 		read(null, jsonData);
-		
+		startLevel();
 	}
 	
 //	Initialization

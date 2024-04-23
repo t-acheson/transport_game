@@ -447,6 +447,7 @@ public class GameScreen implements Screen, Json.Serializable {
 
 
 		if (levelEnd){
+			Gdx.input.setInputProcessor(levelEndScreen.stage);
 			if (levelCompleted){
 				levelEndScreen.updateLevelEndScreen(true, parentGame.getCurrLevel(), points.getText().toString());
 				game.setScreen(levelEndScreen);
