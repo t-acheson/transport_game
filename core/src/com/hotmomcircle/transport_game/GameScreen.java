@@ -652,6 +652,7 @@ public class GameScreen implements Screen, Json.Serializable {
 		json.writeValue("cars", car_OBJs);
 		json.writeValue("bikes", bike_OBJs);
 		json.writeValue("gems", gems);
+		json.writeValue("time", (int) timer.getTime());
 	}
 
 	@Override
@@ -676,6 +677,8 @@ public class GameScreen implements Screen, Json.Serializable {
 		for (JsonValue bikeLoc = jsonData.get("bikes").child; bikeLoc != null; bikeLoc = bikeLoc.next) {
 			bike_OBJs.add(new Bicycle_OBJ(this, bikeLoc.getInt("x"), bikeLoc.getInt("y"), true));
 		}
+		System.out.println(String.valueOf(jsonData.getFloat("time")));
+		timer = new TimerUI(String.valueOf((int)jsonData.getFloat("time")), skin);
 		
 	}
 
