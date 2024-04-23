@@ -18,6 +18,7 @@ import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.hotmomcircle.transport_game.entity.Gem;
 import com.hotmomcircle.transport_game.entity.Player;
 import com.hotmomcircle.transport_game.object.Bicycle_OBJ;
@@ -36,6 +37,7 @@ import com.hotmomcircle.transport_game.ui.TimerUI;
 import com.hotmomcircle.transport_game.ui.WorldMapUI;
 import com.hotmomcircle.transport_game.ui.gemArrow;
 import com.hotmomcircle.transport_game.ui.LevelStart;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.hotmomcircle.transport_game.ui.EducationalPopup;
 import com.hotmomcircle.transport_game.ui.LevelStart;
 import com.hotmomcircle.transport_game.ui.Pause;
@@ -485,11 +487,15 @@ public class GameScreen implements Screen, Json.Serializable {
 		}
 		
 		if (isLevelStart) {
+			
 			renderer.setView(camera);
 			camera.setPosition();
 			camera.update();
 			renderer.render();
 
+			
+
+			
 			startStage.act(delta);
 			startStage.draw();
 			
