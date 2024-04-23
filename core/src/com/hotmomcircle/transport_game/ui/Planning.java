@@ -143,8 +143,8 @@ public class Planning {
 		for (Actor actor: listOfTableChildren){
 			if (actor instanceof ImageButton){
 				Button button = (Button) actor;
-				button.setDisabled(true);
-				System.out.println("Disabled button");
+				// button.setDisabled(true);
+				// System.out.println("Disabled button");
 				button.setPosition(-1000, -1000);
 			}
 
