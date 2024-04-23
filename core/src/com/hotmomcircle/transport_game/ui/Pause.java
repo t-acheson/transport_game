@@ -32,7 +32,7 @@ public class Pause {
         Gdx.input.setInputProcessor(stage);
 		pauseTable = new Table();
 		pauseTable.setFillParent(true);
-		pauseTable.defaults().width(this.game.SCREEN_WIDTH / 6).expandX().fillX();
+		pauseTable.defaults().width(this.game.SCREEN_WIDTH / 3).expandX().fillX();
 		pauseTable.setWidth(game.SCREEN_WIDTH / 6);
         pauseTable.row().pad(10, 0, 10, 0);
         TextButton resumeButton = new TextButton("Resume", skin);
