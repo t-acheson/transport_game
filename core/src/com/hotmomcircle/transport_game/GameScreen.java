@@ -95,7 +95,7 @@ public class GameScreen implements Screen, Json.Serializable {
 	
 	public Array<Gem> gems = new Array<Gem>();;
 
-	public Array<Hub> busHubs;
+	public ArrayList<Hub> busHubs;
 	public Array<Hub> luasHubs;
 	   
    // Variables associated with the pause / game state
@@ -273,7 +273,7 @@ public class GameScreen implements Screen, Json.Serializable {
 
 
 		// initialise Node array
-		busHubs = new Array<Hub>();
+		busHubs = new ArrayList<Hub>();
 		luasHubs = new Array<Hub>();
 		obstacles = new ArrayList<Obstacle>();
 		roads = new ArrayList<Obstacle>(); 
@@ -282,28 +282,33 @@ public class GameScreen implements Screen, Json.Serializable {
 
 		for (MapLayer layer : map.getLayers()) {
             // Check if the layer contains objects and is of guided transport
-            if (layer.getObjects() != null && layer.getName().contains("bus")) {
+            if (layer.getObjects() != null && layer.getName().contains("busObject")) {
+				System.out.println(layer.getName());
 
+				ArrayList<Hub> newHubs = new ArrayList<Hub>(); 
                 // Retrieve objects from the layer
                 for (MapObject object : layer.getObjects()) {
 					// get X and Y for each object
                     // pass to Hub constructor
-					busHubs.add(hubCreator(object, "Bus", 3));
+					newHubs.add(hubCreator(object, "Bus", 3));
 				}
 
 				for (MapObject object : layer.getObjects()) {
 					Hub newHub = hubCreator(object, "Bus", 3);
 
-					for (Hub hub : busHubs) { 
+					for (Hub hub : newHubs) { 
 						if (newHub.getX() != hub.getX() && newHub.getY() != hub.getY()) {
 							hub.addHub(newHub);
 						}
 					}
 				}
+
+				busHubs.addAll(newHubs);
             }
 
 			if (layer.getObjects() != null && layer.getName().contains("luas")) {
 
+				System.out.println(layer.getName());
                 // Retrieve objects from the layer
                 for (MapObject object : layer.getObjects()) {
 					// get X and Y for each object
@@ -340,6 +345,9 @@ public class GameScreen implements Screen, Json.Serializable {
 				}
 			}
 		}
+
+		System.out.println(busHubs.get(0).getConnected());
+		System.out.println(busHubs);
 
 		renderer = new OrthogonalTiledMapRenderer(map,3);
 		//
