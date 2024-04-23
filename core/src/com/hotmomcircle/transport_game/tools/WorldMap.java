@@ -1,5 +1,7 @@
 package com.hotmomcircle.transport_game.tools;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
@@ -114,20 +116,22 @@ public class WorldMap {
 
 			shape.setProjectionMatrix(worldMap.combined);
 
-			shape.begin(ShapeRenderer.ShapeType.Line);
-
-        	shape.setColor(Color.RED);
-			shape.rect((player.getX()-(camera.viewportWidth/2)), (player.getY()-(camera.viewportHeight/2)), camera.viewportWidth, camera.viewportHeight);
-			shape.end();
-
-			if (isDrawLocationPointer) {
-				drawLocationPointer(locPointX, locPointY);
-			}
     }
 
 	public void setLocationPointer(float x, float y) {
 		locPointX = x * camera.viewportWidth / mapWidthInPixels;
 		locPointY = y * camera.viewportHeight / mapHeightInPixels;
+	}
+
+	public ArrayList<Float> getLocationPointer(float x, float y) {
+		locPointX = x * camera.viewportWidth / mapWidthInPixels;
+		locPointY = y * camera.viewportHeight / mapHeightInPixels;
+		ArrayList<Float> locationPoints = new ArrayList<>();
+		locationPoints.add(locPointX);
+		locationPoints.add(locPointY);
+	
+		// Return the list of location points
+		return locationPoints;	
 	}
 
 	public void toggleLocationPointer() {
@@ -138,10 +142,5 @@ public class WorldMap {
 		}
 	}
 
-	private void drawLocationPointer(float x, float y) {
-		locationPointer.begin(ShapeRenderer.ShapeType.Filled);
-		locationPointer.setColor(Color.YELLOW);
-		locationPointer.circle(x, y, 10); // Adjust radius as needed
-		locationPointer.end();
-	}
+
 }

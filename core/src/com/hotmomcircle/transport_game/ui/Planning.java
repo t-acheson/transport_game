@@ -3,13 +3,22 @@ package com.hotmomcircle.transport_game.ui;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.badlogic.gdx.utils.SnapshotArray;
 import com.hotmomcircle.transport_game.GameScreen;
 import com.hotmomcircle.transport_game.TransportGame;
 import com.hotmomcircle.transport_game.entity.Hub;
@@ -43,16 +52,35 @@ public class Planning {
 		// creates new table and populates with routes
 		planningTable = new Table();
 		planningTable.setFillParent(true);
-		// planningTable.defaults().width(this.game.SCREEN_WIDTH / 6).expandX().fillX();
-		// planningTable.setWidth(game.SCREEN_WIDTH / 6);
+		Texture playTexture = null;
+		Drawable drawable = null;
+		try {
+			playTexture = new Texture("busstop.png");  // Assuming the image is in PNG format
+			drawable = new TextureRegionDrawable(new TextureRegion(playTexture));
+			System.out.println("dub busstop loaded");
+		} catch (GdxRuntimeException e) {
+			System.out.println("not loaded");
+			Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+			pixmap.setColor(Color.MAGENTA);
+			pixmap.fill();
+			playTexture = new Texture(pixmap);  // Create a texture from the pixmap
+			drawable = new TextureRegionDrawable(new TextureRegion(playTexture));
+			pixmap.dispose();
+
+		}
 
 		for (Hub hub: hubs) {
+			ImageButton routeButton = new ImageButton(drawable);
+			ArrayList<Float> xyLocation = new ArrayList<>();
+			xyLocation = screen.worldMap.getLocationPointer(hub.getX()-20,hub.getY()-50);
+
+
+			routeButton.setPosition(xyLocation.get(0),xyLocation.get(1));
+
 			planningTable.row().pad(2, 0, 0, 0);
-			TextButton routeButton = new TextButton(hub.toString(), skin);
-			planningTable.add(routeButton).pad(0,0,0,0).row();
             // event listener allows selection
             // right now it just closes the Planning UI
-			routeButton.setColor(1, 1, 1, 0.3f);
+			routeButton.setColor(1, 1, 1, 0.7f);
 			routeButton.addListener(new InputListener() {
 
 				@Override
@@ -67,7 +95,7 @@ public class Planning {
 				@Override
 				public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
 					// back to opaque on exit
-					routeButton.setColor(1, 1, 1, 0.3f);
+					routeButton.setColor(1, 1, 1, 0.7f);
 					screen.worldMap.toggleLocationPointer();
 				}
 
@@ -92,10 +120,9 @@ public class Planning {
 					return true;
 				}
 			});
-			
+			stage.addActor(routeButton);
 		}
-		stage.addActor(planningTable);
-		planningTable.left();
+
 	}
 
 	public void activatePlanning(ArrayList<Hub> hubs) {
@@ -112,8 +139,17 @@ public class Planning {
 	}
 
 	public void deactivatePlanning() {
+		SnapshotArray<Actor> listOfTableChildren = stage.getRoot().getChildren();
+		for (Actor actor: listOfTableChildren){
+			if (actor instanceof ImageButton){
+				Button button = (Button) actor;
+				button.setDisabled(true);
+				System.out.println("Disabled button");
+				button.setPosition(-1000, -1000);
+			}
+
+		}
 		if (active) {
-		stage.getRoot().removeActor(planningTable);
 		active = false;
 		} 
 	}
