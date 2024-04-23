@@ -2,12 +2,57 @@
   "num_levels": 4,
   "levels": [
     {
-      "captions": ["Collect gems before the time runs out", "Use WASD to move"],
+      "captions": ["Collect gems to complete the level", "Use WASD to move"],
       "time": 240,
       "carbon": 0,
-      "gems": [{ "x": 830, "y": 2540 }],
+      "gems": [{ "x": 12800, "y": 1024 }],
       "gemCount": 3,
-      "player": { "x": 12295, "y": 970 },
+      "player": { "x": 12450, "y": 1040 },
+      "gemWin": true,
+      "map": "bigMap.tmx",
+      "cars": [
+        { "x": 1512, "y": 1757 },
+        { "x": 12137, "y": 4591 }
+      ],
+      "bikes": [
+        { "x": 11486, "y": 1670 },
+        { "x": 11486, "y": 5186 }
+      ]
+    },
+    {
+      "captions": [
+        "The arrow on the top left points to the nearest gem",
+        "Collect the gem to complete the level"
+      ],
+      "time": 240,
+      "carbon": 0,
+      "gems": [{ "x": 12200, "y": 1024 }],
+      "gemCount": 3,
+      "player": { "x": 12450, "y": 1040 },
+      "gemWin": true,
+      "map": "bigMap.tmx",
+      "cars": [
+        { "x": 1512, "y": 1757 },
+        { "x": 12137, "y": 4591 }
+      ],
+      "bikes": [
+        { "x": 11486, "y": 1670 },
+        { "x": 11486, "y": 5186 }
+      ]
+    },
+    {
+      "captions": [
+        "If the timer runs out you'll lose the level",
+        "Collect the gem to complete the level"
+      ],
+      "time": 10,
+      "carbon": 0,
+      "gems": [
+        { "x": 13200, "y": 1024 },
+        { "x": 13200, "y": 1024 }
+      ],
+      "gemCount": 3,
+      "player": { "x": 12450, "y": 1040 },
       "gemWin": true,
       "map": "bigMap.tmx",
       "cars": [
