@@ -2,6 +2,10 @@
   "num_levels": 4,
   "levels": [
     {
+      "captions": [
+        "Collect all the gems before the time runs out",
+        "Use WASD to move"
+      ],
       "time": 500,
       "carbon": 3000,
       "gems": [{ "x": 600, "y": 500 }],
@@ -23,6 +27,10 @@
       ]
     },
     {
+      "captions": [
+        "Collect all the gems before the time runs out",
+        "Use WASD to move"
+      ],
       "time": 300,
       "carbon": 200,
       "gems": [
@@ -49,6 +57,10 @@
       ]
     },
     {
+      "captions": [
+        "Collect all the gems before the time runs out",
+        "Use WASD to move"
+      ],
       "time": 300,
       "carbon": 3000,
       "gems": [

@@ -108,6 +108,7 @@ public class GameScreen implements Screen, Json.Serializable {
 	public LevelStart levelStart;
 	public Stage startStage;
 	public boolean isLevelStart = true;
+	private Array<String> captions = new Array<>();
 	
 
 	public Pause pauseUI;
@@ -154,6 +155,8 @@ public class GameScreen implements Screen, Json.Serializable {
 		
 		loadAssets();
 		
+		
+		
 		int pX = levelData.get("player").getInt("x");
 		int pY = levelData.get("player").getInt("y");
 		player = new Player(this, pX, pY, 32, 32, "./foot/player_down1.png");
@@ -176,6 +179,10 @@ public class GameScreen implements Screen, Json.Serializable {
 			bike_OBJs.add(new Bicycle_OBJ(this, bikeLoc.getInt("x"), bikeLoc.getInt("y"), true));
 		}
 		
+		for (JsonValue caption = levelData.get("captions").child; caption != null; caption = caption.next) {
+			captions.add(caption.toString());
+			System.out.println(caption.toString());
+		}
 
 		
 		
@@ -361,7 +368,7 @@ public class GameScreen implements Screen, Json.Serializable {
 		assetManager.load("uiskin.json", Skin.class);
 
 		startStage = new Stage(new ScreenViewport());
-		levelStart = new LevelStart(game, this, startStage, skin, parentGame.getCurrLevel());
+		levelStart = new LevelStart(game, this, startStage, skin, parentGame.getCurrLevel(), captions);
 		
 		// table to hold UI elements
 		table = new Table();
