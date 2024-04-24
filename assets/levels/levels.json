@@ -60,9 +60,40 @@
         { "x": 12137, "y": 4591 }
       ],
       "bikes": [
-        { "x": 11486, "y": 1670 },
+        { "x": 11486, "y": 4491 },
         { "x": 11486, "y": 5186 }
       ]
+    },
+    {
+      "captions": [
+        "Cars move quickly but produce a lot of CO2",
+        "Press space to get into a car"
+      ],
+      "time": 100,
+      "carbon": 0,
+      "gems": [{ "x": 8881, "y": 4598 }],
+      "gemCount": 3,
+      "player": { "x": 13507, "y": 4598 },
+      "gemWin": true,
+      "map": "bigMap.tmx",
+      "cars": [{ "x": 13200, "y": 4598 }],
+      "bikes": []
+    },
+    {
+      "captions": [
+        "You can also use bikes to get to your destination",
+        "Bikes are much more efficient but are slower and cost freshness",
+        "Press space to get into a bike"
+      ],
+      "time": 100,
+      "carbon": 0,
+      "gems": [{ "x": 8881, "y": 4598 }],
+      "gemCount": 3,
+      "player": { "x": 13507, "y": 4598 },
+      "gemWin": true,
+      "map": "bigMap.tmx",
+      "cars": [{ "x": 13200, "y": 4638 }],
+      "bikes": [{ "x": 13200, "y": 4538 }]
     },
     {
       "captions": [
