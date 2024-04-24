@@ -1,0 +1,26 @@
+levels": [
+    {
+      "time": 500, //////// should be more than enough time to scoot around //////////
+      "carbon": 0,
+      "gems": [  //////// loads of gems so i go around most of the map, focusing on nicer areas/////////
+        { "x": 12295.0, "y": 970 },
+        { "x": 8304.78, "y": 8367.231 },
+        { "x": 2139.3125, "y": 5889.4385 },
+        { "x": 9078.445, "y": 5143.9 },
+        { "x": 8649.687, "y": 3777.208 },
+        { "x": 4455.7085, "y": 2370.3235 },
+        { "x": 2119.5986, "y": 8357.372 }
+      ],
+      "gemCount": 7,
+      "player": { "x": 12295, "y": 1595.0364 },
+      "gemWin": true,
+      "map": "bigMap.tmx",
+      "cars": [
+        { "x": 1512, "y": 1757 },
+        { "x": 12137, "y": 1590.0364 } //////////load in right beside player for easy access to make it a quick level///////////
+      ],
+      "bikes": [ //////// didn't change bikes as don't need them for the tour ////////
+        { "x": 11486, "y": 1670 },
+        { "x": 11486, "y": 5186 }
+      ]
+    },
