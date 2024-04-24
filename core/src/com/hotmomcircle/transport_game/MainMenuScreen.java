@@ -3,6 +3,7 @@ package com.hotmomcircle.transport_game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -55,6 +56,7 @@ public class MainMenuScreen implements Screen {
 	TextButton loadGame;
 	TextButton settings;
 	TextButton exitGame;
+	public Music music;
 	
 	static String savePath = "saves/";
 	
@@ -112,6 +114,10 @@ public class MainMenuScreen implements Screen {
 		}
 		renderer = new OrthogonalTiledMapRenderer(map, 1.08f);
 		
+		music = Gdx.audio.newMusic(Gdx.files.internal("mainmenugroove.mp3"));
+		music.setVolume(0.2f);
+		music.setLooping(true);
+		music.play();
 	}
 	
 	
@@ -321,6 +327,7 @@ public class MainMenuScreen implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
 				if (!textField.getText().trim().isEmpty()) {
 					game.newGame(textField.getText());
+					music.stop();
 					dispose();
 				}
 

@@ -1,5 +1,4 @@
 package com.hotmomcircle.transport_game.object;
-
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Json;

@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -128,6 +129,8 @@ public class GameScreen implements Screen, Json.Serializable {
 	public Points freshness;
 
 	public AssetManager assetManager;
+
+	public Music music;
 
 	//gemArrow instance 
 	private gemArrow gemArrowUI;
@@ -353,8 +356,11 @@ public class GameScreen implements Screen, Json.Serializable {
 		//
 
 		
-		
-
+		// create music
+		music = Gdx.audio.newMusic(Gdx.files.internal("backgroundmusic.mp3"));
+		music.setVolume(0.2f);
+		music.setLooping(true);
+		music.play();
 		
 		// create the camera and the SpriteBatch
 		camera = new Camera(game, player);
@@ -471,8 +477,10 @@ public class GameScreen implements Screen, Json.Serializable {
 		if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) && GAME_STATE != GAME_PAUSED) {
 			pause();
 			pauseUI.showPause();
+			music.setVolume(0.05f);
 		} else if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) && GAME_STATE != GAME_RUNNING ) {
 			resume();
+			music.setVolume(0.2f);
 		} 
 
 		// shows world map
