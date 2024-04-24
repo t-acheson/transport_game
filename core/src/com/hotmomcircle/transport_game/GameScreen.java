@@ -24,7 +24,6 @@ import com.hotmomcircle.transport_game.entity.Player;
 import com.hotmomcircle.transport_game.object.Bicycle_OBJ;
 import com.hotmomcircle.transport_game.object.Car_OBJ;
 import com.hotmomcircle.transport_game.object.Transport_OBJ;
-import com.hotmomcircle.transport_game.entity.Route;
 import com.hotmomcircle.transport_game.tools.Camera;
 import com.hotmomcircle.transport_game.tools.WorldMap;
 import com.hotmomcircle.transport_game.tools.pathfinding.AStar;
@@ -38,21 +37,14 @@ import com.hotmomcircle.transport_game.ui.WorldMapUI;
 import com.hotmomcircle.transport_game.ui.gemArrow;
 import com.hotmomcircle.transport_game.ui.LevelStart;
 import com.hotmomcircle.transport_game.ui.EducationalPopup;
-import com.hotmomcircle.transport_game.ui.LevelStart;
 import com.hotmomcircle.transport_game.ui.Pause;
 import com.hotmomcircle.transport_game.ui.gemCounter;
 //map imports below 
 import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-//
-
-import com.badlogic.gdx.utils.Timer;
-import com.badlogic.gdx.utils.Timer.Task; 
-
 
 
 // Screen of the level the player is currently playing
@@ -419,7 +411,7 @@ public class GameScreen implements Screen, Json.Serializable {
 
 		pauseUI = new Pause(game, this, pauseStage, skin);
 
-		worldMap = new WorldMap(renderer, map, batch, camera);
+		worldMap = new WorldMap(renderer, map, batch, camera, this);
 		worldMapStage = new Stage(new ScreenViewport());
 
 		worldMapUI = new WorldMapUI(game, this, worldMapStage, skin);
@@ -514,7 +506,7 @@ public class GameScreen implements Screen, Json.Serializable {
 		}
 
 		else if (showWorldMap) {
-			worldMap.render(player, gems);
+			worldMap.render(player, gems, bike_OBJs, car_OBJs);
 			if (!planningUI.active) {
 				worldMapUI.showUI();
 				worldMapStage.draw();

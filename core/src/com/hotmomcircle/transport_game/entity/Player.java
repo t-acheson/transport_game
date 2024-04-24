@@ -2,7 +2,6 @@ package com.hotmomcircle.transport_game.entity;
 
 import java.util.ArrayList;
 
-import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -13,9 +12,6 @@ import com.badlogic.gdx.math.Rectangle;
 import com.hotmomcircle.transport_game.GameScreen;
 import com.hotmomcircle.transport_game.transport.GuidedTransport;
 import com.hotmomcircle.transport_game.transport.Transport;
-import com.hotmomcircle.transport_game.tools.pathfinding.AStar;
-import com.hotmomcircle.transport_game.tools.pathfinding.Node;
-import com.hotmomcircle.transport_game.tools.pathfinding.NodeFinder;
 
 //This will hold the player class. 
 //Player should be able to move, be drawn, and will own the transport methods
