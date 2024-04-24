@@ -71,7 +71,9 @@ public class GameScreen implements Screen, Json.Serializable {
 	
 	//initializing map 
 	private TiledMap map;
+	private TiledMap buildingMap;
 	private OrthogonalTiledMapRenderer renderer;
+	private OrthogonalTiledMapRenderer buildingRenderer;
 
 	Texture img;
 	public Player player;
@@ -257,6 +259,7 @@ public class GameScreen implements Screen, Json.Serializable {
 
 		try {
 			map = assetManager.get("finalDraft.tmx", TiledMap.class);
+			buildingMap = assetManager.get("finalDraft_buildings.tmx", TiledMap.class);
 			System.out.println("Map loaded successfully.");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -359,6 +362,7 @@ public class GameScreen implements Screen, Json.Serializable {
 		System.out.println(busHubs);
 
 		renderer = new OrthogonalTiledMapRenderer(map,3);
+		buildingRenderer = new OrthogonalTiledMapRenderer(buildingMap,3);
 		//
 
 		
@@ -605,6 +609,9 @@ public class GameScreen implements Screen, Json.Serializable {
 			educationalPopup.showUI();
 		}
 
+		buildingRenderer.setView(camera);
+		buildingRenderer.render();
+
 	}
 		 //Update the gemArrow UI with the current player and gem positions
 		gemArrowUI.update(player, gems);
@@ -648,6 +655,7 @@ public class GameScreen implements Screen, Json.Serializable {
 
 		// TODO check if right place for this disposal
 		map.dispose();
+		buildingMap.dispose();
 		renderer.dispose();
 		stage.dispose();
 		assetManager.dispose(); // This will have to be removed from gamescreen when we have multiple levels and put into ParentGame
