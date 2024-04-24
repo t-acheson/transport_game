@@ -80,7 +80,7 @@ public class MainMenuScreen implements Screen {
 //		Game camera
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, game.SCREEN_WIDTH, game.SCREEN_HEIGHT);
-		camera.position.set(game.SCREEN_WIDTH/2, 2950, 0);
+		camera.position.set(game.SCREEN_WIDTH/2, 5850, 0);
 		targetPosition = new Vector3(camera.position);
 		
 //		Create a stage for our buttons. This is a better way of doing UI elements
@@ -110,7 +110,7 @@ public class MainMenuScreen implements Screen {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		renderer = new OrthogonalTiledMapRenderer(map, 1.08f);
+		renderer = new OrthogonalTiledMapRenderer(map, 2.0f);
 		
 	}
 	

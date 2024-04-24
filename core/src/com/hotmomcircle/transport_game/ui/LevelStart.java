@@ -38,6 +38,8 @@ public class LevelStart {
 	}
 	
 	public void showLevelStart() {
+		
+		
 		table = new Table();
 		
 		table.setFillParent(true);
