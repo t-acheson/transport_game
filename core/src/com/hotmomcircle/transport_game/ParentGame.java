@@ -40,8 +40,8 @@ public class ParentGame implements Json.Serializable{
 		this.fileName = fileName;
 		init();
 		loadLevels();
-		currLevel = 4;
-		maxLevel = 4;
+		currLevel = 0;
+		maxLevel = 0;
 		startLevel();
 		
 	}

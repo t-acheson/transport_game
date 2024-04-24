@@ -72,7 +72,7 @@ public class GameScreen implements Screen, Json.Serializable {
 	//initializing map 
 	private TiledMap map;
 	private TiledMap buildingMap;
-	private OrthogonalTiledMapRenderer renderer;
+	public OrthogonalTiledMapRenderer renderer;
 	private OrthogonalTiledMapRenderer buildingRenderer;
 
 	Texture img;
@@ -433,7 +433,7 @@ public class GameScreen implements Screen, Json.Serializable {
 
 		educationalPopup = new EducationalPopup(game, this, stage, skin, player);
 
-		levelEndScreen = new LevelEndScreen(game, parentGame);
+		levelEndScreen = new LevelEndScreen(game, parentGame, camera, renderer);
 
 	}
 
@@ -468,6 +468,10 @@ public class GameScreen implements Screen, Json.Serializable {
 
 
 		if (levelEnd){
+			renderer.setView(camera);
+			camera.setPosition();
+			camera.update();
+			renderer.render();
 			if (levelCompleted){
 				levelEndScreen.updateLevelEndScreen(true, parentGame.getCurrLevel(), points.getText().toString());
 				game.setScreen(levelEndScreen);

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -15,12 +16,15 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.hotmomcircle.transport_game.tools.Camera;
 
 public class LevelEndScreen implements Screen {
     final TransportGame game;
     final ParentGame parentGame;
     
-    OrthographicCamera camera;
+	public OrthogonalTiledMapRenderer renderer;
+	public Camera camera;
+	
     Skin skin;
     BitmapFont font;
     
@@ -35,11 +39,13 @@ public class LevelEndScreen implements Screen {
     String completed;
     String scoreText;
 
-    public LevelEndScreen(final TransportGame game, ParentGame parentGame) {
+    public LevelEndScreen(final TransportGame game, ParentGame parentGame, Camera camera, OrthogonalTiledMapRenderer renderer) {
         this.game = game;
         this.skin = game.skin;
         this.font = game.font;
         this.parentGame = parentGame;
+        this.camera = camera;
+        this.renderer = renderer;
         
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
@@ -112,7 +118,7 @@ public class LevelEndScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        ScreenUtils.clear(0, 0, 0.2f, 1);
+    	renderer.render();
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
     }
