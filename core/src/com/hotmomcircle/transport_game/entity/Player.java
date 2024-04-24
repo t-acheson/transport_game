@@ -130,14 +130,14 @@ public class Player extends Entity {
 		Texture[] luasTextures = new Texture[8];
 		
 		String[] luasPaths = {
-			    "./bus/bus_up.png",
-			    "./bus/bus_up.png",
-			    "./bus/bus_down.png",
-			    "./bus/bus_down.png",
-			    "./bus/bus_left.png",
-			    "./bus/bus_left.png",
-			    "./bus/bus_right.png",
-			    "./bus/bus_right.png"
+			    "./luas/luas_up.png",
+			    "./luas/luas_up.png",
+			    "./luas/luas_down.png",
+			    "./luas/luas_down.png",
+			    "./luas/luas_left.png",
+			    "./luas/luas_left.png",
+			    "./luas/luas_right.png",
+			    "./luas/luas_right.png"
 			};
 		
 		for(int i = 0; i<luasPaths.length; i++) {
