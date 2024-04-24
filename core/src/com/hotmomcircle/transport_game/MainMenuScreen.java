@@ -110,7 +110,7 @@ public class MainMenuScreen implements Screen {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		renderer = new OrthogonalTiledMapRenderer(map);
+		renderer = new OrthogonalTiledMapRenderer(map, 1.08f);
 		
 	}
 	
@@ -122,7 +122,7 @@ public class MainMenuScreen implements Screen {
 		table.setFillParent(true);
 		table.defaults().width(game.SCREEN_WIDTH/3).expandX().fillX();
 		table.setWidth(game.SCREEN_WIDTH/3);
-		table.setDebug(true);
+		table.setDebug(false);
 		
 		Label titleLabel = new Label("Gem Expedition", skin);
 		titleLabel.setAlignment(Align.center);

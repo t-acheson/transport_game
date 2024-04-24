@@ -32,7 +32,6 @@ public abstract class Transport_OBJ extends Object {
 		
 
 		if (player_rect.overlaps(object_rect)){
-			System.out.println("Collision");
 			game.player.Collision(game.player.getRectangle());
 
 			font.draw(batch, popUp, this.object_rect.x - 100, this.object_rect.y + 100);
