@@ -180,6 +180,11 @@ public class Player extends Entity {
 				break;
 			}
 		}
+
+		if(Gdx.input.isKeyJustPressed(Input.Keys.L)) {
+			game.levelEnd = true;
+			game.levelCompleted = true;
+		}
 //		Can press 'f' to go on foot
 		if(Gdx.input.isKeyPressed(Input.Keys.F)) {
 			getOnFoot();
