@@ -108,7 +108,7 @@ public class WorldMap {
 			try{
 				batch.draw(player.image, player.getX()-128,player.getY()-64, 512,512);
 				for (Gem gem : gems) {
-					batch.draw(gem.image, gem.getX()-128, gem.getY()-64, 750,750);
+					batch.draw(gem.image, gem.getX()-256, gem.getY()-64, 750,750);
 				}
 				for (Transport_OBJ bike: bike_OBJs){
 					batch.draw(game.assetManager.get("./objects/bicycle.png", Texture.class), bike.getX()-128, bike.getY()-64, 512,512);
