@@ -702,6 +702,7 @@ public class GameScreen implements Screen, Json.Serializable {
 		json.writeValue("carbon", carbon.getText().toString());
 		json.writeValue("freshness", freshness.getText().toString());
 		json.writeValue("points", points.getText().toString());
+		json.writeValue("totalScore", totalScore);
 	}
 
 	@Override
@@ -729,11 +730,12 @@ public class GameScreen implements Screen, Json.Serializable {
 		System.out.println(String.valueOf(jsonData.getFloat("time")));
 		timer = new TimerUI(String.valueOf((int)jsonData.getFloat("time")), skin);
 
-		this.totalScore = String.valueOf(jsonData.getString("score"));
+		this.totalScore = String.valueOf(jsonData.getString("totalScore"));
 
 		points = new Points(String.valueOf(jsonData.getString("points")), skin);
 		carbon = new Points(String.valueOf(jsonData.getString("carbon")), skin);
 		freshness = new Points(String.valueOf(jsonData.getString("freshness")), skin);
+		
 		
 
 	}

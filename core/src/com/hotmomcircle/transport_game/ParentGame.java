@@ -165,7 +165,7 @@ public class ParentGame implements Json.Serializable{
 //	Serialization function to read ParentGame from JSON
 	@Override
 	public void read(Json json, JsonValue jsonData) {
-		// TODO Auto-generated method stub
+		name = jsonData.getString("name");
 		currLevel = jsonData.getInt("currLevel");
 		maxLevel = jsonData.getInt("maxLevel");
 		totalScore = jsonData.getString("score");
