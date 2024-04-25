@@ -262,6 +262,7 @@ public class MainMenuScreen implements Screen {
     			@Override
     			public void changed(ChangeEvent event, Actor actor) {
     				dispose();
+					music.stop();
     				game.loadGame(fileName);
     			}
     		});
