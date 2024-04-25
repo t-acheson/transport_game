@@ -499,6 +499,7 @@ public class GameScreen implements Screen, Json.Serializable {
 			showWorldMap ^= true; // Toggle the state of showWorldMap
 			if (showWorldMap) {
 				System.out.println("show map");
+				worldMap.render(player, gems, bike_OBJs, car_OBJs);
 			} else {
 				System.out.println("hide map");
 			}
