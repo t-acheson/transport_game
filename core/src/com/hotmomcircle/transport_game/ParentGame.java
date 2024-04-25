@@ -32,7 +32,7 @@ public class ParentGame implements Json.Serializable{
 	String name;
 	String fileName;
 
-	String score;
+	String totalScore = "0";
 
 	
 //	Constructor for new game
@@ -117,15 +117,17 @@ public class ParentGame implements Json.Serializable{
 	
 //	Starts the level given
 	public void startLevel() {
-		gameScreen = new GameScreen(game, this, levelData.get(currLevel));
+		gameScreen = new GameScreen(game, this, levelData.get(currLevel), totalScore);
 		game.setScreen(gameScreen);
 	}
 	
-	public void levelUp() {
+	public void levelUp(String totalScore) {
 		currLevel += 1;
 		if (currLevel > maxLevel) {
 			maxLevel += 1;
 		}
+
+		this.totalScore = totalScore;
 
 		startLevel();
 	}
@@ -155,7 +157,7 @@ public class ParentGame implements Json.Serializable{
 		json.writeValue("currLevel", currLevel);
 		json.writeValue("maxLevel", maxLevel);
 		json.writeValue("currGame", gameScreen);
-		json.writeValue("score", score);
+		json.writeValue("score", totalScore);
 	}
 
 //	Serialization function to read ParentGame from JSON
@@ -164,9 +166,9 @@ public class ParentGame implements Json.Serializable{
 		// TODO Auto-generated method stub
 		currLevel = jsonData.getInt("currLevel");
 		maxLevel = jsonData.getInt("maxLevel");
-		score = jsonData.getString("score");
+		totalScore = jsonData.getString("score");
 		
-		gameScreen = new GameScreen(game, this, levelData.get(currLevel), jsonData.get("currGame"), score);
+		gameScreen = new GameScreen(game, this, levelData.get(currLevel), jsonData.get("currGame"), totalScore);
 		game.setScreen(gameScreen);
 	}
 	

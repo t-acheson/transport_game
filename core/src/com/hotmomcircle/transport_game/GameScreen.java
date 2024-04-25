@@ -135,7 +135,7 @@ public class GameScreen implements Screen, Json.Serializable {
 	private TimerUI timer;
 
 	private String score;
-	private String totalScore= "0";
+	private String totalScore;
 
 
 
@@ -146,15 +146,21 @@ public class GameScreen implements Screen, Json.Serializable {
 	public ArrayList<Obstacle> roads; 
 	public ArrayList<Obstacle> paths; 
 // New level
-	public GameScreen(TransportGame game, ParentGame parentGame, JsonValue levelData) {
+	public GameScreen(TransportGame game, ParentGame parentGame, JsonValue levelData, String totalScore) {
 		this.game = game;
 		this.parentGame = parentGame;
+		this.totalScore = totalScore;
 		
 		loadAssets();
 		
 		int pX = levelData.get("player").getInt("x");
 		int pY = levelData.get("player").getInt("y");
 		player = new Player(this, pX, pY, 32, 32, "./foot/player_down1.png");
+
+		// UI scores
+		points = new Points("0", skin);
+		carbon = new Points("0", skin);
+		freshness = new Points("0", skin);
 
 		timer = new TimerUI(String.valueOf(levelData.getInt("time")), skin);
 
@@ -186,7 +192,7 @@ public class GameScreen implements Screen, Json.Serializable {
 		this.game = game;
 		this.font = game.font;
 		this.parentGame = parentGame;
-		this.score = score;
+		this.totalScore = score;
 		// for the pause / play feature
 
 		loadAssets();
@@ -382,10 +388,7 @@ public class GameScreen implements Screen, Json.Serializable {
 		table.setWidth(game.SCREEN_WIDTH / 9);
 		table.left().top();
 
-		// UI scores
-		points = new Points("0", skin);
-		carbon = new Points("0", skin);
-		freshness = new Points("0", skin);
+
 		
 		gemArrowUI = new gemArrow(skin, player, gems, table); 
 		gemCounter = new gemCounter(gems, skin);
@@ -671,7 +674,9 @@ public class GameScreen implements Screen, Json.Serializable {
 		json.writeValue("bikes", bike_OBJs);
 		json.writeValue("gems", gems);
 		json.writeValue("time", (int) timer.getTime());
-		json.writeValue("score", totalScore);
+		json.writeValue("carbon", carbon.getText().toString());
+		json.writeValue("freshness", freshness.getText().toString());
+		json.writeValue("points", points.getText().toString());
 	}
 
 	@Override
@@ -699,7 +704,12 @@ public class GameScreen implements Screen, Json.Serializable {
 		System.out.println(String.valueOf(jsonData.getFloat("time")));
 		timer = new TimerUI(String.valueOf((int)jsonData.getFloat("time")), skin);
 
-		totalScore = String.valueOf(jsonData.getString("score"));
+		this.totalScore = String.valueOf(jsonData.getString("score"));
+
+		points = new Points(String.valueOf(jsonData.getString("points")), skin);
+		carbon = new Points(String.valueOf(jsonData.getString("carbon")), skin);
+		freshness = new Points(String.valueOf(jsonData.getString("freshness")), skin);
+		
 
 	}
 

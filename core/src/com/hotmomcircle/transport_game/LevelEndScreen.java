@@ -59,7 +59,7 @@ public class LevelEndScreen implements Screen {
      			@Override
     			public void changed(ChangeEvent event, Actor actor) {
     				// TODO Add continue game functionality
-    				parentGame.levelUp();
+    				parentGame.levelUp(score);
     				}
              });
         } else {
