@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -24,7 +25,6 @@ import com.hotmomcircle.transport_game.entity.Player;
 import com.hotmomcircle.transport_game.object.Bicycle_OBJ;
 import com.hotmomcircle.transport_game.object.Car_OBJ;
 import com.hotmomcircle.transport_game.object.Transport_OBJ;
-import com.hotmomcircle.transport_game.entity.Route;
 import com.hotmomcircle.transport_game.tools.Camera;
 import com.hotmomcircle.transport_game.tools.WorldMap;
 import com.hotmomcircle.transport_game.tools.pathfinding.AStar;
@@ -39,21 +39,14 @@ import com.hotmomcircle.transport_game.ui.gemArrow;
 import com.hotmomcircle.transport_game.ui.LevelStart;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.hotmomcircle.transport_game.ui.EducationalPopup;
-import com.hotmomcircle.transport_game.ui.LevelStart;
 import com.hotmomcircle.transport_game.ui.Pause;
 import com.hotmomcircle.transport_game.ui.gemCounter;
 //map imports below 
 import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-//
-
-import com.badlogic.gdx.utils.Timer;
-import com.badlogic.gdx.utils.Timer.Task; 
-
 
 
 // Screen of the level the player is currently playing
@@ -133,6 +126,8 @@ public class GameScreen implements Screen, Json.Serializable {
 	public Points freshness;
 
 	public AssetManager assetManager;
+
+	public Music music;
 
 	//gemArrow instance 
 	private gemArrow gemArrowUI;
@@ -236,6 +231,8 @@ public class GameScreen implements Screen, Json.Serializable {
 			    "./car/car_right.png", "./car/car_right.png",
 				"./bus/bus_left.png", "./bus/bus_right.png",
 				"./bus/bus_up.png", "./bus/bus_down.png",
+				"./luas/luas_up.png", "./luas/luas_down.png",
+				"./luas/luas_right.png", "./luas/luas_left.png"
 			};
 		
 		for(String path: transportPaths) {
@@ -366,8 +363,11 @@ public class GameScreen implements Screen, Json.Serializable {
 		//
 
 		
-		
-
+		// create music
+		music = Gdx.audio.newMusic(Gdx.files.internal("backgroundmusic.mp3"));
+		music.setVolume(0.2f);
+		music.setLooping(true);
+		music.play();
 		
 		// create the camera and the SpriteBatch
 		camera = new Camera(game, player);
@@ -426,7 +426,7 @@ public class GameScreen implements Screen, Json.Serializable {
 
 		pauseUI = new Pause(game, this, pauseStage, skin);
 
-		worldMap = new WorldMap(renderer, map, batch, camera);
+		worldMap = new WorldMap(renderer, map, batch, camera, this);
 		worldMapStage = new Stage(new ScreenViewport());
 
 		worldMapUI = new WorldMapUI(game, this, worldMapStage, skin);
@@ -488,8 +488,10 @@ public class GameScreen implements Screen, Json.Serializable {
 		if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) && GAME_STATE != GAME_PAUSED) {
 			pause();
 			pauseUI.showPause();
+			music.setVolume(0.05f);
 		} else if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) && GAME_STATE != GAME_RUNNING ) {
 			resume();
+			music.setVolume(0.2f);
 		} 
 
 		// shows world map
@@ -527,7 +529,7 @@ public class GameScreen implements Screen, Json.Serializable {
 		}
 
 		else if (showWorldMap) {
-			worldMap.render(player, gems);
+			worldMap.render(player, gems, bike_OBJs, car_OBJs);
 			if (!planningUI.active) {
 				worldMapUI.showUI();
 				worldMapStage.draw();

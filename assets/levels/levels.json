@@ -26,7 +26,7 @@
       ],
       "time": 240,
       "carbon": 0,
-      "gems": [{ "x": 12200, "y": 1024 }],
+      "gems": [{ "x": 13200, "y": 1024 }],
       "gemCount": 3,
       "player": { "x": 12450, "y": 1040 },
       "gemWin": true,
@@ -60,7 +60,7 @@
         { "x": 12137, "y": 4591 }
       ],
       "bikes": [
-        { "x": 11486, "y": 4491 },
+        { "x": 11486, "y": 1670 },
         { "x": 11486, "y": 5186 }
       ]
     },
@@ -77,7 +77,7 @@
       "gemWin": true,
       "map": "bigMap.tmx",
       "cars": [{ "x": 13200, "y": 4598 }],
-      "bikes": []
+      "bikes": [{ "x": 11486, "y": 1670 }]
     },
     {
       "captions": [
@@ -94,119 +94,6 @@
       "map": "bigMap.tmx",
       "cars": [{ "x": 13200, "y": 4638 }],
       "bikes": [{ "x": 13200, "y": 4538 }]
-    },
-    {
-      "captions": [
-        "Collect all the gems before the time runs out",
-        "Use WASD to move"
-      ],
-      "time": 240,
-      "carbon": 0,
-      "gems": [
-        { "x": 830, "y": 2540 },
-        { "x": 4430, "y": 1757 },
-        { "x": 3343, "y": 4563 },
-        { "x": 12057, "y": 3970 },
-        { "x": 12088, "y": 6237 },
-        { "x": 8794, "y": 5186 }
-      ],
-      "gemCount": 3,
-      "player": { "x": 12295, "y": 970 },
-      "gemWin": true,
-      "map": "bigMap.tmx",
-      "cars": [
-        { "x": 1512, "y": 1757 },
-        { "x": 12137, "y": 4591 }
-      ],
-      "bikes": [
-        { "x": 11486, "y": 1670 },
-        { "x": 11486, "y": 5186 }
-      ]
-    },
-    {
-      "captions": [
-        "This level is a little more difficult",
-        "Use the bus to get all the gems in time"
-      ],
-      "time": 500,
-      "carbon": 3000,
-      "gems": [{ "x": 600, "y": 500 }],
-      "gemCount": 3,
-      "player": { "x": 3364, "y": 3180 },
-      "gemWin": true,
-      "map": "bigMap.tmx",
-      "cars": [
-        { "x": 900, "y": 500 },
-        { "x": 1000, "y": 200 },
-        { "x": 1100, "y": 400 },
-        { "x": 1200, "y": 500 }
-      ],
-      "bikes": [
-        { "x": 3364, "y": 3180 },
-        { "x": 1000, "y": 300 },
-        { "x": 1100, "y": 600 },
-        { "x": 1200, "y": 700 }
-      ]
-    },
-    {
-      "captions": [
-        "Collect all the gems before the time runs out",
-        "Use WASD to move"
-      ],
-      "time": 300,
-      "carbon": 200,
-      "gems": [
-        { "x": 700, "y": 500 },
-        { "x": 800, "y": 200 },
-        { "x": 700, "y": 400 },
-        { "x": 600, "y": 500 }
-      ],
-      "gemCount": 3,
-      "player": { "x": 700, "y": 300 },
-      "gemWin": true,
-      "map": "bigMap.tmx",
-      "cars": [
-        { "x": 900, "y": 500 },
-        { "x": 1000, "y": 200 },
-        { "x": 1100, "y": 400 },
-        { "x": 1200, "y": 500 }
-      ],
-      "bikes": [
-        { "x": 3364, "y": 3180 },
-        { "x": 1000, "y": 300 },
-        { "x": 1100, "y": 600 },
-        { "x": 1200, "y": 700 }
-      ]
-    },
-    {
-      "captions": [
-        "Collect all the gems before the time runs out",
-        "Use WASD to move"
-      ],
-      "time": 300,
-      "carbon": 3000,
-      "gems": [
-        { "x": 700, "y": 500 },
-        { "x": 800, "y": 200 },
-        { "x": 700, "y": 400 },
-        { "x": 600, "y": 500 }
-      ],
-      "gemCount": 3,
-      "player": { "x": 700, "y": 300 },
-      "gemWin": true,
-      "map": "bigMap.tmx",
-      "cars": [
-        { "x": 900, "y": 500 },
-        { "x": 1000, "y": 200 },
-        { "x": 1100, "y": 400 },
-        { "x": 1200, "y": 500 }
-      ],
-      "bikes": [
-        { "x": 3364, "y": 3180 },
-        { "x": 1000, "y": 300 },
-        { "x": 1100, "y": 600 },
-        { "x": 1200, "y": 700 }
-      ]
     }
   ]
 }

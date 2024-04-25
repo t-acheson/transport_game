@@ -55,6 +55,8 @@ public class LevelEndScreen implements Screen {
     public void makeLevelEndTable(boolean levelSuccessful, int level, String score) {
         table = new Table();
         table.setFillParent(true);
+        stage = new Stage(new ScreenViewport());
+        Gdx.input.setInputProcessor(stage);
 
        
         if (levelSuccessful){
