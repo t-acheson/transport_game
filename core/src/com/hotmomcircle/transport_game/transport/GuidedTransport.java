@@ -42,7 +42,7 @@ public class GuidedTransport extends Transport {
                 player.getOnFoot();
                 return getCurrentImage(dx, dy);
             }
-        } else {
+        } 
             // Calculate the distance to the current node
             float deltaX = current.getX() - player.getX();
             float deltaY = current.getY() - player.getY();
@@ -72,7 +72,6 @@ public class GuidedTransport extends Transport {
                 dx = deltaX * speed;
                 dy = deltaY * speed;
             
-        }
     
         // finally apply the movement
         this.player.incX(dx);
