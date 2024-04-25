@@ -134,6 +134,8 @@ public class GameScreen implements Screen, Json.Serializable {
 	private float timeLeft;
 	private TimerUI timer;
 
+	private String score;
+
 
 
 
@@ -179,10 +181,11 @@ public class GameScreen implements Screen, Json.Serializable {
 	}
 	
 //	Load level from json
-	public GameScreen(TransportGame game, ParentGame parentGame, JsonValue levelData, JsonValue jsonMap) {
+	public GameScreen(TransportGame game, ParentGame parentGame, JsonValue levelData, JsonValue jsonMap, String score) {
 		this.game = game;
 		this.font = game.font;
 		this.parentGame = parentGame;
+		this.score = score;
 		// for the pause / play feature
 
 		loadAssets();
@@ -430,6 +433,11 @@ public class GameScreen implements Screen, Json.Serializable {
 
 	@Override
 	public void render(float delta) {
+
+		int tempScore = Integer.parseInt(points.getText().toString()) - Integer.parseInt(carbon.getText().toString()) - Integer.parseInt(freshness.getText().toString());
+		score = String.valueOf(tempScore);
+		System.out.println(score);
+
 		if(Gdx.input.isKeyJustPressed(Input.Keys.P)) {
 			System.out.println("X: " + player.getX() + ", Y: " + player.getY());
 		}
@@ -454,10 +462,10 @@ public class GameScreen implements Screen, Json.Serializable {
 
 		if (levelEnd){
 			if (levelCompleted){
-				levelEndScreen.updateLevelEndScreen(true, parentGame.getCurrLevel(), points.getText().toString());
+				levelEndScreen.updateLevelEndScreen(true, parentGame.getCurrLevel(), score);
 				game.setScreen(levelEndScreen);
 			} else {
-				levelEndScreen.gameOverScreen(parentGame.getCurrLevel(), points.getText().toString());
+				levelEndScreen.gameOverScreen(parentGame.getCurrLevel(), score);
 				game.setScreen(levelEndScreen);
 			}
 		}
@@ -661,6 +669,7 @@ public class GameScreen implements Screen, Json.Serializable {
 		json.writeValue("bikes", bike_OBJs);
 		json.writeValue("gems", gems);
 		json.writeValue("time", (int) timer.getTime());
+		json.writeValue("score", score);
 	}
 
 	@Override
@@ -687,6 +696,8 @@ public class GameScreen implements Screen, Json.Serializable {
 		}
 		System.out.println(String.valueOf(jsonData.getFloat("time")));
 		timer = new TimerUI(String.valueOf((int)jsonData.getFloat("time")), skin);
+
+		score = jsonData.getString("score");
 		
 	}
 
