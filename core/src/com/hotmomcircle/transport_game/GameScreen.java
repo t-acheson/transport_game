@@ -139,6 +139,9 @@ public class GameScreen implements Screen, Json.Serializable {
 	private float timeLeft;
 	private TimerUI timer;
 
+	private String score;
+	private String totalScore;
+
 
 
 
@@ -148,9 +151,10 @@ public class GameScreen implements Screen, Json.Serializable {
 	public ArrayList<Obstacle> roads; 
 	public ArrayList<Obstacle> paths; 
 // New level
-	public GameScreen(TransportGame game, ParentGame parentGame, JsonValue levelData) {
+	public GameScreen(TransportGame game, ParentGame parentGame, JsonValue levelData, String totalScore) {
 		this.game = game;
 		this.parentGame = parentGame;
+		this.totalScore = totalScore;
 		
 		loadAssets();
 		
@@ -159,6 +163,11 @@ public class GameScreen implements Screen, Json.Serializable {
 		int pX = levelData.get("player").getInt("x");
 		int pY = levelData.get("player").getInt("y");
 		player = new Player(this, pX, pY, 32, 32, "./foot/player_down1.png");
+
+		// UI scores
+		points = new Points("0", skin);
+		carbon = new Points("0", skin);
+		freshness = new Points("0", skin);
 
 		timer = new TimerUI(String.valueOf(levelData.getInt("time")), skin);
 
@@ -190,10 +199,11 @@ public class GameScreen implements Screen, Json.Serializable {
 	}
 	
 //	Load level from json
-	public GameScreen(TransportGame game, ParentGame parentGame, JsonValue levelData, JsonValue jsonMap) {
+	public GameScreen(TransportGame game, ParentGame parentGame, JsonValue levelData, JsonValue jsonMap, String score) {
 		this.game = game;
 		this.font = game.font;
 		this.parentGame = parentGame;
+		this.totalScore = score;
 		// for the pause / play feature
 
 		loadAssets();
@@ -391,10 +401,7 @@ public class GameScreen implements Screen, Json.Serializable {
 		table.setWidth(game.SCREEN_WIDTH / 9);
 		table.left().top();
 
-		// UI scores
-		points = new Points("0", skin);
-		carbon = new Points("0", skin);
-		freshness = new Points("100", skin);
+
 		
 		gemArrowUI = new gemArrow(skin, player, gems, table); 
 		gemCounter = new gemCounter(gems, skin);
@@ -445,6 +452,9 @@ public class GameScreen implements Screen, Json.Serializable {
 
 	@Override
 	public void render(float delta) {
+		int tempScore = Integer.parseInt(points.getText().toString()) - Integer.parseInt(carbon.getText().toString()) - Integer.parseInt(freshness.getText().toString());
+		score = String.valueOf(tempScore);
+
 		if(Gdx.input.isKeyJustPressed(Input.Keys.P)) {
 			System.out.println("X: " + player.getX() + ", Y: " + player.getY());
 		}
@@ -473,10 +483,11 @@ public class GameScreen implements Screen, Json.Serializable {
 			camera.update();
 			renderer.render();
 			if (levelCompleted){
-				levelEndScreen.updateLevelEndScreen(true, parentGame.getCurrLevel(), points.getText().toString());
+				String finalScore = String.valueOf(Integer.parseInt(score)+Integer.parseInt(totalScore));
+				levelEndScreen.updateLevelEndScreen(true, parentGame.getCurrLevel(), finalScore);
 				game.setScreen(levelEndScreen);
 			} else {
-				levelEndScreen.gameOverScreen(parentGame.getCurrLevel(), points.getText().toString());
+				levelEndScreen.gameOverScreen(parentGame.getCurrLevel(), totalScore);
 				game.setScreen(levelEndScreen);
 			}
 		}
@@ -553,7 +564,7 @@ public class GameScreen implements Screen, Json.Serializable {
 			for (Gem gem : gems) {
 				if (player.getRectangle().overlaps(gem.getRectangle())) {
 					gems.removeValue(gem, true);
-				points.setText("50");
+				points.setText("500");
 				gemCounter.update();
 				
 				}
@@ -688,6 +699,9 @@ public class GameScreen implements Screen, Json.Serializable {
 		json.writeValue("bikes", bike_OBJs);
 		json.writeValue("gems", gems);
 		json.writeValue("time", (int) timer.getTime());
+		json.writeValue("carbon", carbon.getText().toString());
+		json.writeValue("freshness", freshness.getText().toString());
+		json.writeValue("points", points.getText().toString());
 	}
 
 	@Override
@@ -714,7 +728,14 @@ public class GameScreen implements Screen, Json.Serializable {
 		}
 		System.out.println(String.valueOf(jsonData.getFloat("time")));
 		timer = new TimerUI(String.valueOf((int)jsonData.getFloat("time")), skin);
+
+		this.totalScore = String.valueOf(jsonData.getString("score"));
+
+		points = new Points(String.valueOf(jsonData.getString("points")), skin);
+		carbon = new Points(String.valueOf(jsonData.getString("carbon")), skin);
+		freshness = new Points(String.valueOf(jsonData.getString("freshness")), skin);
 		
+
 	}
 
 	// utiltiy functions

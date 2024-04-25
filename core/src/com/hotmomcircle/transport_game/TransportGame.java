@@ -112,6 +112,7 @@ public class TransportGame extends Game {
         String text = fileHandle.readString();
         
         JsonValue json = new JsonReader().parse(text);
+		
 		new ParentGame(this, json, fileName);
 	}
 	

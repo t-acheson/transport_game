@@ -63,7 +63,7 @@ public class Player extends Entity {
 			playerTextures[i] = game.assetManager.get(paths[i], Texture.class);
 		}
 
-		transport[0] = new Transport(game, this, "Foot", 200, playerTextures, "0", "-5");
+		transport[0] = new Transport(game, this, "Foot", 200, playerTextures, "0", "5");
 		
 		
 		
@@ -87,7 +87,7 @@ public class Player extends Entity {
 		
 		
 		// footprint for the bike? we gotta nerf it somehow, could just crank up the stamina cost?
-		transport[1] = new Transport(game, this, "Bicycle", 300, bikeTextures, "2", "-10"); 
+		transport[1] = new Transport(game, this, "Bicycle", 300, bikeTextures, "2", "10"); 
 		
 		Texture[] carTextures = new Texture[8];
 		

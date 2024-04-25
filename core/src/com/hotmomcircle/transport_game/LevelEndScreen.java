@@ -71,7 +71,7 @@ public class LevelEndScreen implements Screen {
     			public void changed(ChangeEvent event, Actor actor) {
     				// TODO Add continue game functionality
      				gameScreen.music.stop();
-    				parentGame.levelUp();
+    				parentGame.levelUp(score);
     				}
              });
         } else {
