@@ -135,6 +135,7 @@ public class GameScreen implements Screen, Json.Serializable {
 	private TimerUI timer;
 
 	private String score;
+	private String totalScore;
 
 
 
@@ -433,10 +434,10 @@ public class GameScreen implements Screen, Json.Serializable {
 
 	@Override
 	public void render(float delta) {
-
+		System.out.println("Score before score: " + score);
 		int tempScore = Integer.parseInt(points.getText().toString()) - Integer.parseInt(carbon.getText().toString()) - Integer.parseInt(freshness.getText().toString());
 		score = String.valueOf(tempScore);
-		System.out.println(score);
+		System.out.println("Current score "+score);
 
 		if(Gdx.input.isKeyJustPressed(Input.Keys.P)) {
 			System.out.println("X: " + player.getX() + ", Y: " + player.getY());
@@ -462,10 +463,11 @@ public class GameScreen implements Screen, Json.Serializable {
 
 		if (levelEnd){
 			if (levelCompleted){
-				levelEndScreen.updateLevelEndScreen(true, parentGame.getCurrLevel(), score);
+				String finalScore = String.valueOf(Integer.parseInt(score)+Integer.parseInt(totalScore));
+				levelEndScreen.updateLevelEndScreen(true, parentGame.getCurrLevel(), finalScore);
 				game.setScreen(levelEndScreen);
 			} else {
-				levelEndScreen.gameOverScreen(parentGame.getCurrLevel(), score);
+				levelEndScreen.gameOverScreen(parentGame.getCurrLevel(), totalScore);
 				game.setScreen(levelEndScreen);
 			}
 		}
@@ -669,7 +671,7 @@ public class GameScreen implements Screen, Json.Serializable {
 		json.writeValue("bikes", bike_OBJs);
 		json.writeValue("gems", gems);
 		json.writeValue("time", (int) timer.getTime());
-		json.writeValue("score", score);
+		json.writeValue("score", totalScore);
 	}
 
 	@Override
@@ -697,7 +699,7 @@ public class GameScreen implements Screen, Json.Serializable {
 		System.out.println(String.valueOf(jsonData.getFloat("time")));
 		timer = new TimerUI(String.valueOf((int)jsonData.getFloat("time")), skin);
 
-		score = jsonData.getString("score");
+		totalScore = String.valueOf(jsonData.getString("score"));
 		
 	}
 
