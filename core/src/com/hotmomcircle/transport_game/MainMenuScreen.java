@@ -213,7 +213,7 @@ public class MainMenuScreen implements Screen {
 		loadTable.setFillParent(true);
 		loadTable.defaults().width(game.SCREEN_WIDTH/2).expandX().fillX();
 		loadTable.setWidth(game.SCREEN_WIDTH/2);
-		loadTable.setDebug(true);
+		// loadTable.setDebug(true);
 		
 		Label titleLabel = new Label("Load Game", skin);
 		titleLabel.setAlignment(Align.center);
@@ -227,7 +227,7 @@ public class MainMenuScreen implements Screen {
 		pastSavesTable.defaults().width(game.SCREEN_WIDTH/2).expandX().fillX();
 		pastSavesTable.setWidth(game.SCREEN_WIDTH/2);
 		pastSavesTable.pad(0);
-		pastSavesTable.setDebug(true);
+		// pastSavesTable.setDebug(true);
 		
 		
 		
@@ -300,7 +300,7 @@ public class MainMenuScreen implements Screen {
 		newGameTable.setFillParent(true);
 		newGameTable.defaults().width(game.SCREEN_WIDTH/2).expandX().fillX();
 		newGameTable.setWidth(game.SCREEN_WIDTH/2);
-		newGameTable.setDebug(true);
+		// newGameTable.setDebug(true);
 		
 		Label titleLabel = new Label("Please enter your name:", skin);
 		titleLabel.setAlignment(Align.center);

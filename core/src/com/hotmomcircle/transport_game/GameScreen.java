@@ -57,7 +57,7 @@ import com.badlogic.gdx.utils.Timer.Task;
 
 
 // Screen of the level the player is currently playing
-// Separation of game and level to allow 
+// Separation of game and level to allow level-up in same game
 public class GameScreen implements Screen, Json.Serializable {
 
 	TransportGame game;
