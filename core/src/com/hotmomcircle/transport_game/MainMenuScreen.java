@@ -130,10 +130,10 @@ public class MainMenuScreen implements Screen {
 		table.setWidth(game.SCREEN_WIDTH/3);
 		table.setDebug(false);
 		
-		Label titleLabel = new Label("Gem Expedition", skin);
+		Label titleLabel = new Label("Gemvironmentally Friendly", skin);
 		titleLabel.setAlignment(Align.center);
         titleLabel.setFontScale(2.5f); // Increase font size
-		table.add(titleLabel).padBottom(20); // Colspan to span across all columns
+		table.add(titleLabel).padTop(300); // Colspan to span across all columns
 
 		
 //		Create the buttons 

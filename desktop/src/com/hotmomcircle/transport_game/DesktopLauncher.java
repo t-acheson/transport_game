@@ -11,7 +11,7 @@ public class DesktopLauncher {
 		config.setWindowedMode(1280, 768);
 		config.setResizable(false);
 		config.useVsync(true);
-		config.setTitle("Travel City");
+		config.setTitle("Gemvironmentally Friendly");
 		new Lwjgl3Application(new TransportGame(), config);
 	}
 }
