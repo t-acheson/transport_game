@@ -2,17 +2,16 @@ package com.hotmomcircle.transport_game.entity;
 
 import java.util.ArrayList;
 
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.hotmomcircle.transport_game.GameScreen;
 import com.hotmomcircle.transport_game.transport.GuidedTransport;
 import com.hotmomcircle.transport_game.transport.Transport;
-import com.hotmomcircle.transport_game.tools.pathfinding.AStar;
-import com.hotmomcircle.transport_game.tools.pathfinding.Node;
-import com.hotmomcircle.transport_game.tools.pathfinding.NodeFinder;
 
 //This will hold the player class. 
 //Player should be able to move, be drawn, and will own the transport methods
@@ -31,11 +30,16 @@ public class Player extends Entity {
 	private int stamina;
 	public Rectangle playerRectangle;
 
+	public Sound bikeEffect;
+	public Sound carEffect;
+	
 	public float prevx = 0;
 	public float prevy = 0;
 
 	private String direction = "down";
 	private boolean hasInteracted = false;
+	private ArrayList<Obstacle> boundaryRoads;
+	private ArrayList<Obstacle> boundaryRoadsAndPaths;
 	
 	public Player(GameScreen game, int locX, int locY, int width, int height, String imagePath) {
 		super(game, locX, locY, width, height, imagePath);
@@ -59,7 +63,7 @@ public class Player extends Entity {
 			playerTextures[i] = game.assetManager.get(paths[i], Texture.class);
 		}
 
-		transport[0] = new Transport(game, this, "Foot", 200, playerTextures, "0", "-5");
+		transport[0] = new Transport(game, this, "Foot", 200, playerTextures, "0", "5");
 		
 		
 		
@@ -83,7 +87,7 @@ public class Player extends Entity {
 		
 		
 		// footprint for the bike? we gotta nerf it somehow, could just crank up the stamina cost?
-		transport[1] = new Transport(game, this, "Bicycle", 300, bikeTextures, "2", "-10"); 
+		transport[1] = new Transport(game, this, "Bicycle", 300, bikeTextures, "2", "10"); 
 		
 		Texture[] carTextures = new Texture[8];
 		
@@ -126,14 +130,14 @@ public class Player extends Entity {
 		Texture[] luasTextures = new Texture[8];
 		
 		String[] luasPaths = {
-			    "./bus/bus_up.png",
-			    "./bus/bus_up.png",
-			    "./bus/bus_down.png",
-			    "./bus/bus_down.png",
-			    "./bus/bus_left.png",
-			    "./bus/bus_left.png",
-			    "./bus/bus_right.png",
-			    "./bus/bus_right.png"
+			    "./luas/luas_up.png",
+			    "./luas/luas_up.png",
+			    "./luas/luas_down.png",
+			    "./luas/luas_down.png",
+			    "./luas/luas_left.png",
+			    "./luas/luas_left.png",
+			    "./luas/luas_right.png",
+			    "./luas/luas_right.png"
 			};
 		
 		for(int i = 0; i<luasPaths.length; i++) {
@@ -141,7 +145,14 @@ public class Player extends Entity {
 		}
 		
 		transport[4] = new GuidedTransport(game, this, "Luas", 400, luasTextures, "5", "0"); 
-	
+		
+		bikeEffect = Gdx.audio.newSound(Gdx.files.internal("bikebell.mp3"));
+		long bikeId = bikeEffect.play(0f);
+		bikeEffect.setLooping(bikeId, false);
+
+		carEffect = Gdx.audio.newSound(Gdx.files.internal("carhorn.mp3"));
+		long carId = carEffect.play(0f);
+		carEffect.setLooping(carId, false);
 	}
 	
 	@Override
@@ -161,12 +172,18 @@ public class Player extends Entity {
 			case "Bicycle":
 				game.addBike(Math.round(this.x), Math.round(this.y));				
 				getOnFoot();
+				
 				break;
 			case "Car":
 				game.addCar(Math.round(this.x), Math.round(this.y));
 				getOnFoot();
 				break;
 			}
+		}
+
+		if(Gdx.input.isKeyJustPressed(Input.Keys.L)) {
+			game.levelEnd = true;
+			game.levelCompleted = true;
 		}
 //		Can press 'f' to go on foot
 		if(Gdx.input.isKeyPressed(Input.Keys.F)) {
@@ -180,8 +197,8 @@ public class Player extends Entity {
 		
 		
 //		Can press 'B' to get on bike
-		if(Gdx.input.isKeyPressed(Input.Keys.F)) {
-			getOnFoot();
+		if(Gdx.input.isKeyPressed(Input.Keys.B)) {
+			getOnBike();
 		}		
 
 		currTransport().render(batch);
@@ -204,8 +221,13 @@ public class Player extends Entity {
 		return this.rectangle;
 	}
 
-	public void Collision(){
-		this.rectangle = new Rectangle(prevx, prevy, this.rectangle.getWidth(), this.rectangle.getHeight());
+	public void Collision(Rectangle playersPreviousPosition){
+
+		this.rectangle = new Rectangle(
+			playersPreviousPosition.x, 
+			playersPreviousPosition.y, 
+			playersPreviousPosition.getWidth(),
+			 playersPreviousPosition.getHeight());
 	}
 	
 //  Go on foot
@@ -222,6 +244,8 @@ public class Player extends Entity {
 		if(transIdx == 0) {
 			transIdx = 1;
 		}
+
+		bikeEffect.play();
 	}
 	
 //	 Changes player transport
@@ -231,6 +255,8 @@ public class Player extends Entity {
 		if(transIdx == 0) {
 			transIdx = 2;
 		}
+
+		carEffect.play();
 	}
 
 	//	 Changes player transport
@@ -295,7 +321,7 @@ public class Player extends Entity {
 	
 //	Can the player interact with an object
 	public boolean canGetOnTransport(Rectangle rect) {
-		return !hasInteracted && getPlayerRectangle().overlaps(rect) && transIdx == FOOT;
+		return !hasInteracted && rect.contains(this.getX(), this.getY()) && transIdx == FOOT;
 	}
 	
 }

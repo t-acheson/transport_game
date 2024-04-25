@@ -1,0 +1,116 @@
+Level 1:
+Gem is next to the player.
+Player learns to use WASD
+
+{
+    "captions": ["Collect gems to complete the level", "Use WASD to move"],
+    "time": 240,
+    "carbon": 0,
+    "gems": [{ "x": 12800, "y": 1024 }],
+    "gemCount": 3,
+    "player": { "x": 12450, "y": 1040 },
+    "gemWin": true,
+    "map": "bigMap.tmx",
+    "cars": [
+    { "x": 1512, "y": 1757 },
+    { "x": 12137, "y": 4591 }
+    ],
+    "bikes": [
+    { "x": 11486, "y": 1670 },
+    { "x": 11486, "y": 5186 }
+    ]
+},
+
+
+Level 2:
+Gem is a bit further out
+Player learns to use the arrow to find the nearest gem.
+
+
+{
+    "captions": [
+    "The arrow on the top left points to the nearest gem",
+    "Collect the gem to complete the level"
+    ],
+    "time": 240,
+    "carbon": 0,
+    "gems": [{ "x": 13200, "y": 1024 }],
+    "gemCount": 3,
+    "player": { "x": 12450, "y": 1040 },
+    "gemWin": true,
+    "map": "bigMap.tmx",
+    "cars": [
+    { "x": 1512, "y": 1757 },
+    { "x": 12137, "y": 4591 }
+    ],
+    "bikes": [
+    { "x": 11486, "y": 1670 },
+    { "x": 11486, "y": 5186 }
+    ]
+},
+
+
+Level 3: Player learns about the timer feature
+
+{
+    "captions": [
+    "If the timer runs out you'll lose the level",
+    "Collect the gem to complete the level"
+    ],
+    "time": 10,
+    "carbon": 0,
+    "gems": [
+    { "x": 13200, "y": 1024 },
+    { "x": 13200, "y": 1024 }
+    ],
+    "gemCount": 3,
+    "player": { "x": 12450, "y": 1040 },
+    "gemWin": true,
+    "map": "bigMap.tmx",
+    "cars": [
+    { "x": 1512, "y": 1757 },
+    { "x": 12137, "y": 4591 }
+    ],
+    "bikes": [
+    { "x": 11486, "y": 1670 },
+    { "x": 11486, "y": 5186 }
+    ]
+},
+
+Level 4: Player uses a car
+
+    {
+      "captions": [
+        "Cars move quickly but produce a lot of CO2",
+        "Press space to get into a car"
+      ],
+      "time": 100,
+      "carbon": 0,
+      "gems": [{ "x": 8881, "y": 4598 }],
+      "gemCount": 3,
+      "player": { "x": 13507, "y": 4598 },
+      "gemWin": true,
+      "map": "bigMap.tmx",
+      "cars": [{ "x": 13200, "y": 4598 }],
+      "bikes": [{ "x": 11486, "y": 1670 }]
+    },
+
+
+Level 5: Player uses a bike
+
+    {
+      "captions": [
+        "You can also use bikes to get to your destination",
+        "Bikes are much more efficient but are slower and cost freshness",
+        "Press space to get into a bike"
+      ],
+      "time": 100,
+      "carbon": 0,
+      "gems": [{ "x": 8881, "y": 4598 }],
+      "gemCount": 3,
+      "player": { "x": 13507, "y": 4598 },
+      "gemWin": true,
+      "map": "bigMap.tmx",
+      "cars": [{ "x": 13200, "y": 4638 }],
+      "bikes": [{ "x": 13200, "y": 4538 }]
+    },

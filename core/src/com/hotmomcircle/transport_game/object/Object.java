@@ -1,5 +1,4 @@
 package com.hotmomcircle.transport_game.object;
-
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Json;
@@ -10,6 +9,7 @@ public class Object implements Json.Serializable {
 	protected int y;
 	protected Texture objImg;
 	protected Rectangle interactionRadius;
+	protected String popUp;
 	boolean interactable = false;
 	
 	

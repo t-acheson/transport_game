@@ -19,8 +19,8 @@ import com.badlogic.gdx.utils.JsonValue;
 public class TransportGame extends Game {
 	
 
-	public int SCREEN_WIDTH = 800;
-	public int SCREEN_HEIGHT = 480;
+	public int SCREEN_WIDTH = 1280;
+	public int SCREEN_HEIGHT = 768;
 	
 	SpriteBatch batch;
 	
@@ -112,6 +112,7 @@ public class TransportGame extends Game {
         String text = fileHandle.readString();
         
         JsonValue json = new JsonReader().parse(text);
+		
 		new ParentGame(this, json, fileName);
 	}
 	

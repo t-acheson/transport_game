@@ -2,77 +2,229 @@
   "num_levels": 4,
   "levels": [
     {
+      "captions": ["Collect gems to complete the level", "Use WASD to move"],
+      "time": 240,
+      "carbon": 0,
+      "gems": [{ "x": 12800, "y": 1024 }],
+      "gemCount": 3,
+      "player": { "x": 12450, "y": 1040 },
+      "gemWin": true,
+      "map": "bigMap.tmx",
+      "cars": [
+        { "x": 1512, "y": 1757 },
+        { "x": 12137, "y": 4591 }
+      ],
+      "bikes": [
+        { "x": 11486, "y": 1670 },
+        { "x": 11486, "y": 5186 }
+      ]
+    },
+    {
+      "captions": [
+        "The arrow on the top left points to the nearest gem",
+        "Collect the gem to complete the level"
+      ],
+      "time": 240,
+      "carbon": 0,
+      "gems": [{ "x": 13200, "y": 1024 }],
+      "gemCount": 3,
+      "player": { "x": 12450, "y": 1040 },
+      "gemWin": true,
+      "map": "bigMap.tmx",
+      "cars": [
+        { "x": 1512, "y": 1757 },
+        { "x": 12137, "y": 4591 }
+      ],
+      "bikes": [
+        { "x": 11486, "y": 1670 },
+        { "x": 11486, "y": 5186 }
+      ]
+    },
+    {
+      "captions": [
+        "If the timer runs out you'll lose the level",
+        "Collect the gem to complete the level"
+      ],
+      "time": 10,
+      "carbon": 0,
+      "gems": [
+        { "x": 13200, "y": 1024 },
+        { "x": 13200, "y": 1024 }
+      ],
+      "gemCount": 3,
+      "player": { "x": 12450, "y": 1040 },
+      "gemWin": true,
+      "map": "bigMap.tmx",
+      "cars": [
+        { "x": 1512, "y": 1757 },
+        { "x": 12137, "y": 4591 }
+      ],
+      "bikes": [
+        { "x": 11486, "y": 1670 },
+        { "x": 11486, "y": 5186 }
+      ]
+    },
+    {
+      "captions": [
+        "Cars move quickly but produce a lot of CO2",
+        "Press space to get into a car"
+      ],
+      "time": 100,
+      "carbon": 0,
+      "gems": [{ "x": 8881, "y": 4598 }],
+      "gemCount": 3,
+      "player": { "x": 13507, "y": 4598 },
+      "gemWin": true,
+      "map": "bigMap.tmx",
+      "cars": [{ "x": 13200, "y": 4598 }],
+      "bikes": [{ "x": 11486, "y": 1670 }]
+    },
+    {
+      "captions": [
+        "You can also use bikes to get to your destination",
+        "Bikes are much more efficient but are slower and cost freshness",
+        "Press space to get into a bike"
+      ],
+      "time": 100,
+      "carbon": 0,
+      "gems": [{ "x": 8881, "y": 4598 }],
+      "gemCount": 3,
+      "player": { "x": 13507, "y": 4598 },
+      "gemWin": true,
+      "map": "bigMap.tmx",
+      "cars": [{ "x": 13200, "y": 4638 }],
+      "bikes": [{ "x": 13200, "y": 4538 }]
+    },
+    {
+      "captions": [
+        "Our map is big and full of gems",
+        "Get immersed",
+        "Press space to start your grand tour"
+      ],
       "time": 500,
-      "carbon": 3000,
-      "gems": [{ "x": 600, "y": 500 }],
-      "gemCount": 3,
-      "player": { "x": 3364, "y": 3180 },
+      "carbon": 0,
+      "gems": [ 
+        { "x": 2139.3125, "y": 5889.4385 },
+        { "x": 9078.445, "y": 5143.9 },
+        { "x": 8649.687, "y": 3777.208 },
+        { "x": 4455.7085, "y": 2370.3235 }
+      ],
+      "gemCount": 7,
+      "player": { "x": 12295, "y": 1595.0364 },
       "gemWin": true,
       "map": "bigMap.tmx",
       "cars": [
-        { "x": 900, "y": 500 },
-        { "x": 1000, "y": 200 },
-        { "x": 1100, "y": 400 },
-        { "x": 1200, "y": 500 }
+        { "x": 1512, "y": 1757 },
+        { "x": 12137, "y": 1590.0364 } 
       ],
-      "bikes": [
-        { "x": 900, "y": 600 },
-        { "x": 1000, "y": 300 },
-        { "x": 1100, "y": 600 },
-        { "x": 1200, "y": 700 }
+      "bikes": [ 
+        { "x": 11486, "y": 1670 },
+        { "x": 11486, "y": 5186 }
       ]
     },
     {
-      "time": 300,
-      "carbon": 200,
+      "captions": [
+        "Cars and bikes and your options for free movement",
+        "But watch your carbon footprint and your freshness!",
+        "Press space to get started"
+      ],
+      "time": 240,
+      "carbon": 0,
       "gems": [
+        { "x": 830, "y": 2540 },
+        { "x": 4430, "y": 1757 },
+        { "x": 3343, "y": 4563 },
+        { "x": 12057, "y": 3970 },
+        { "x": 12088, "y": 6237 },
+        { "x": 8794, "y": 5186 },
+        { "x": 600, "y": 500 },
         { "x": 700, "y": 500 },
-        { "x": 800, "y": 200 },
         { "x": 700, "y": 400 },
         { "x": 600, "y": 500 }
       ],
       "gemCount": 3,
-      "player": { "x": 700, "y": 300 },
+      "player": { "x": 13500.674, "y": 3165.2375 },
       "gemWin": true,
       "map": "bigMap.tmx",
       "cars": [
-        { "x": 900, "y": 500 },
-        { "x": 1000, "y": 200 },
-        { "x": 1100, "y": 400 },
-        { "x": 1200, "y": 500 }
+        { "x": 12205.418, "y": 3165.2375 },
+        { "x": 10732.224, "y": 5236.159 },
+        { "x": 7526.0747, "y": 5193.9897 },
+        { "x": 840.86035, "y": 3178.589 },
+        { "x": 3579.155, "y": 4590.0444 },
+        { "X": 7557.2793, "y": 4611.2437 },
+        { "X": 11834.369, "y": 5236.513 }
       ],
       "bikes": [
-        { "x": 900, "y": 600 },
-        { "x": 1000, "y": 300 },
-        { "x": 1100, "y": 600 },
-        { "x": 1200, "y": 700 }
+        { "x": 13462.664, "y": 3165.2375 },
+        { "x": 12058.893, "y": 4452.4565 },
+        { "x": 6282.963, "y": 5193.9897 },
+        { "x": 1607.5505, "y": 1785.3173 },
+        { "x": 4441.94, "y": 3394.0203 },
+        { "x": 12070.99, "y": 4139.0757 },
+        { "x": 5480.532, "y": 4611.2437 }
       ]
     },
     {
-      "time": 300,
-      "carbon": 3000,
+      "captions": [
+        "Busses and trams let you move more people at once",
+        "So your carbon footprint is lower, but you on a fixed route",
+        "Press space to start riding"
+      ],
+      "time": 420,
+      "carbon": 0,
       "gems": [
-        { "x": 700, "y": 500 },
-        { "x": 800, "y": 200 },
-        { "x": 700, "y": 400 },
-        { "x": 600, "y": 500 }
+        { "x": 8805, "y": 1287 },
+        { "x": 11916, "y": 403 },
+        { "x": 10650, "y": 6988 },
+        { "x": 3951, "y": 3590 },
+        { "x": 8794, "y": 5186 }
       ],
       "gemCount": 3,
-      "player": { "x": 700, "y": 300 },
+      "player": { "x": 8795, "y": 1828 },
       "gemWin": true,
       "map": "bigMap.tmx",
       "cars": [
-        { "x": 900, "y": 500 },
-        { "x": 1000, "y": 200 },
-        { "x": 1100, "y": 400 },
-        { "x": 1200, "y": 500 }
+        { "x": 8904, "y": 1291 },
+        { "x": 12137, "y": 4591 },
+        { "x": 10750, "y": 6988 },
+        { "x": 10650, "y": 6988 }
       ],
       "bikes": [
-        { "x": 900, "y": 600 },
-        { "x": 1000, "y": 300 },
-        { "x": 1100, "y": 600 },
-        { "x": 1200, "y": 700 }
+        { "x": 8665, "y": 1291 },
+        { "x": 11486, "y": 5186 },
+        { "x": 10450, "y": 6988 },
+        { "x": 13344, "y": 8404 }
       ]
-    }
+    },
+    {
+      "captions": [
+        "If you want to get all the gems in time,",
+        "you'll need to use all the vehicles at your disposal!",
+        "Press space and try to get around!"
+      ],
+      "time": 240,
+      "carbon": 0,
+      "gems": [
+      { "x": 830, "y": 2540 },
+      { "x": 4430, "y": 1757 },
+      { "x": 3343, "y": 4563 },
+      { "x": 12057, "y": 3970 },
+      { "x": 12088, "y": 6237 },
+      { "x": 8794, "y": 5186 }
+      ],
+      "gemCount": 3,
+      "player": { "x": 12295, "y": 970 },
+      "gemWin": true,
+      "map": "bigMap.tmx",
+      "cars": [
+      { "x": 1512, "y": 1757 },
+      { "x": 12137, "y": 4591 }
+      ],
+      "bikes": [
+      { "x": 11486, "y": 1670 },
+      { "x": 11486, "y": 5186 }
+      ]
+  }
   ]
 }

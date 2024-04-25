@@ -18,12 +18,14 @@ public class Pause {
 	public boolean active = false;
     public Skin skin;
     public Stage stage;
+    private GameScreen screen;
 
     public Pause(TransportGame game, GameScreen screen, Stage stage, Skin skin) {
         // constructor just needs to know what it can work with
         this.game = game;
         this.stage = stage;
         this.skin = skin;
+        this.screen = screen;
     }
     
     public void showPause () {
@@ -32,7 +34,7 @@ public class Pause {
         Gdx.input.setInputProcessor(stage);
 		pauseTable = new Table();
 		pauseTable.setFillParent(true);
-		pauseTable.defaults().width(this.game.SCREEN_WIDTH / 6).expandX().fillX();
+		pauseTable.defaults().width(this.game.SCREEN_WIDTH / 3).expandX().fillX();
 		pauseTable.setWidth(game.SCREEN_WIDTH / 6);
         pauseTable.row().pad(10, 0, 10, 0);
         TextButton resumeButton = new TextButton("Resume", skin);
@@ -54,6 +56,7 @@ public class Pause {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 deactivatePause();
+                screen.music.stop();
 				game.setScreen(new MainMenuScreen(game));
 
                 return true;

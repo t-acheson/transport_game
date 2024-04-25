@@ -1,5 +1,7 @@
 package com.hotmomcircle.transport_game.transport;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
@@ -7,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.hotmomcircle.transport_game.GameScreen;
+import com.hotmomcircle.transport_game.entity.Obstacle;
 import com.hotmomcircle.transport_game.entity.Player;
 
 // Transport superclass.
@@ -35,6 +38,8 @@ public class Transport {
 	public Texture[] down;
 	public Texture[] left;
 	public Texture[] right;
+	private ArrayList<Obstacle> boundaryRoads;
+	private ArrayList<Obstacle> boundaryRoadsAndPaths;
 
 	public Transport(GameScreen game, Player player, String name, int speed, Texture[] images, String footprint, String staminaCost) {
 		this.game = game;
@@ -138,6 +143,67 @@ public class Transport {
 			dy = dy / movementMagnitude * speed;
 		}
 
+		for (Obstacle obstacle: this.game.obstacles) {
+			int collision = handleCollision(obstacle.rectangle, dx, dy);
+
+			switch (collision) {
+				case 1:
+					dx = -dx;
+					break;
+
+				case 2:
+					dy = -dy;
+					break;
+
+				case 3:
+					dx = -dx;
+					dy = -dy;
+			
+				default:
+					break;
+			}
+		}
+
+		if (player.transIdx == player.CAR) {
+			boundaryRoads = new ArrayList<Obstacle>();
+
+			for (Obstacle road: this.game.roads) {
+				if (player.rectangle.overlaps(road.rectangle)) {
+					boundaryRoads.add(road);
+				}
+			}
+
+			boolean internalCollision = handleInteralCollision(boundaryRoads, dx, dy);
+
+			if (internalCollision) {
+				dx = 0;
+				dy = 0;
+			}
+		}
+
+		if (player.transIdx == player.BIKE) {
+			boundaryRoadsAndPaths = new ArrayList<Obstacle>();
+
+			for (Obstacle road: this.game.roads) {
+				if (player.rectangle.overlaps(road.rectangle)) {
+					boundaryRoadsAndPaths.add(road);
+				}
+			}
+
+			for (Obstacle path: this.game.paths) {
+				if (player.rectangle.overlaps(path.rectangle)) {
+					boundaryRoadsAndPaths.add(path);
+				}
+			}
+
+			boolean internalCollision = handleInteralCollision(boundaryRoadsAndPaths, dx, dy);
+
+			if (internalCollision) {
+				dx = 0;
+				dy = 0;
+			}
+		}
+
 		// finally apply the movement
 		this.player.incX(dx);
 		this.player.incY(dy);
@@ -171,13 +237,51 @@ public class Transport {
 
 	public String getDirection(float dx, float dy) {
 		if (dx != 0) {
-			return dx > 0 ? "right" : "left";
+			direction = dx > 0 ? "right" : "left";
 		}
 
-		if (dy != 0) {
-			return dy > 0 ? "up" : "down";
+		else if (dy != 0) {
+			direction = dy > 0 ? "up" : "down";
 		}
-		return "down";
+		return direction;
+	}
+
+	private int handleCollision(Rectangle obstacle, float dx, float dy) {
+		float[][] points = {
+			{player.getX() + dx, player.getY() + dy},
+			{player.getX() + dx, player.getY() + player.rectangle.getHeight() + dy},
+			{player.getX() + player.rectangle.getWidth() + dx, player.getY() + dy},
+			{player.getX() + player.rectangle.getWidth() + dx, player.getY() + player.rectangle.getHeight() + dy}
+		};
+		for (float[] point: points) {
+			if (obstacle.contains(point[0], point[1])) {
+				System.out.println(TimeUtils.nanoTime());
+				// Calculate the overlap between player and obstacle
+				float overlapX = Math.max(0, Math.min(player.getX() + dx + player.rectangle.getWidth(), obstacle.x + obstacle.width) - Math.max(player.getX() + dx, obstacle.x));
+				float overlapY = Math.max(0, Math.min(player.getY() + dy + player.rectangle.getHeight(), obstacle.y + obstacle.height) - Math.max(player.getY() + dy, obstacle.y));
+		
+				// Adjust player position based on overlap and movement direction
+				if (overlapX < overlapY) {
+					return 1;
+				} else if (overlapX > overlapY) {
+					return 2;
+				} else {
+					return 3;
+				}
+			}
+		}
+		return 0;
+}
+
+	private boolean handleInteralCollision(ArrayList<Obstacle> boundaryRoads, float dx, float dy) {
+		boolean ob = true;
+		for (Obstacle road: boundaryRoads) {
+			if (road.rectangle.contains(player.getX() + dx, player.getY() + dy)) {
+				ob = false;
+				break;
+			}
+		}
+		return ob;
 	}
 	
 }

@@ -2,7 +2,6 @@ package com.hotmomcircle.transport_game.ui;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.utils.StringBuilder;
 
 public class Points extends Label {
     
