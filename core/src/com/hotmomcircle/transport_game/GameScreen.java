@@ -433,7 +433,7 @@ public class GameScreen implements Screen, Json.Serializable {
 
 		educationalPopup = new EducationalPopup(game, this, stage, skin, player);
 
-		levelEndScreen = new LevelEndScreen(game, parentGame, camera, renderer);
+		levelEndScreen = new LevelEndScreen(game, parentGame, this, camera, renderer);
 
 	}
 
@@ -665,7 +665,6 @@ public class GameScreen implements Screen, Json.Serializable {
 		renderer.dispose();
 		stage.dispose();
 		assetManager.dispose(); // This will have to be removed from gamescreen when we have multiple levels and put into ParentGame
-
 	}
 
 	public int getTileSize() {

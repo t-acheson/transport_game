@@ -21,6 +21,7 @@ import com.hotmomcircle.transport_game.tools.Camera;
 public class LevelEndScreen implements Screen {
     final TransportGame game;
     final ParentGame parentGame;
+    final GameScreen gameScreen;
     
 	public OrthogonalTiledMapRenderer renderer;
 	public Camera camera;
@@ -39,11 +40,12 @@ public class LevelEndScreen implements Screen {
     String completed;
     String scoreText;
 
-    public LevelEndScreen(final TransportGame game, ParentGame parentGame, Camera camera, OrthogonalTiledMapRenderer renderer) {
+    public LevelEndScreen(final TransportGame game, ParentGame parentGame, GameScreen gameScreen, Camera camera, OrthogonalTiledMapRenderer renderer) {
         this.game = game;
         this.skin = game.skin;
         this.font = game.font;
         this.parentGame = parentGame;
+        this.gameScreen = gameScreen;
         this.camera = camera;
         this.renderer = renderer;
         
@@ -68,6 +70,7 @@ public class LevelEndScreen implements Screen {
      			@Override
     			public void changed(ChangeEvent event, Actor actor) {
     				// TODO Add continue game functionality
+     				gameScreen.music.stop();
     				parentGame.levelUp();
     				}
              });
@@ -79,6 +82,7 @@ public class LevelEndScreen implements Screen {
             continueButton.addListener(new ChangeListener(){
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
+                	gameScreen.music.stop();
                     parentGame.startLevel();
                 }
             });
