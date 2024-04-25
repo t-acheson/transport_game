@@ -383,7 +383,7 @@ public class GameScreen implements Screen, Json.Serializable {
 		// UI scores
 		points = new Points("0", skin);
 		carbon = new Points("0", skin);
-		freshness = new Points("100", skin);
+		freshness = new Points("0", skin);
 		
 		gemArrowUI = new gemArrow(skin, player, gems, table); 
 		gemCounter = new gemCounter(gems, skin);
@@ -537,7 +537,7 @@ public class GameScreen implements Screen, Json.Serializable {
 			for (Gem gem : gems) {
 				if (player.getRectangle().overlaps(gem.getRectangle())) {
 					gems.removeValue(gem, true);
-				points.setText("50");
+				points.setText("500");
 				gemCounter.update();
 				
 				}
