@@ -434,10 +434,8 @@ public class GameScreen implements Screen, Json.Serializable {
 
 	@Override
 	public void render(float delta) {
-		System.out.println("Score before score: " + score);
 		int tempScore = Integer.parseInt(points.getText().toString()) - Integer.parseInt(carbon.getText().toString()) - Integer.parseInt(freshness.getText().toString());
 		score = String.valueOf(tempScore);
-		System.out.println("Current score "+score);
 
 		if(Gdx.input.isKeyJustPressed(Input.Keys.P)) {
 			System.out.println("X: " + player.getX() + ", Y: " + player.getY());
@@ -700,7 +698,7 @@ public class GameScreen implements Screen, Json.Serializable {
 		timer = new TimerUI(String.valueOf((int)jsonData.getFloat("time")), skin);
 
 		totalScore = String.valueOf(jsonData.getString("score"));
-		
+
 	}
 
 	// utiltiy functions
