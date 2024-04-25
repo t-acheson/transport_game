@@ -224,6 +224,8 @@ public class GameScreen implements Screen, Json.Serializable {
 			    "./car/car_right.png", "./car/car_right.png",
 				"./bus/bus_left.png", "./bus/bus_right.png",
 				"./bus/bus_up.png", "./bus/bus_down.png",
+				"./luas/luas_up.png", "./luas/luas_down.png",
+				"./luas/luas_right.png", "./luas/luas_left.png"
 			};
 		
 		for(String path: transportPaths) {

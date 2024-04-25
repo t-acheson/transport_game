@@ -144,7 +144,7 @@ public class Transport {
 		}
 
 		for (Obstacle obstacle: this.game.obstacles) {
-			int collision = handleCollision(obstacle.rectangle);
+			int collision = handleCollision(obstacle.rectangle, dx, dy);
 
 			switch (collision) {
 				case 1:
@@ -154,6 +154,10 @@ public class Transport {
 				case 2:
 					dy = -dy;
 					break;
+
+				case 3:
+					dx = -dx;
+					dy = -dy;
 			
 				default:
 					break;
@@ -242,21 +246,32 @@ public class Transport {
 		return direction;
 	}
 
-	private int handleCollision(Rectangle obstacle) {
-		if (player.rectangle.overlaps(obstacle)) {
-			// Calculate the overlap between player and obstacle
-			float overlapX = Math.max(0, Math.min(player.getX() + player.rectangle.getWidth(), obstacle.x + obstacle.width) - Math.max(player.getX(), obstacle.x));
-			float overlapY = Math.max(0, Math.min(player.getY() + player.rectangle.getHeight(), obstacle.y + obstacle.height) - Math.max(player.getY(), obstacle.y));
-	
-			// Adjust player position based on overlap and movement direction
-			if (overlapX < overlapY) {
-				return 1;
-			} else {
-				return 2;
+	private int handleCollision(Rectangle obstacle, float dx, float dy) {
+		float[][] points = {
+			{player.getX() + dx, player.getY() + dy},
+			{player.getX() + dx, player.getY() + player.rectangle.getHeight() + dy},
+			{player.getX() + player.rectangle.getWidth() + dx, player.getY() + dy},
+			{player.getX() + player.rectangle.getWidth() + dx, player.getY() + player.rectangle.getHeight() + dy}
+		};
+		for (float[] point: points) {
+			if (obstacle.contains(point[0], point[1])) {
+				System.out.println(TimeUtils.nanoTime());
+				// Calculate the overlap between player and obstacle
+				float overlapX = Math.max(0, Math.min(player.getX() + dx + player.rectangle.getWidth(), obstacle.x + obstacle.width) - Math.max(player.getX() + dx, obstacle.x));
+				float overlapY = Math.max(0, Math.min(player.getY() + dy + player.rectangle.getHeight(), obstacle.y + obstacle.height) - Math.max(player.getY() + dy, obstacle.y));
+		
+				// Adjust player position based on overlap and movement direction
+				if (overlapX < overlapY) {
+					return 1;
+				} else if (overlapX > overlapY) {
+					return 2;
+				} else {
+					return 3;
+				}
 			}
 		}
 		return 0;
-	}
+}
 
 	private boolean handleInteralCollision(ArrayList<Obstacle> boundaryRoads, float dx, float dy) {
 		boolean ob = true;
