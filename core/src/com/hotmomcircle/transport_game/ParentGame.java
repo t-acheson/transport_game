@@ -64,6 +64,8 @@ public class ParentGame implements Json.Serializable{
 		//loading map 
 		assetManager.setLoader(TiledMap.class,  new TmxMapLoader());
 		assetManager.load("finalDraft.tmx", TiledMap.class);
+		assetManager.load("finalDraft_buildings.tmx", TiledMap.class);
+
 		
 //		Load in the player transport
 		String[] transportPaths = {

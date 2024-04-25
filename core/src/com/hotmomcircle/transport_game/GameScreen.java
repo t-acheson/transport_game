@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.hotmomcircle.transport_game.entity.Gem;
 import com.hotmomcircle.transport_game.entity.Player;
 import com.hotmomcircle.transport_game.object.Bicycle_OBJ;
@@ -36,6 +37,7 @@ import com.hotmomcircle.transport_game.ui.TimerUI;
 import com.hotmomcircle.transport_game.ui.WorldMapUI;
 import com.hotmomcircle.transport_game.ui.gemArrow;
 import com.hotmomcircle.transport_game.ui.LevelStart;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.hotmomcircle.transport_game.ui.EducationalPopup;
 import com.hotmomcircle.transport_game.ui.Pause;
 import com.hotmomcircle.transport_game.ui.gemCounter;
@@ -48,7 +50,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 
 
 // Screen of the level the player is currently playing
-// Separation of game and level to allow 
+// Separation of game and level to allow level-up in same game
 public class GameScreen implements Screen, Json.Serializable {
 
 	TransportGame game;
@@ -62,7 +64,9 @@ public class GameScreen implements Screen, Json.Serializable {
 	
 	//initializing map 
 	private TiledMap map;
-	private OrthogonalTiledMapRenderer renderer;
+	private TiledMap buildingMap;
+	public OrthogonalTiledMapRenderer renderer;
+	private OrthogonalTiledMapRenderer buildingRenderer;
 
 	Texture img;
 	public Player player;
@@ -101,6 +105,7 @@ public class GameScreen implements Screen, Json.Serializable {
 	public LevelStart levelStart;
 	public Stage startStage;
 	public boolean isLevelStart = true;
+	private Array<String> captions = new Array<>();
 	
 
 	public Pause pauseUI;
@@ -149,6 +154,8 @@ public class GameScreen implements Screen, Json.Serializable {
 		
 		loadAssets();
 		
+		
+		
 		int pX = levelData.get("player").getInt("x");
 		int pY = levelData.get("player").getInt("y");
 		player = new Player(this, pX, pY, 32, 32, "./foot/player_down1.png");
@@ -171,6 +178,10 @@ public class GameScreen implements Screen, Json.Serializable {
 			bike_OBJs.add(new Bicycle_OBJ(this, bikeLoc.getInt("x"), bikeLoc.getInt("y"), true));
 		}
 		
+		for (JsonValue caption = levelData.get("captions").child; caption != null; caption = caption.next) {
+			captions.add(caption.toString());
+			System.out.println(caption.toString());
+		}
 
 		
 		
@@ -245,6 +256,7 @@ public class GameScreen implements Screen, Json.Serializable {
 
 		try {
 			map = assetManager.get("finalDraft.tmx", TiledMap.class);
+			buildingMap = assetManager.get("finalDraft_buildings.tmx", TiledMap.class);
 			System.out.println("Map loaded successfully.");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -347,6 +359,7 @@ public class GameScreen implements Screen, Json.Serializable {
 		System.out.println(busHubs);
 
 		renderer = new OrthogonalTiledMapRenderer(map,3);
+		buildingRenderer = new OrthogonalTiledMapRenderer(buildingMap,3);
 		//
 
 		
@@ -369,7 +382,7 @@ public class GameScreen implements Screen, Json.Serializable {
 		assetManager.load("uiskin.json", Skin.class);
 
 		startStage = new Stage(new ScreenViewport());
-		levelStart = new LevelStart(game, this, startStage, skin, parentGame.getCurrLevel());
+		levelStart = new LevelStart(game, this, startStage, skin, parentGame.getCurrLevel(), captions);
 		
 		// table to hold UI elements
 		table = new Table();
@@ -420,7 +433,7 @@ public class GameScreen implements Screen, Json.Serializable {
 
 		educationalPopup = new EducationalPopup(game, this, stage, skin, player);
 
-		levelEndScreen = new LevelEndScreen(game, parentGame);
+		levelEndScreen = new LevelEndScreen(game, parentGame, this, camera, renderer);
 
 	}
 
@@ -455,6 +468,10 @@ public class GameScreen implements Screen, Json.Serializable {
 
 
 		if (levelEnd){
+			renderer.setView(camera);
+			camera.setPosition();
+			camera.update();
+			renderer.render();
 			if (levelCompleted){
 				levelEndScreen.updateLevelEndScreen(true, parentGame.getCurrLevel(), points.getText().toString());
 				game.setScreen(levelEndScreen);
@@ -488,11 +505,15 @@ public class GameScreen implements Screen, Json.Serializable {
 		}
 		
 		if (isLevelStart) {
+			
 			renderer.setView(camera);
 			camera.setPosition();
 			camera.update();
 			renderer.render();
 
+			
+
+			
 			startStage.act(delta);
 			startStage.draw();
 			
@@ -594,6 +615,9 @@ public class GameScreen implements Screen, Json.Serializable {
 			educationalPopup.showUI();
 		}
 
+		buildingRenderer.setView(camera);
+		buildingRenderer.render();
+
 	}
 		 //Update the gemArrow UI with the current player and gem positions
 		gemArrowUI.update(player, gems);
@@ -637,10 +661,10 @@ public class GameScreen implements Screen, Json.Serializable {
 
 		// TODO check if right place for this disposal
 		map.dispose();
+		buildingMap.dispose();
 		renderer.dispose();
 		stage.dispose();
 		assetManager.dispose(); // This will have to be removed from gamescreen when we have multiple levels and put into ParentGame
-
 	}
 
 	public int getTileSize() {
