@@ -18,12 +18,14 @@ public class Pause {
 	public boolean active = false;
     public Skin skin;
     public Stage stage;
+    private GameScreen screen;
 
     public Pause(TransportGame game, GameScreen screen, Stage stage, Skin skin) {
         // constructor just needs to know what it can work with
         this.game = game;
         this.stage = stage;
         this.skin = skin;
+        this.screen = screen;
     }
     
     public void showPause () {
@@ -54,6 +56,7 @@ public class Pause {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 deactivatePause();
+                screen.music.stop();
 				game.setScreen(new MainMenuScreen(game));
 
                 return true;

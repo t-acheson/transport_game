@@ -7,10 +7,12 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -401,6 +403,12 @@ public class GameScreen implements Screen, Json.Serializable {
 		table.setWidth(game.SCREEN_WIDTH / 9);
 		table.left().top();
 
+		Label tempLabel = new Label(score, skin);
+		Pixmap labelColor = new Pixmap(1, 1, Pixmap.Format.RGB888);
+        labelColor.setColor(0f, 0f, 0f, 0.5f);
+        labelColor.fill();
+        tempLabel.getStyle().background = new Image(new Texture(labelColor)).getDrawable();
+
 
 		
 		gemArrowUI = new gemArrow(skin, player, gems, table); 
@@ -702,6 +710,7 @@ public class GameScreen implements Screen, Json.Serializable {
 		json.writeValue("carbon", carbon.getText().toString());
 		json.writeValue("freshness", freshness.getText().toString());
 		json.writeValue("points", points.getText().toString());
+		json.writeValue("totalScore", totalScore);
 	}
 
 	@Override
@@ -729,11 +738,12 @@ public class GameScreen implements Screen, Json.Serializable {
 		System.out.println(String.valueOf(jsonData.getFloat("time")));
 		timer = new TimerUI(String.valueOf((int)jsonData.getFloat("time")), skin);
 
-		this.totalScore = String.valueOf(jsonData.getString("score"));
+		this.totalScore = String.valueOf(jsonData.getString("totalScore"));
 
 		points = new Points(String.valueOf(jsonData.getString("points")), skin);
 		carbon = new Points(String.valueOf(jsonData.getString("carbon")), skin);
 		freshness = new Points(String.valueOf(jsonData.getString("freshness")), skin);
+		
 		
 
 	}
