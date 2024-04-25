@@ -135,7 +135,7 @@ public class GameScreen implements Screen, Json.Serializable {
 	private TimerUI timer;
 
 	private String score;
-	private String totalScore;
+	private String totalScore= "0";
 
 
 
