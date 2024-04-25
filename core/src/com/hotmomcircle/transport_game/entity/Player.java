@@ -321,7 +321,7 @@ public class Player extends Entity {
 	
 //	Can the player interact with an object
 	public boolean canGetOnTransport(Rectangle rect) {
-		return !hasInteracted && getPlayerRectangle().overlaps(rect) && transIdx == FOOT;
+		return !hasInteracted && rect.contains(this.getX(), this.getY()) && transIdx == FOOT;
 	}
 	
 }

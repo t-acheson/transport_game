@@ -82,7 +82,7 @@ public class MainMenuScreen implements Screen {
 //		Game camera
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, game.SCREEN_WIDTH, game.SCREEN_HEIGHT);
-		camera.position.set(game.SCREEN_WIDTH/2, 2950, 0);
+		camera.position.set(game.SCREEN_WIDTH/2, 5850, 0);
 		targetPosition = new Vector3(camera.position);
 		
 //		Create a stage for our buttons. This is a better way of doing UI elements
@@ -112,7 +112,7 @@ public class MainMenuScreen implements Screen {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		renderer = new OrthogonalTiledMapRenderer(map, 1.08f);
+		renderer = new OrthogonalTiledMapRenderer(map, 2.0f);
 		
 		music = Gdx.audio.newMusic(Gdx.files.internal("mainmenugroove.mp3"));
 		music.setVolume(0.2f);
@@ -130,10 +130,10 @@ public class MainMenuScreen implements Screen {
 		table.setWidth(game.SCREEN_WIDTH/3);
 		table.setDebug(false);
 		
-		Label titleLabel = new Label("Gem Expedition", skin);
+		Label titleLabel = new Label("Gemvironmentally Friendly", skin);
 		titleLabel.setAlignment(Align.center);
         titleLabel.setFontScale(2.5f); // Increase font size
-		table.add(titleLabel).padBottom(20); // Colspan to span across all columns
+		table.add(titleLabel).padTop(300); // Colspan to span across all columns
 
 		
 //		Create the buttons 
@@ -219,7 +219,7 @@ public class MainMenuScreen implements Screen {
 		loadTable.setFillParent(true);
 		loadTable.defaults().width(game.SCREEN_WIDTH/2).expandX().fillX();
 		loadTable.setWidth(game.SCREEN_WIDTH/2);
-		loadTable.setDebug(true);
+		// loadTable.setDebug(true);
 		
 		Label titleLabel = new Label("Load Game", skin);
 		titleLabel.setAlignment(Align.center);
@@ -233,7 +233,7 @@ public class MainMenuScreen implements Screen {
 		pastSavesTable.defaults().width(game.SCREEN_WIDTH/2).expandX().fillX();
 		pastSavesTable.setWidth(game.SCREEN_WIDTH/2);
 		pastSavesTable.pad(0);
-		pastSavesTable.setDebug(true);
+		// pastSavesTable.setDebug(true);
 		
 		
 		
@@ -306,7 +306,7 @@ public class MainMenuScreen implements Screen {
 		newGameTable.setFillParent(true);
 		newGameTable.defaults().width(game.SCREEN_WIDTH/2).expandX().fillX();
 		newGameTable.setWidth(game.SCREEN_WIDTH/2);
-		newGameTable.setDebug(true);
+		// newGameTable.setDebug(true);
 		
 		Label titleLabel = new Label("Please enter your name:", skin);
 		titleLabel.setAlignment(Align.center);

@@ -42,7 +42,7 @@ public class GuidedTransport extends Transport {
                 player.getOnFoot();
                 return getCurrentImage(dx, dy);
             }
-        } else {
+        } 
             // Calculate the distance to the current node
             float deltaX = current.getX() - player.getX();
             float deltaY = current.getY() - player.getY();
@@ -60,7 +60,7 @@ public class GuidedTransport extends Transport {
                     return getCurrentImage(dx, dy);
                 }
 
-            } else {
+            } 
                 // Calculate the normalized movement vector
                 float length = (float) Math.sqrt(deltaX * deltaX + deltaY * deltaY);
                 if (length > 0) {
@@ -71,8 +71,7 @@ public class GuidedTransport extends Transport {
                 // Scale the vector by the speed
                 dx = deltaX * speed;
                 dy = deltaY * speed;
-            }
-        }
+            
     
         // finally apply the movement
         this.player.incX(dx);
