@@ -7,10 +7,12 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -400,6 +402,12 @@ public class GameScreen implements Screen, Json.Serializable {
 		table.defaults().width(game.SCREEN_WIDTH / 9).expandX().fillX();
 		table.setWidth(game.SCREEN_WIDTH / 9);
 		table.left().top();
+
+		Label tempLabel = new Label(score, skin);
+		Pixmap labelColor = new Pixmap(1, 1, Pixmap.Format.RGB888);
+        labelColor.setColor(0f, 0f, 0f, 0.5f);
+        labelColor.fill();
+        tempLabel.getStyle().background = new Image(new Texture(labelColor)).getDrawable();
 
 
 		
